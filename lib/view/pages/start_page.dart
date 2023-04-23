@@ -56,7 +56,7 @@ class _StartPageState extends State<StartPage> {
         floatingActionButton: FactionButton(
           title: 'はじめる',
           fontSize: 23,
-          width: 180,
+          width: 190,
           height: 60,
           nextPage: nextPage,
         ));

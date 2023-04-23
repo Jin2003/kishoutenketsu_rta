@@ -29,22 +29,27 @@ class FactionButton extends StatelessWidget {
     return SizedBox(
       width: width,
       height: height,
-      child: FloatingActionButton.extended(
-        backgroundColor: Constant.white,
+      child: ElevatedButton(
+        child: Text(
+          title,
+          style: GoogleFonts.zenMaruGothic(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+            color: Constant.mainColor,
+          ),),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Constant.white,
+          elevation: 16,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: ((context) => nextPage!)),
           );
         },
-        label: Text(
-          title,
-          style: GoogleFonts.zenMaruGothic(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            color: Constant.mainColor,
-          ),
-        ),
       ),
     );
   }

@@ -5,7 +5,7 @@ import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'dart:async';
 
 import '../constant.dart';
-import 'components/f-action_button.dart';
+import 'components/elevate_button.dart';
 import 'nfc_setting_page.dart';
 
 class StartPage extends StatefulWidget {
@@ -53,7 +53,7 @@ class _StartPageState extends State<StartPage> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FactionButton(
+        floatingActionButton: ElevateButton(
           title: 'はじめる',
           fontSize: 23,
           width: 190,

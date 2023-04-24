@@ -5,7 +5,17 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../constant.dart';
 
-class FactionButton extends StatelessWidget {
+// elevatedbutton：titleだけ
+
+// これで呼び出せる
+// ElevatedButton(
+//   title: '',　　テキスト
+//   fontSize: ,　フォントサイズ
+//   width: ,　　　ボタンの高さ
+//   height: ,　　ボタンの横幅
+//   nextPage: ,　次どこのページに行くか
+// )
+class ElevateButton extends StatelessWidget {
   final String title;
   final double? fontSize;
   final double? width;
@@ -14,7 +24,7 @@ class FactionButton extends StatelessWidget {
   final Function? onPressed;
   final bool isDisabled = false;
 
-  const FactionButton({
+  const ElevateButton({
     Key? key,
     required this.title,
     this.fontSize,

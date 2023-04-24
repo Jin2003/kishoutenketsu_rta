@@ -9,6 +9,7 @@ class OutlineButton extends StatelessWidget {
   final String title;
   final double width;
   final double height;
+  final double? fontsize;
   final Widget? nextPage;
   final Function? onPressed;
   final bool isDisabled = false;
@@ -18,6 +19,7 @@ class OutlineButton extends StatelessWidget {
     required this.title,
     required this.width,
     required this.height,
+    this.fontsize,
     this.nextPage,
     this.onPressed,
   }) : super(key: key);
@@ -26,10 +28,13 @@ class OutlineButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
+        textStyle: TextStyle(
+          fontSize: fontsize,
+          fontWeight: FontWeight.bold,
+        ),
         foregroundColor: Constant.mainColor,
         backgroundColor: Constant.white,
         fixedSize: Size(width, height),
-        
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

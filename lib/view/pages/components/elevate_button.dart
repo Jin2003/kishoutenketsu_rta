@@ -46,10 +46,11 @@ class ElevateButton extends StatelessWidget {
             fontSize: fontSize,
             fontWeight: FontWeight.bold,
             color: Constant.mainColor,
-          ),),
+          ),
+        ),
         style: ElevatedButton.styleFrom(
           backgroundColor: Constant.white,
-          elevation: 16,
+          elevation: 5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),

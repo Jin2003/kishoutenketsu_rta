@@ -15,17 +15,39 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.mainColor,
-      body: Column(children: const [
-        OutlineButton(
-          title: "8 : 40",
-          width: 250,
-          height: 80,
-          fontsize: 50,
-        ),
-        ElevateButton(title: "時刻設定"),
-        ElevateButton(title: "アラーム音設定")
-      ]),
+      backgroundColor: Constant.subColor,
+      body: Center(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              OutlineButton(
+                title: "8 : 40",
+                width: 250,
+                height: 80,
+                fontsize: 50,
+              ),
+              SizedBox(
+                width: 0,
+                height: 40,
+              ),
+              ElevateButton(
+                title: "時刻設定",
+                width: 180,
+                height: 40,
+                fontSize: 20,
+              ),
+              SizedBox(
+                width: 0,
+                height: 20,
+              ),
+              ElevateButton(
+                title: "アラーム音設定",
+                width: 180,
+                height: 40,
+                fontSize: 20,
+              )
+            ]),
+      ),
     );
   }
 }

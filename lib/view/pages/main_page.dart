@@ -18,9 +18,10 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: Constant.mainColor,
       body: Column(children: const [
         OutlineButton(
-          title: "8:40",
+          title: "8 : 40",
           width: 250,
           height: 80,
+          fontsize: 50,
         ),
         ElevateButton(title: "時刻設定"),
         ElevateButton(title: "アラーム音設定")

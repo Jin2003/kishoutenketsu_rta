@@ -9,7 +9,7 @@ class OutlineButton extends StatelessWidget {
   final String title;
   final double width;
   final double height;
-  final double? fontsize;
+  final double fontsize;
   final Widget? nextPage;
   final Function? onPressed;
   final bool isDisabled = false;
@@ -19,7 +19,7 @@ class OutlineButton extends StatelessWidget {
     required this.title,
     required this.width,
     required this.height,
-    this.fontsize,
+    required this.fontsize,
     this.nextPage,
     this.onPressed,
   }) : super(key: key);
@@ -58,7 +58,7 @@ class OutlineButton extends StatelessWidget {
           );
         }
       },
-      child: CustomTextBlue(text: title, fontSize: 17),
+      child: CustomTextBlue(text: title, fontSize: fontsize),
     );
   }
 }

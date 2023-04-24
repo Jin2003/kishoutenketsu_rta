@@ -41,8 +41,7 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
 
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _showStartDialog() 
-        );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showStartDialog());
   }
 
   Future<void> _showStartDialog() async {
@@ -65,6 +64,7 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
                   title: 'とじる',
                   width: 50,
                   height: 50,
+                  fontsize: 17,
                   onPressed: () => Navigator.pop(context),
                 ),
               ),

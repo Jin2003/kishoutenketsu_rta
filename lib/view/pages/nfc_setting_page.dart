@@ -64,6 +64,7 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
                   title: 'とじる',
                   width: 50,
                   height: 50,
+                  shape: 10,
                   fontsize: 17,
                   onPressed: () => Navigator.pop(context),
                 ),

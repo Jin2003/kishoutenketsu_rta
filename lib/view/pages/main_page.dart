@@ -22,19 +22,21 @@ class _MainPageState extends State<MainPage> {
             children: const [
               OutlineButton(
                 title: "8 : 40",
-                width: 250,
-                height: 80,
-                fontsize: 50,
+                width: 300,
+                height: 110,
+                fontsize: 60,
+                shape: 100,
               ),
               SizedBox(
                 width: 0,
-                height: 40,
+                height: 30,
               ),
               ElevateButton(
                 title: "時刻設定",
                 width: 180,
-                height: 40,
+                height: 55,
                 fontSize: 20,
+                shape: 30,
               ),
               SizedBox(
                 width: 0,
@@ -43,8 +45,9 @@ class _MainPageState extends State<MainPage> {
               ElevateButton(
                 title: "アラーム音設定",
                 width: 180,
-                height: 40,
+                height: 55,
                 fontSize: 20,
+                shape: 30,
               )
             ]),
       ),

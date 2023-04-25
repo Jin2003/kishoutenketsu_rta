@@ -26,7 +26,7 @@ class _LankingPageState extends State<LankingPage> {
             child: Container(
               padding: const EdgeInsets.only(top: 50),
               width: 300,
-              height: 380,
+              height: 420,
               child: Scrollbar(
                 child: ListView.separated(
                   padding: const EdgeInsets.all(20),

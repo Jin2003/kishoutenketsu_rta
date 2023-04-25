@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'dart:async';
 
+import '../../logic/nav_bar.dart';
 import '../constant.dart';
 import 'components/elevate_button.dart';
 import 'nfc_setting_page.dart';
@@ -30,10 +31,10 @@ class _StartPageState extends State<StartPage> {
 
     // if (){
     //   // 登録があった場合
-    //   return _logoWidget(context, Navigate());
+      return _logoWidget(context, NavBar());
     // } else {
     //   // 登録がなかった場合
-    return _logoWidget(context, NfcSettingPage());
+    //return _logoWidget(context, NfcSettingPage());
     // },
   }
 
@@ -58,6 +59,7 @@ class _StartPageState extends State<StartPage> {
           fontSize: 23,
           width: 190,
           height: 60,
+          shape: 30,
           nextPage: nextPage,
         ));
   }

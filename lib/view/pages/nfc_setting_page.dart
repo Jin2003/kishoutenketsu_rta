@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_white.dart';
+import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
+import 'package:kishoutenketsu_rta/view/pages/start_page.dart';
+import 'package:nfc_manager/nfc_manager.dart';
 
+
+import '../../logic/nav_bar.dart';
 import '../constant.dart';
 import 'components/outline_button.dart';
 
@@ -15,64 +21,110 @@ class NfcSettingPage extends StatefulWidget {
 }
 
 class _NfcSettingPageState extends State<NfcSettingPage> {
+  // タグ名
+  final List<String> tagname = ["起", "床", "点", "結", "RTA"];
+  // タグ番号
+  final int tag_count = 0;
+
   @override
   Widget build(BuildContext context) {
-    //遷移後すぐダイアログ表示
-    //initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // エラーの出ていた処理
-      initState();
-    });
-
-    // タグ番号
-    int tag_count = 1;
+    String tag_name = tagname[tag_count];
 
     return Scaffold(
       backgroundColor: Constant.mainColor,
-      body: Center(
-        child: Container(
-          child: CustomTextWhite(
-              text: '$tag_count つ目のボタンを\n壁に取り付け\nタッチしてください', fontSize: 30),
-        ),
-      ),
-    );
-  }
-
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _showStartDialog());
-  }
-
-  Future<void> _showStartDialog() async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: [
-            const SizedBox(
-              height: 20,
+      body: Stack(
+        children: [
+          Center(
+            child: Container(
+              child: CustomTextWhite(
+                  text: '[$tag_name]のボタンを\n壁に取り付け\nタッチしてください', fontSize: 30),
             ),
-            const Align(
-              alignment: Alignment.center,
-              child: CustomTextBlue(text: '５つのボタンの\n置き場所を決めよう', fontSize: 25),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                child: OutlineButton(
-                  title: 'とじる',
-                  width: 50,
-                  height: 50,
-                  shape: 10,
-                  fontsize: 17,
-                  onPressed: () => Navigator.pop(context),
+          ),
+          Align(
+            alignment: const Alignment(0.0, 0.4),
+            child: //OutlineButton(title: 'nfcスキャンできたら', width: 250, height: 70, fontsize: 20, shape: 60),
+                SizedBox(
+              width: 250,
+              height: 70,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Constant.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                ),
+                onPressed: () {
+                  showDialog<void>(
+                      context: context,
+                      builder: (_) {
+                        return Dialog();
+                      });
+                },
+                child: CustomTextBlue(
+                  text: 'nfcスキャンできたら',
+                  fontSize: 20,
                 ),
               ),
             ),
-          ],
-        );
-      },
+          ),
+          Align(
+            alignment: const Alignment(0.0, 0.6),
+            child: //OutlineButton(title: 'nfcスキャンできたら', width: 250, height: 70, fontsize: 20, shape: 60),
+                SizedBox(
+              width: 250,
+              height: 70,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Constant.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                ),
+                onPressed: () {
+                  NavBar();
+                },
+                child: CustomTextBlue(
+                  text: 'main',
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class Dialog extends StatelessWidget {
+  const Dialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      children: [
+        const SizedBox(
+          height: 40,
+        ),
+        const Align(
+          alignment: Alignment.center,
+          child: CustomTextBlue(text: 'スキャン完了！', fontSize: 25),
+        ),
+        Padding(
+          padding:
+              const EdgeInsets.only(top: 20, left: 50, right: 50, bottom: 40),
+          child: Container(
+            child: OutlineButton(
+              title: 'とじる',
+              width: 50,
+              height: 50,
+              shape: 10,
+              fontsize: 17,
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

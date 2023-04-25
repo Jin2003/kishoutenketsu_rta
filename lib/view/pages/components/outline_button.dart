@@ -10,6 +10,7 @@ class OutlineButton extends StatelessWidget {
   final double width;
   final double height;
   final double fontsize;
+  final double shape;
   final Widget? nextPage;
   final Function? onPressed;
   final bool isDisabled = false;
@@ -20,6 +21,7 @@ class OutlineButton extends StatelessWidget {
     required this.width,
     required this.height,
     required this.fontsize,
+    required this.shape,
     this.nextPage,
     this.onPressed,
   }) : super(key: key);
@@ -36,10 +38,10 @@ class OutlineButton extends StatelessWidget {
         backgroundColor: Constant.white,
         fixedSize: Size(width, height),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(shape),
         ),
         side: BorderSide(
-          width: 3,
+          width: 4,
           color: Constant.mainColor,
         ),
         elevation: 6,

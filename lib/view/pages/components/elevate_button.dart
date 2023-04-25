@@ -17,6 +17,7 @@ import '../../constant.dart';
 // )
 class ElevateButton extends StatelessWidget {
   final String title;
+  final double? shape;
   final double? fontSize;
   final double? width;
   final double? height;
@@ -27,6 +28,7 @@ class ElevateButton extends StatelessWidget {
   const ElevateButton({
     Key? key,
     required this.title,
+    this.shape,
     this.fontSize,
     this.width,
     this.height,
@@ -52,7 +54,7 @@ class ElevateButton extends StatelessWidget {
           backgroundColor: Constant.white,
           elevation: 5,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(shape!),
           ),
         ),
         onPressed: () {

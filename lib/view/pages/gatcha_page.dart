@@ -78,23 +78,25 @@ class _GatchaPageState extends State<GatchaPage> {
               
               //ElevateButton(title: 'ガチャをまわす'),
               SizedBox(
-                height: 100,
+                height: 400,
                 width: 1,
               ),
               //OutlineButton(title: 'e', width: 10, height: 10, fontsize: 10, shape: 10)
               //ElevateButton(title: 'ガチャをまわす'),
               SizedBox(
+                width: 210,
+                height: 60,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Constant.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(25),
                     ),
                   ),
                   onPressed: () {},
                   child: CustomTextBlue(
                     text: 'ガチャをまわす',
-                    fontSize: 25,
+                    fontSize: 23,
                   ),
                   // child: Text(
                   //   style: TextStyle(

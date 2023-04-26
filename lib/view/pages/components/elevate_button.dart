@@ -58,6 +58,10 @@ class ElevateButton extends StatelessWidget {
           ),
         ),
         onPressed: () {
+          if (onPressed != null) {
+            onPressed!();
+            return;
+          }
           Navigator.push(
             context,
             MaterialPageRoute(builder: ((context) => nextPage!)),

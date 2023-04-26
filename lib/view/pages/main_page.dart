@@ -12,44 +12,57 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  late TimeOfDay _timeOfDay;
+
+  @override
+  void initState() {
+    _timeOfDay = TimeOfDay(hour: 0, minute: 0);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.subColor,
       body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              OutlineButton(
-                title: "8 : 40",
-                width: 300,
-                height: 110,
-                fontsize: 60,
-                shape: 100,
-              ),
-              SizedBox(
-                width: 0,
-                height: 30,
-              ),
-              ElevateButton(
-                title: "時刻設定",
-                width: 180,
-                height: 55,
-                fontSize: 20,
-                shape: 30,
-              ),
-              SizedBox(
-                width: 0,
-                height: 20,
-              ),
-              ElevateButton(
-                title: "アラーム音設定",
-                width: 180,
-                height: 55,
-                fontSize: 20,
-                shape: 30,
-              )
-            ]),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          OutlineButton(
+            //titleに_timeOfDayを18:00のような時間を表示
+            title:
+                '${_timeOfDay.hour.toString().padLeft(2, '0')}:${_timeOfDay.minute.toString().padLeft(2, '0')}',
+            width: 300,
+            height: 110,
+            fontsize: 60,
+            shape: 100,
+          ),
+          SizedBox(
+            width: 0,
+            height: 30,
+          ),
+          ElevateButton(
+            title: "時刻設定",
+            width: 180,
+            height: 55,
+            fontSize: 20,
+            shape: 30,
+            onPressed: () async {
+              final TimeOfDay? timeOfDay = await showTimePicker(
+                  context: context, initialTime: _timeOfDay);
+              if (timeOfDay != null) setState(() => {_timeOfDay = timeOfDay});
+            },
+          ),
+          SizedBox(
+            width: 0,
+            height: 20,
+          ),
+          ElevateButton(
+            title: "アラーム音設定",
+            width: 180,
+            height: 55,
+            fontSize: 20,
+            shape: 30,
+          )
+        ]),
       ),
     );
   }

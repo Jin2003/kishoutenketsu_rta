@@ -17,10 +17,10 @@ import '../../constant.dart';
 // )
 class ElevateButton extends StatelessWidget {
   final String title;
-  final double? shape;
-  final double? fontSize;
-  final double? width;
-  final double? height;
+  final double shape;
+  final double fontSize;
+  final double width;
+  final double height;
   final Widget? nextPage;
   final Function? onPressed;
   final bool isDisabled = false;
@@ -28,10 +28,10 @@ class ElevateButton extends StatelessWidget {
   const ElevateButton({
     Key? key,
     required this.title,
-    this.shape,
-    this.fontSize,
-    this.width,
-    this.height,
+    required this.shape,
+    required this.fontSize,
+    required this.width,
+    required this.height,
     this.nextPage,
     this.onPressed,
   }) : super(key: key);

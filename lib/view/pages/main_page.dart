@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> {
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           OutlineButton(
-            //titleに_timeOfDayを18:00のような時間を表示
+            //timeOfDayを18:00のような時間を表示
             title:
                 '${_timeOfDay.hour.toString().padLeft(2, '0')}:${_timeOfDay.minute.toString().padLeft(2, '0')}',
             width: 300,
@@ -45,6 +45,7 @@ class _MainPageState extends State<MainPage> {
             height: 55,
             fontSize: 20,
             shape: 30,
+            //時刻の設定をする処理
             onPressed: () async {
               final TimeOfDay? timeOfDay = await showTimePicker(
                   context: context, initialTime: _timeOfDay);

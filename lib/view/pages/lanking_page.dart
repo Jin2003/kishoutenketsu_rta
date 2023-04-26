@@ -24,14 +24,14 @@ class _LankingPageState extends State<LankingPage> {
         Align(
             alignment: Alignment.center,
             child: Container(
-              padding: const EdgeInsets.only(top: 50),
+              padding: const EdgeInsets.only(top: 55),
               width: 300,
               height: 420,
               child: Scrollbar(
                 child: ListView.separated(
                   padding: const EdgeInsets.all(20),
                   separatorBuilder: (context, index) =>
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 8),
                   itemCount: 10,
                   itemBuilder: (context, index) => _buildCard(index + 1),
                 ),
@@ -73,24 +73,26 @@ Widget _buildCard(int index) {
               ),
             ),
           ),
-          Text(
-            '$index',
-            style: const TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Constant.white),
-          ),
           SizedBox(
             width: 20,
             height: 0,
           ),
           Text(
-            'item $index',
+            '1 : $index',
             style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: Constant.mainColor),
           ),
+          Container(
+            margin: EdgeInsets.only(top: 15, left: 30),
+            width: 60,
+            height: 20,
+            decoration: BoxDecoration(
+              color: Constant.mainColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+          )
         ],
       ),
     ),

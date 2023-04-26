@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> {
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           OutlineButton(
-            //timeOfDayを18:00のような時間を表示
+            //timeOfDayを18:00のような時間を表示する
             title:
                 '${_timeOfDay.hour.toString().padLeft(2, '0')}:${_timeOfDay.minute.toString().padLeft(2, '0')}',
             width: 300,

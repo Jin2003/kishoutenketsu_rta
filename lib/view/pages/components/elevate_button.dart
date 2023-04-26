@@ -58,7 +58,7 @@ class ElevateButton extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          // nextPageがnullの場合はonPressed!を実行
+          // nextPageがnullの場合はonPressed!を実行する
           if (nextPage == null) {
             onPressed!();
             return;

@@ -27,15 +27,17 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
-    // nfcが登録されてるか確認
+    // nfcが登録されてるか確認  false==登録なし
+    //bool nfc_state = false;
+    bool nfc_state = true;
 
-    // if (){
-    //   // 登録があった場合
+    if (nfc_state == true) {
+      // 登録があった場合
       return _logoWidget(context, NavBar());
-    // } else {
-    //   // 登録がなかった場合
-    //return _logoWidget(context, NfcSettingPage());
-    // },
+    } else {
+      // 登録がなかった場合
+      return _logoWidget(context, NfcSettingPage());
+    }
   }
 
   // ロゴを表示するウィジェト
@@ -50,7 +52,6 @@ class _StartPageState extends State<StartPage> {
                 fit: BoxFit.cover,
               ),
             ),
-            //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

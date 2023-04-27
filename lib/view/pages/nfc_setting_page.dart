@@ -27,10 +27,12 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
   int tag_count = 0;
 
   @override
-  Widget build(BuildContext context) { 
-    if( tag_count > tagname.length){
-      
-  }
+  Widget build(BuildContext context) {
+    // 0,1,2,3,4,  5
+    if (tag_count >= tagname.length) {
+      EndSet();
+    }
+    
 
     String tag_name = tagname[tag_count];
 
@@ -88,7 +90,10 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
                   ),
                 ),
                 onPressed: () {
-                  NavBar();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: ((context) => NavBar()!)),
+                  );
                 },
                 child: CustomTextBlue(
                   text: 'main',
@@ -128,6 +133,44 @@ class Dialog extends StatelessWidget {
               shape: 10,
               fontsize: 17,
               onPressed: () => Navigator.pop(context),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class EndSet extends StatelessWidget {
+  const EndSet({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      children: [
+        const SizedBox(
+          height: 40,
+        ),
+        const Align(
+          alignment: Alignment.center,
+          child: CustomTextBlue(text: '設定が完了しました！', fontSize: 25),
+        ),
+        Padding(
+          padding:
+              const EdgeInsets.only(top: 20, left: 50, right: 50, bottom: 40),
+          child: Container(
+            child: OutlineButton(
+              title: 'とじる',
+              width: 50,
+              height: 50,
+              shape: 10,
+              fontsize: 17,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: ((context) => NavBar()!)),
+                );
+              },
             ),
           ),
         ),

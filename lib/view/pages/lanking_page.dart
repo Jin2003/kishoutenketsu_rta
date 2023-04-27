@@ -53,9 +53,10 @@ Widget _buildCard(int index) {
       child: Row(
         children: [
           SizedBox(
-            width: 10,
+            width: 5,
             height: 0,
           ),
+          // 順位の丸
           Container(
             width: 35,
             height: 35,
@@ -77,20 +78,28 @@ Widget _buildCard(int index) {
             width: 20,
             height: 0,
           ),
+          // RTAのタイム
           Text(
-            '1 : $index',
+            '10 : $index',
             style: const TextStyle(
-                fontSize: 30,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
                 color: Constant.mainColor),
           ),
+          // 年月日のやつ
           Container(
-            margin: EdgeInsets.only(top: 15, left: 30),
-            width: 60,
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 10, left: 20),
+            width: 75,
             height: 20,
             decoration: BoxDecoration(
-              color: Constant.mainColor,
+              color: Constant.subColor,
               borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              "23.04/25",
+              style: TextStyle(
+                  color: Constant.mainColor, fontWeight: FontWeight.bold),
             ),
           )
         ],

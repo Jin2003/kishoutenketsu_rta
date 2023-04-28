@@ -129,65 +129,104 @@ class _GatchaPageState extends State<GatchaPage> {
                             title: CustomTextBlue(
                                 text: '10ポイント消費して\nガチャを回しますか？', fontSize: 20),
                             actions: <Widget>[
-                              GestureDetector(
-                                child:
-                                    CustomTextBlue(text: 'いいえ', fontSize: 15),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              GestureDetector(
-                                child: CustomTextBlue(text: 'はい', fontSize: 15),
-                                onTap: () async {
-                                  final db = await DatabaseHelper().db;
-                                  if (_point < 10) {
-                                    return;
-                                  }
-
-                                  setState(() {
-                                    _isPressed = true;
-                                  });
-                                  //userテーブルのpointカラムを10減らす
-                                  await db.rawUpdate(
-                                      'UPDATE user SET point = point - 10');
-                                  //userテーブルのpointカラムを取得
-                                  final point =
-                                      await db.rawQuery('SELECT * FROM user');
-                                  setState(() {
-                                    _point = point[0]['point'] as int;
-                                  });
-                                  Navigator.pop(context);
-                                  // まわるポップアップ表示
-                                  Future.delayed(Duration(milliseconds: 3500),
-                                      () {
-                                    showAnimatedDialog<void>(
-                                      context: context,
-                                      builder: (_) {
-                                        return AlertDialog(
-                                          title: CustomTextBlue(
-                                              text: 'せせらぎが当たりました！',
-                                              fontSize: 20),
-                                          actions: <Widget>[
-                                            GestureDetector(
-                                              child: CustomTextBlue(
-                                                  text: '閉じる', fontSize: 15),
-                                              onTap: () {
-                                                setState(() {
-                                                  _isPressed = false;
-                                                });
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ],
-                                        );
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    child: OutlineButton(
+                                      title: 'はい',
+                                      fontsize: 15,
+                                      height: 40,
+                                      width: 80,
+                                      shape: 10,
+                                      onPressed: () async {
+                                        final db = await DatabaseHelper().db;
+                                        if (_point < 10) {
+                                          return;
+                                        }
+                                        setState(() {
+                                          _isPressed = true;
+                                        });
+                                        //userテーブルのpointカラムを10減らす
+                                        await db.rawUpdate(
+                                            'UPDATE user SET point = point - 10');
+                                        //userテーブルのpointカラムを取得
+                                        final point = await db
+                                            .rawQuery('SELECT * FROM user');
+                                        setState(() {
+                                          _point = point[0]['point'] as int;
+                                        });
+                                        Navigator.pop(context);
+                                        // まわるポップアップ表示
+                                        Future.delayed(
+                                            Duration(milliseconds: 3500), () {
+                                          showAnimatedDialog<void>(
+                                            context: context,
+                                            builder: (_) {
+                                              return AlertDialog(
+                                                title: CustomTextBlue(
+                                                    text: 'せせらぎ\nが当たりました！',
+                                                    fontSize: 20),
+                                                actions: <Widget>[
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: Column(
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        GestureDetector(
+                                                          child: OutlineButton(
+                                                            fontsize: 15,
+                                                            width: 80,
+                                                            height: 40,
+                                                            title: 'とじる',
+                                                            shape: 10,
+                                                            onPressed: () {
+                                                              setState(() {
+                                                                _isPressed =
+                                                                    false;
+                                                              });
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 20,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                            animationType: DialogTransitionType
+                                                .scaleRotate,
+                                            duration:
+                                                Duration(milliseconds: 300),
+                                          );
+                                        });
                                       },
-                                      animationType:
-                                          DialogTransitionType.scaleRotate,
-                                      duration: Duration(milliseconds: 300),
-                                    );
-                                  });
-                                },
-                              ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 30,
+                                    height: 0,
+                                  ),
+                                  GestureDetector(
+                                    child: OutlineButton(
+                                        title: 'いいえ',
+                                        fontsize: 15,
+                                        height: 40,
+                                        width: 80,
+                                        shape: 10,
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        }),
+                                  ),
+                                ],
+                              )
                             ],
                           );
                         });

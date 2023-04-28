@@ -7,6 +7,8 @@ import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 
+import '../../logic/nav_bar.dart';
+
 class RtaPage extends StatefulWidget {
   const RtaPage({super.key});
 
@@ -21,11 +23,13 @@ class _RtaPageState extends State<RtaPage> {
     'assets/rta/床.png',
     'assets/rta/点.png',
     'assets/rta/結.png',
-    'assets/rta/RTA.png'
+    'assets/rta/RTA.png',
+    'assets/rta/RTA.png',
   ];
 
   // タッチしたかしてないか判定
   List<bool> on_off = [
+    false,
     false,
     false,
     false,
@@ -134,6 +138,9 @@ class _RtaPageState extends State<RtaPage> {
                   setState(() {
                     image_count++;
                   });
+                  if (image_count == 5) {
+                    endDialog();
+                  }
                 },
               ),
             ),
@@ -141,5 +148,52 @@ class _RtaPageState extends State<RtaPage> {
         ),
       ),
     );
+  }
+
+  void endDialog() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Scaffold(
+            backgroundColor: Constant.subColor,
+            body: Stack(
+              children: [
+                SimpleDialog(
+                  children: [
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    const Align(
+                      alignment: Alignment.center,
+                      child: CustomTextBlue(text: '設定が完了しました！', fontSize: 25),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 20, left: 50, right: 50, bottom: 40),
+                      child: Container(
+                        child: OutlineButton(
+                          title: 'とじる',
+                          width: 50,
+                          height: 50,
+                          shape: 10,
+                          fontsize: 17,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => NavBar()!)),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
+    });
   }
 }

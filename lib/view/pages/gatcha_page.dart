@@ -5,6 +5,7 @@ import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 import '../../logic/database_helper.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../constant.dart';
 
@@ -18,6 +19,9 @@ class GatchaPage extends StatefulWidget {
 class _GatchaPageState extends State<GatchaPage> {
   //現在のポイント
   int _point = 10;
+
+  //ボタンが押されたかどうk
+  bool _isPressed = false;
 
   @override
   void initState() {
@@ -47,6 +51,7 @@ class _GatchaPageState extends State<GatchaPage> {
             "assets/gatcha_page.png",
             fit: BoxFit.cover,
           ),
+          //画像を表示する
           Column(
             children: [
               SizedBox(
@@ -137,6 +142,9 @@ class _GatchaPageState extends State<GatchaPage> {
                                   if (_point < 10) {
                                     return;
                                   }
+                                  setState(() {
+                                    _isPressed = true;
+                                  });
                                   //userテーブルのpointカラムを10減らす
                                   await db.rawUpdate(
                                       'UPDATE user SET point = point - 10');
@@ -167,6 +175,36 @@ class _GatchaPageState extends State<GatchaPage> {
               ),
             ],
           ),
+          if (_isPressed)
+            Container(
+              color: Color.fromARGB(255, 11, 11, 11).withOpacity(0.5),
+            ),
+          //_isPressedがtrueの時に表示する
+          if (_isPressed)
+            Positioned(
+              top: 250,
+              left: 118,
+              child: Container(
+                  width: 150,
+                  height: 150,
+                  child: Animate(
+                    effects: [
+                      SlideEffect(duration: 1.seconds),
+                      ShakeEffect(delay: 1.seconds, duration: 500.milliseconds),
+                      ShimmerEffect(
+                          delay: 2.seconds, duration: 800.milliseconds),
+                    ],
+                    child: Image.asset(
+                      "assets/capsule.png",
+                      fit: BoxFit.cover,
+                      height: 500,
+                    ),
+                  )),
+              //   Image.asset(
+              //   "assets/capsule.png",
+              //   fit: BoxFit.cover,
+              // ),
+            ),
         ],
         fit: StackFit.expand,
       ),

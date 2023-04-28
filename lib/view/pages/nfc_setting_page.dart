@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -21,7 +20,7 @@ class NfcSettingPage extends StatefulWidget {
 
 class _NfcSettingPageState extends State<NfcSettingPage> {
   // タグ名
-  final List<String> tagname = ["起", "床", "点", "結", "RTA"];
+  final List<String> tagname = ["起", "床", "点", "結", "RTA", "RTA"];
   //int a = tagname.length;
 
   // タグ番号
@@ -29,12 +28,6 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 0,1,2,3,4,  5
-    if (tag_count >= tagname.length) {
-      EndSet();
-    }
-    
-
     String tag_name = tagname[tag_count];
 
     return Scaffold(
@@ -61,14 +54,14 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
                   ),
                 ),
                 onPressed: () {
-                  showDialog<void>(
-                      context: context,
-                      builder: (_) {
-                        return Dialog();
-                      });
                   setState(() {
                     tag_count++;
                   });
+                  showDialog<void>(
+                      context: context,
+                      builder: (_) {
+                        return Dialog(tag_count: tag_count);
+                      });
                 },
                 child: CustomTextBlue(
                   text: 'nfcスキャンできたら',
@@ -110,10 +103,44 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
 }
 
 class Dialog extends StatelessWidget {
-  const Dialog({Key? key}) : super(key: key);
+  final int tag_count;
+  const Dialog({Key? key, required this.tag_count}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (tag_count >= 5) {
+      return SimpleDialog(
+        children: [
+          const SizedBox(
+            height: 40,
+          ),
+          const Align(
+            alignment: Alignment.center,
+            child: CustomTextBlue(text: '設定が完了しました！', fontSize: 25),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 20, left: 50, right: 50, bottom: 40),
+            child: Container(
+              child: OutlineButton(
+                title: 'とじる',
+                width: 50,
+                height: 50,
+                shape: 10,
+                fontsize: 17,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: ((context) => NavBar()!)),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     return SimpleDialog(
       children: [
         const SizedBox(
@@ -141,42 +168,3 @@ class Dialog extends StatelessWidget {
     );
   }
 }
-
-class EndSet extends StatelessWidget {
-  const EndSet({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-      children: [
-        const SizedBox(
-          height: 40,
-        ),
-        const Align(
-          alignment: Alignment.center,
-          child: CustomTextBlue(text: '設定が完了しました！', fontSize: 25),
-        ),
-        Padding(
-          padding:
-              const EdgeInsets.only(top: 20, left: 50, right: 50, bottom: 40),
-          child: Container(
-            child: OutlineButton(
-              title: 'とじる',
-              width: 50,
-              height: 50,
-              shape: 10,
-              fontsize: 17,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: ((context) => NavBar()!)),
-                );
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-

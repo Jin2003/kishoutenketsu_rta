@@ -6,6 +6,7 @@ import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 import '../../logic/database_helper.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 import '../constant.dart';
 
@@ -142,6 +143,7 @@ class _GatchaPageState extends State<GatchaPage> {
                                   if (_point < 10) {
                                     return;
                                   }
+
                                   setState(() {
                                     _isPressed = true;
                                   });
@@ -155,6 +157,32 @@ class _GatchaPageState extends State<GatchaPage> {
                                     _point = point[0]['point'] as int;
                                   });
                                   Navigator.pop(context);
+                                  // まわるポップアップ表示
+                                  Future.delayed(Duration(milliseconds: 3500),
+                                      () {
+                                    showAnimatedDialog<void>(
+                                      context: context,
+                                      builder: (_) {
+                                        return AlertDialog(
+                                          title: CustomTextBlue(
+                                              text: 'せせらぎが当たりました！',
+                                              fontSize: 20),
+                                          actions: <Widget>[
+                                            GestureDetector(
+                                              child: CustomTextBlue(
+                                                  text: '閉じる', fontSize: 15),
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
+                                        ); //koko
+                                      },
+                                      animationType:
+                                          DialogTransitionType.scaleRotate,
+                                      duration: Duration(milliseconds: 300),
+                                    );
+                                  });
                                 },
                               ),
                             ],
@@ -200,10 +228,6 @@ class _GatchaPageState extends State<GatchaPage> {
                       height: 500,
                     ),
                   )),
-              //   Image.asset(
-              //   "assets/capsule.png",
-              //   fit: BoxFit.cover,
-              // ),
             ),
         ],
         fit: StackFit.expand,

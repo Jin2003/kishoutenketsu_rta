@@ -24,7 +24,16 @@ class _RtaPageState extends State<RtaPage> {
     'assets/rta/RTA.png'
   ];
 
-  // running_bar 画像  
+  // タッチしたかしてないか判定
+  List<bool> on_off = [
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
+
+  // running_bar 画像
   final List<String> rta_image = [
     'assets/rta/rta_circle.png',
     'assets/rta/rta_bar.png',
@@ -50,14 +59,14 @@ class _RtaPageState extends State<RtaPage> {
             SizedBox(width: 100, height: 20),
             CustomTextBlue(text: '  をタッチしてね！', fontSize: 25),
             SizedBox(width: 100, height: 30),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[2]),
+                  child: Image.asset(
+                    rta_image[2]),
                 ),
                 SizedBox(
                   width: 30,
@@ -122,7 +131,7 @@ class _RtaPageState extends State<RtaPage> {
                   ),
                 ),
                 onPressed: () {
-
+                  on_off[image_count] = true;
                 },
               ),
             ),

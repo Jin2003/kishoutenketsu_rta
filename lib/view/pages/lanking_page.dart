@@ -17,7 +17,7 @@ class _LankingPageState extends State<LankingPage> {
       body: Stack(children: [
         Positioned.fill(
           child: Image.asset(
-            "assets/lanking_page.png",
+            "assets/ranking_page.png",
             fit: BoxFit.cover,
           ),
         ),
@@ -25,13 +25,13 @@ class _LankingPageState extends State<LankingPage> {
             alignment: Alignment.center,
             child: Container(
               padding: const EdgeInsets.only(top: 55),
-              width: 300,
+              width: 310,
               height: 420,
               child: Scrollbar(
                 child: ListView.separated(
                   padding: const EdgeInsets.all(20),
                   separatorBuilder: (context, index) =>
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 9),
                   itemCount: 10,
                   itemBuilder: (context, index) => _buildCard(index + 1),
                 ),
@@ -68,14 +68,14 @@ Widget _buildCard(int index) {
               child: Text(
                 '$index',
                 style: const TextStyle(
-                    fontSize: 25,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Constant.white),
               ),
             ),
           ),
           SizedBox(
-            width: 20,
+            width: 18,
             height: 0,
           ),
           // RTAのタイム

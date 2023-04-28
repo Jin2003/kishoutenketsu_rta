@@ -105,7 +105,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             ),
           ),
           SizedBox(
-            width: 18,
+            width: 23,
             height: 0,
           ),
           // RTAのタイム
@@ -118,6 +118,10 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
                 color: Constant.mainColor),
+          ),
+          SizedBox(
+            width: 25,
+            height: 0,
           ),
           // 年月日のやつ
           Container(

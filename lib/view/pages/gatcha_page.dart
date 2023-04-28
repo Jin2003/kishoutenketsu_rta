@@ -50,7 +50,7 @@ class _GatchaPageState extends State<GatchaPage> {
           Column(
             children: [
               SizedBox(
-                height: 50,
+                height: 70,
                 width: 1,
               ),
               CustomTextBlue(text: '現在のポイント', fontSize: 28),
@@ -99,8 +99,7 @@ class _GatchaPageState extends State<GatchaPage> {
               //ElevateButton(title: 'ガチャをまわす'),
               SizedBox(
                 //デバッグ用に300にしている
-                // height: 400,
-                height: 300,
+                height: 380,
                 width: 1,
               ),
               //OutlineButton(title: 'e', width: 10, height: 10, fontsize: 10, shape: 10)

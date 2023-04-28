@@ -36,8 +36,8 @@ class _RtaPageState extends State<RtaPage> {
   // running_bar 画像
   final List<String> rta_image = [
     'assets/rta/rta_circle.png',
-    'assets/rta/rta_bar.png',
     'assets/rta/rta_circle_on.png',
+    'assets/rta/rta_bar.png',
   ];
 
   // 画像番号
@@ -65,48 +65,47 @@ class _RtaPageState extends State<RtaPage> {
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(
-                    rta_image[2]),
+                  child: Image.asset(rta_image[on_off[0] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[1]),
-                ),
-                SizedBox(
-                  width: 35,
-                  height: 35,
                   child: Image.asset(rta_image[2]),
                 ),
                 SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset(rta_image[1]),
-                ),
-                SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[image_count]),
+                  child: Image.asset(rta_image[on_off[1] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[1]),
+                  child: Image.asset(rta_image[2]),
                 ),
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[image_count]),
+                  child: Image.asset(rta_image[on_off[2] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[1]),
+                  child: Image.asset(rta_image[2]),
                 ),
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[image_count]),
+                  child: Image.asset(rta_image[on_off[3] ? 1 : 0]),
+                ),
+                SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset(rta_image[2]),
+                ),
+                SizedBox(
+                  width: 35,
+                  height: 35,
+                  child: Image.asset(rta_image[on_off[4] ? 1 : 0]),
                 ),
               ],
             ),
@@ -132,6 +131,9 @@ class _RtaPageState extends State<RtaPage> {
                 ),
                 onPressed: () {
                   on_off[image_count] = true;
+                  setState(() {
+                    image_count++;
+                  });
                 },
               ),
             ),

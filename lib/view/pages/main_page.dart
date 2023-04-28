@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
-import 'package:kishoutenketsu_rta/view/rta_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
 import '../constant.dart';
 import 'components/outline_button.dart';
 

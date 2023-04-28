@@ -7,7 +7,7 @@ import '../constant.dart';
 import 'components/outline_button.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -15,6 +15,10 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late TimeOfDay _timeOfDay;
+  // 洗濯中のアラーム音
+  String? _music;
+
+  //List<String> alarmMusic = ['きらきら星', 'せせらぎ', 'アンパンマンマーチ', 'りんご'];
 
   @override
   void initState() {
@@ -27,8 +31,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       backgroundColor: Constant.subColor,
       body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, 
-        children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Container(
             alignment: Alignment.center,
             width: 260,
@@ -83,8 +86,22 @@ class _MainPageState extends State<MainPage> {
             height: 55,
             fontSize: 20,
             shape: 30,
+            onPressed: () async {
+              // アラーム音のダイアログを表示して、選択したアラーム音を受け取る
+              final selectedAlarm = await showDialog<String>(
+                context: context,
+                builder:(context) => _alarmSelectorDialog(
+                  music: _music,
+                ),
+              );
+              if (selectedAlarm != null) {
+                // 選択中のアラームを更新してリビルドする
+                setState(() {
+                  _music = selectedAlarm;
+                });
+              }
+            },
           ),
-
           SizedBox(
             width: 0,
             height: 40,
@@ -103,3 +120,44 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
+/// 都道府県を選択するダイアログ
+/// 選択されたら都道府県の文字列を返す
+/// キャンセルされたら null を返す
+class _alarmSelectorDialog extends StatelessWidget{
+  const _alarmSelectorDialog({
+    Key? key,
+    this.music,
+  }) : super(key: key);
+
+  /// 選択中の都道府県
+  final String? music;
+
+  static const _musics = ['きらきら星', 'せせらぎ', 'たかし〜朝よ〜！', '天国と地獄', '恋愛レボリューション21'];
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      children: _musics
+          .map(
+            (p) => ListTile(
+              leading: Visibility(
+                visible: p == music,
+                child: const Icon(Icons.check),
+              ),
+              title: Text(
+                p,
+                style: GoogleFonts.zenMaruGothic(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 21,
+                  color: Constant.mainColor,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pop(p);
+              },
+            ),
+          )
+          .toList(),
+    );
+  }
+}

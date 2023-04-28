@@ -172,11 +172,14 @@ class _GatchaPageState extends State<GatchaPage> {
                                               child: CustomTextBlue(
                                                   text: '閉じる', fontSize: 15),
                                               onTap: () {
+                                                setState(() {
+                                                  _isPressed = false;
+                                                });
                                                 Navigator.pop(context);
                                               },
                                             ),
                                           ],
-                                        ); //koko
+                                        );
                                       },
                                       animationType:
                                           DialogTransitionType.scaleRotate,

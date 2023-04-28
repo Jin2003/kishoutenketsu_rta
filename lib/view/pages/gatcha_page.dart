@@ -115,12 +115,43 @@ class _GatchaPageState extends State<GatchaPage> {
                     ),
                   ),
                   onPressed: () async {
-                    final db = await DatabaseHelper().db;
-                    if (_point < 10) {
-                      return;
-                    }
-                    await db.rawQuery('UPDATE user SET point = point - 10');
-                    _loadPoint();
+                    // ポップアップ表示
+                    showDialog<void>(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: CustomTextBlue(
+                                text: '10ポイント消費して\nガチャを回しますか？', fontSize: 20),
+                            actions: <Widget>[
+                              GestureDetector(
+                                child:
+                                    CustomTextBlue(text: 'いいえ', fontSize: 15),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              GestureDetector(
+                                child: CustomTextBlue(text: 'はい', fontSize: 15),
+                                onTap: () async {
+                                  final db = await DatabaseHelper().db;
+                                  if (_point < 10) {
+                                    return;
+                                  }
+                                  //userテーブルのpointカラムを10減らす
+                                  await db.rawUpdate(
+                                      'UPDATE user SET point = point - 10');
+                                  //userテーブルのpointカラムを取得
+                                  final point =
+                                      await db.rawQuery('SELECT * FROM user');
+                                  setState(() {
+                                    _point = point[0]['point'] as int;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                        });
                   },
                   child: CustomTextBlue(
                     text: 'ガチャをまわす',

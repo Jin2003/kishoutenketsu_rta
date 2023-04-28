@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
+import '../../logic/database_helper.dart';
 
 class LankingPage extends StatefulWidget {
   const LankingPage({super.key});
@@ -11,6 +12,32 @@ class LankingPage extends StatefulWidget {
 }
 
 class _LankingPageState extends State<LankingPage> {
+  //Lankingを表示するためのリスト
+  List<Map<String, dynamic>> _times = [];
+  //Lankingを何個表示するか
+  int _lankingCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLank();
+  }
+
+  //_timeを取得する関数
+  Future<void> _loadLank() async {
+    final db = await DatabaseHelper().db;
+    //timesテーブルからtime_recordとtime_datetimeを取得し、time_recordの昇順で並び替える
+    final times = await db.rawQuery(
+        'SELECT time_record, time_datetime FROM times ORDER BY time_record ASC');
+    //timesの中身の数を_lankingCountに代入
+    final lankingCount = times.length;
+
+    setState(() {
+      _times = times;
+      _lankingCount = lankingCount;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,8 +59,10 @@ class _LankingPageState extends State<LankingPage> {
                   padding: const EdgeInsets.all(20),
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 9),
-                  itemCount: 10,
-                  itemBuilder: (context, index) => _buildCard(index + 1),
+                  //ここでリストの数を決めている
+                  itemCount: _lankingCount,
+                  itemBuilder: (context, index) =>
+                      _buildCard(index + 1, _times[index]),
                 ),
               ),
             ))
@@ -42,7 +71,8 @@ class _LankingPageState extends State<LankingPage> {
   }
 }
 
-Widget _buildCard(int index) {
+Widget _buildCard(int index, Map<String, dynamic> time) {
+  debugPrint(time.toString());
   return Card(
     elevation: 6,
     shape: RoundedRectangleBorder(
@@ -80,7 +110,10 @@ Widget _buildCard(int index) {
           ),
           // RTAのタイム
           Text(
-            '10 : $index',
+            //timesが秒数で入っているので分と秒に変換し、00:00の形にする
+            '${time['time_record'] ~/ 60}'.padLeft(2, '0') +
+                ':' +
+                '${time['time_record'] % 60}'.padLeft(2, '0'),
             style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -97,7 +130,7 @@ Widget _buildCard(int index) {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
-              "23.04/25",
+              "${time['time_datetime']}",
               style: TextStyle(
                   color: Constant.mainColor, fontWeight: FontWeight.bold),
             ),

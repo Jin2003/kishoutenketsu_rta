@@ -54,7 +54,7 @@ class ElevateButton extends StatelessWidget {
           backgroundColor: Constant.white,
           elevation: 5,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(shape!),
+            borderRadius: BorderRadius.circular(shape),
           ),
         ),
         onPressed: () {

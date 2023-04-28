@@ -28,7 +28,7 @@ class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     // nfcが登録されてるか確認  false==登録なし
-    bool nfc_state = true;
+    bool nfc_state = false;
 
     if (nfc_state == true) {
       // 登録があった場合

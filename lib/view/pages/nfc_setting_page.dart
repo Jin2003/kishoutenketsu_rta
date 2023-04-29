@@ -110,31 +110,48 @@ class Dialog extends StatelessWidget {
   Widget build(BuildContext context) {
     if (tag_count >= 5) {
       return SimpleDialog(
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Constant.white, width: 5),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        backgroundColor: Constant.mainColor,
         children: [
-          const SizedBox(
-            height: 40,
-          ),
-          const Align(
-            alignment: Alignment.center,
-            child: CustomTextBlue(text: '設定が完了しました！', fontSize: 25),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 20, left: 50, right: 50, bottom: 40),
-            child: Container(
-              child: OutlineButton(
-                title: 'とじる',
-                width: 50,
-                height: 50,
-                shape: 10,
-                fontsize: 17,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: ((context) => NavBar()!)),
-                  );
-                },
-              ),
+          Container(
+            width: 200,
+            height: 190,
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 40,
+                ),
+                const Align(
+                  alignment: Alignment.center,
+                  child: CustomTextWhite(text: '設定が完了しました！', fontSize: 25),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: OutlineButton(
+                    title: 'とじる',
+                    width: 120,
+                    height: 50,
+                    shape: 10,
+                    fontsize: 17,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: ((context) => NavBar()!)),
+                      );
+                    },
+                  ),
+                ),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.only(top: 20, left: 50, right: 50, bottom: 40),
+                //   child:
+                // ),
+              ],
             ),
           ),
         ],

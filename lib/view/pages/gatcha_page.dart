@@ -7,6 +7,7 @@ import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 import '../../logic/database_helper.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'dart:math' as math;
 
 import '../constant.dart';
 
@@ -19,10 +20,12 @@ class GatchaPage extends StatefulWidget {
 
 class _GatchaPageState extends State<GatchaPage> {
   //現在のポイント
-  int _point = 10;
+  int? _point;
 
   //ボタンが押されたかどうk
   bool _isPressed = false;
+
+  var random = math.Random();
 
   @override
   void initState() {
@@ -104,8 +107,8 @@ class _GatchaPageState extends State<GatchaPage> {
 
               //ElevateButton(title: 'ガチャをまわす'),
               SizedBox(
-                //デバッグ用に300にしている
-                height: 380,
+                //TODO:デバッグ用に200にしている
+                height: 280,
                 width: 1,
               ),
               //OutlineButton(title: 'e', width: 10, height: 10, fontsize: 10, shape: 10)
@@ -140,7 +143,7 @@ class _GatchaPageState extends State<GatchaPage> {
                                 child: CustomTextBlue(text: 'はい', fontSize: 15),
                                 onTap: () async {
                                   final db = await DatabaseHelper().db;
-                                  if (_point < 10) {
+                                  if (_point! < 10) {
                                     return;
                                   }
 
@@ -153,6 +156,10 @@ class _GatchaPageState extends State<GatchaPage> {
                                   //userテーブルのpointカラムを取得
                                   final point =
                                       await db.rawQuery('SELECT * FROM user');
+                                  final items = await db.rawQuery(
+                                      //これにしようと思ったけど処理が重すぎる
+                                      // 'SELECT item_id , item_name FROM items WHERE has_item = 0 ORDER BY RAND() LIMIT 1');
+                                      'SELECT * FROM items WHERE has_item = 0 ');
                                   setState(() {
                                     _point = point[0]['point'] as int;
                                   });
@@ -165,7 +172,8 @@ class _GatchaPageState extends State<GatchaPage> {
                                       builder: (_) {
                                         return AlertDialog(
                                           title: CustomTextBlue(
-                                              text: 'せせらぎが当たりました！',
+                                              text:
+                                                  '${items[random.nextInt(items.length)]["item_name"]}が当たりました！',
                                               fontSize: 20),
                                           actions: <Widget>[
                                             GestureDetector(

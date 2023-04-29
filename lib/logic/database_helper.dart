@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,16 +28,16 @@ class DatabaseHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    await db.execute(
-        'CREATE TABLE IF NOT EXISTS user (point INTEGER, selected_item_id INTEGER)');
-    //timesテーブルがなければ作成
-    await db.execute(
-        'CREATE TABLE IF NOT EXISTS times (time_id INTEGER PRIMARY KEY AUTOINCREMENT, time_record INTEGER, time_datetime TEXT)');
-    //itemsテーブルがなければ作成
-    await db.execute(
-        'CREATE TABLE IF NOT EXISTS items (item_id INTEGER, item_name TEXT, item_file_name TEXT, has_Item INTEGER)');
-    //NFCテーブルがなければ作成
-    await db.execute('CREATE TABLE IF NOT EXISTS nfc (nfc_id INTEGER)');
+    // await db.execute(
+    //     'CREATE TABLE IF NOT EXISTS user (point INTEGER, selected_item_id INTEGER)');
+    // //timesテーブルがなければ作成
+    // await db.execute(
+    //     'CREATE TABLE IF NOT EXISTS times (time_id INTEGER PRIMARY KEY AUTOINCREMENT, time_record INTEGER, time_datetime TEXT)');
+    // //itemsテーブルがなければ作成
+    // await db.execute(
+    //     'CREATE TABLE IF NOT EXISTS items (item_id INTEGER PRIMARY KEY AUTOINCREMENT, item_name TEXT, item_file_name TEXT, has_Item INTEGER)');
+    // //NFCテーブルがなければ作成
+    // await db.execute('CREATE TABLE IF NOT EXISTS nfc (nfc_id INTEGER)');
   }
 
   Future<void> _onOpen(Database db) async {
@@ -45,7 +46,6 @@ class DatabaseHelper {
     await db.execute('DROP TABLE times');
     await db.execute('DROP TABLE items');
     await db.execute('DROP TABLE nfc');
-
     //userテーブルがなければ作成
     await db.execute(
         'CREATE TABLE IF NOT EXISTS user (point INTEGER, selected_item_id INTEGER)');
@@ -54,7 +54,7 @@ class DatabaseHelper {
         'CREATE TABLE IF NOT EXISTS times (time_id INTEGER PRIMARY KEY AUTOINCREMENT, time_record INTEGER, time_datetime TEXT)');
     //itemsテーブルがなければ作成
     await db.execute(
-        'CREATE TABLE IF NOT EXISTS items (item_id INTEGER, item_name TEXT, item_file_name TEXT, has_Item INTEGER)');
+        'CREATE TABLE IF NOT EXISTS items (item_id INTEGER PRIMARY KEY AUTOINCREMENT, item_name TEXT, item_file_name TEXT, has_Item INTEGER)');
     //NFCテーブルがなければ作成
     await db.execute('CREATE TABLE IF NOT EXISTS nfc (nfc_id INTEGER)');
     //userテーブルの行数を取得
@@ -93,8 +93,33 @@ class DatabaseHelper {
             '23.01/01',
           ]);
     }
-    //デバッグ用のデータを挿入
-    //timesテーブルを初期化
+    //itemsテーブルにデータをいれる
+    var count2 =
+        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM items'));
+    if (count2 == 0) {
+      await db.execute(
+          'INSERT INTO items (item_name, item_file_name, has_Item) VALUES (?, ?, ?),(?, ?, ?), (?, ?, ?), (?, ?, ?), (?, ?, ?), (?, ?, ?)',
+          [
+            'デフォルト',
+            'file1.mp3',
+            1,
+            'きらきら星',
+            'file2.mp3',
+            0,
+            'せせらぎ',
+            'file3.mp3',
+            0,
+            'たかし〜朝よ〜！',
+            'file4.mp3',
+            1,
+            '天国と地獄',
+            'file5.mp3',
+            1,
+            '爆音アラーム',
+            'file6.mp3',
+            0,
+          ]);
+    }
   }
 
   // Future<void> _onCreate(Database db, int version) async {

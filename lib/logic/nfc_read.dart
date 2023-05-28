@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-
 import 'package:nfc_manager/nfc_manager.dart';
 
-String _tagvalue = "";
 
 class NFCRead {
+
+  String _tagvalue = "";
+
   nfcread() async {
     //NFCリーダーをアクティブ状態にする
     await NfcManager.instance.startSession(
@@ -25,7 +25,7 @@ class NFCRead {
           //NFC内のレコード(最初に入っているデータ)を取り出す
           final tagValue = String.fromCharCodes(message.records.first.payload);  
           _tagvalue = tagValue.substring(3);
-          //debugPrint(_tagvalue);
+          debugPrint(_tagvalue);
           NfcManager.instance.stopSession();
           return;
         }

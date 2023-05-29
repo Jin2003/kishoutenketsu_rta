@@ -173,7 +173,7 @@ class _GatchaPageState extends State<GatchaPage> {
                                         return AlertDialog(
                                           title: CustomTextBlue(
                                               text:
-                                                  '${items[random.nextInt(items.length)]["item_name"]}が当たりました！',
+                                                  '${items[0]['item_name']}が当たりました！',
                                               fontSize: 20),
                                           actions: <Widget>[
                                             GestureDetector(

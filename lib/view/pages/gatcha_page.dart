@@ -150,16 +150,17 @@ class _GatchaPageState extends State<GatchaPage> {
                                         setState(() {
                                           _isPressed = true;
                                         });
-                                        //userテーブルのpointカラムを10減らす
+                                        //10ポイント消費する
                                         await db.rawUpdate(
                                             'UPDATE user SET point = point - 10');
-                                        //userテーブルのpointカラムを取得
+                                        //変更後のポイントの取得
                                         final point = await db
                                             .rawQuery('SELECT * FROM user');
+                                        //持っていないアイテムをランダムに1つ取得
                                         final items = await db.rawQuery(
-                                            //これにしようと思ったけど処理が重すぎる
-                                            // 'SELECT item_id , item_name FROM items WHERE has_item = 0 ORDER BY RAND() LIMIT 1');
-                                            'SELECT * FROM items WHERE has_item = 0 ');
+                                            'SELECT * FROM items WHERE has_item = 0 ORDER BY RANDOM() LIMIT 1');
+                                        print(items);
+                                        //表示するポイントの更新
                                         setState(() {
                                           _point = point[0]['point'] as int;
                                         });
@@ -173,7 +174,7 @@ class _GatchaPageState extends State<GatchaPage> {
                                               return AlertDialog(
                                                 title: CustomTextBlue(
                                                     text:
-                                                        '${items[random.nextInt(items.length)]["item_name"]}が当たりました！',
+                                                        '${items[0]["item_name"]}が当たりました！',
                                                     fontSize: 20),
                                                 actions: <Widget>[
                                                   Container(

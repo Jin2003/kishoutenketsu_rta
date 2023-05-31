@@ -144,22 +144,29 @@ class _GatchaPageState extends State<GatchaPage> {
                                       shape: 10,
                                       onPressed: () async {
                                         final db = await DatabaseHelper().db;
+                                        // ポイントが10ポイント以下の場合はガチャを回せない
                                         if (_point < 10) {
+                                          return;
+                                        }
+                                        // 持っていないアイテムをランダムに1つ取得
+                                        final items = await db.rawQuery(
+                                            'SELECT * FROM items WHERE has_item = 0 ORDER BY RANDOM() LIMIT 1');
+                                        // 持っていないアイテムがない場合は処理を終了
+                                        if (items.isEmpty) {
                                           return;
                                         }
                                         setState(() {
                                           _isPressed = true;
                                         });
+                                        // 引いたアイテムを所持アイテムにする
+                                        await db.rawUpdate(
+                                            'UPDATE items SET has_item = 1 WHERE item_id = ${items[0]["item_id"]}');
                                         //10ポイント消費する
                                         await db.rawUpdate(
                                             'UPDATE user SET point = point - 10');
-                                        //変更後のポイントの取得
+                                        // 変更後のポイントの取得
                                         final point = await db
-                                            .rawQuery('SELECT * FROM user');
-                                        //持っていないアイテムをランダムに1つ取得
-                                        final items = await db.rawQuery(
-                                            'SELECT * FROM items WHERE has_item = 0 ORDER BY RANDOM() LIMIT 1');
-                                        print(items);
+                                            .rawQuery('SELECT point FROM user');
                                         //表示するポイントの更新
                                         setState(() {
                                           _point = point[0]['point'] as int;

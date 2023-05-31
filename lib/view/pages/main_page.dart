@@ -90,7 +90,7 @@ class _MainPageState extends State<MainPage> {
               // アラーム音のダイアログを表示して、選択したアラーム音を受け取る
               final selectedAlarm = await showDialog<String>(
                 context: context,
-                builder:(context) => _alarmSelectorDialog(
+                builder: (context) => _alarmSelectorDialog(
                   music: _music,
                 ),
               );
@@ -123,7 +123,7 @@ class _MainPageState extends State<MainPage> {
 /// 都道府県を選択するダイアログ
 /// 選択されたら都道府県の文字列を返す
 /// キャンセルされたら null を返す
-class _alarmSelectorDialog extends StatelessWidget{
+class _alarmSelectorDialog extends StatelessWidget {
   const _alarmSelectorDialog({
     Key? key,
     this.music,

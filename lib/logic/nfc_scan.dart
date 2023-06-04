@@ -1,38 +1,50 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
-import 'package:kishoutenketsu_rta/logic/nfc_write.dart';
 
 class NFCScan {
-  nfcScan(String id) async {
-
+  Future<void> nfcScan(String id) async {
     // 生成されたIDを格納するためのローカル変数
     String generatedID = "";
 
-    //NFCリーダーをアクティブ状態にする
+    // NFCから読み取ったデータを返す
+    Completer<void> completer = Completer<void>();
+
+    // NFCリーダーをアクティブ状態にする
     await NfcManager.instance.startSession(
-      //NFCをスキャンできたらonDiscoveredを呼び出し処理開始
+      // NFCをスキャンできたらonDiscoveredを呼び出し処理開始
       onDiscovered: (NfcTag tag) async {
         final ndef = Ndef.from(tag);
-        //NFC内のデータがNULLであれば処理を終了（読み込み失敗）
+        // NFC内のデータがNULLであれば処理を終了（読み込み失敗）
         if (ndef == null) {
           debugPrint("値がNULLです");
-          await NfcManager.instance.stopSession(errorMessage: 'error');
+          NfcManager.instance.stopSession(errorMessage: 'error');
           return;
         } else {
           // 生成されたIDをローカル変数に保存
           generatedID = id;
-          //インスタンスを生成
-          final writeNFC = NFCWrite();
-          //書き込み処理を実行
-          await writeNFC.nfcWrite(id);
+          // レコードを生成
+          NdefRecord textRecord = NdefRecord.createText(id);
+          // レコード内にメッセージ生成
+          NdefMessage message = NdefMessage([textRecord]);
+          // NFCに書き込み
+          await ndef.write(message);
+          debugPrint(id);
+          debugPrint('書き込みました!"');
+          // await NfcManager.instance.stopSession();
+          completer.complete(); // スキャン処理が完了したことを通知
+          return;
         }
       },
+      // NFCリーダーがエラーを吐いたらonErrorを呼び出し処理終了
       onError: (dynamic e) async {
         debugPrint('NFC error: $e');
-        await NfcManager.instance.stopSession(errorMessage: 'error');
+        NfcManager.instance.stopSession(errorMessage: 'error');
         return;
       },
     );
+    // スキャン処理が完了するまで待機
+    await completer.future;
   }
 }
 
@@ -52,3 +64,9 @@ class NFCScan {
 
     // //NFCリーダーをアクティブ状態にする
     // pollingOptions: {NfcPollingOption.iso14443, NfcPollingOption.iso15693},
+
+
+    // //インスタンスを生成
+    // final writeNFC = NFCWrite();
+    // //書き込み処理を実行
+    // await writeNFC.nfcWrite(id);

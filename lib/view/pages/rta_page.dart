@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
@@ -113,42 +114,70 @@ class _RtaPageState extends State<RtaPage> {
                 ),
               ],
             ),
-            SizedBox(width: 100, height: 50),
-            SizedBox(
-              width: 200,
-              height: 60,
-              child: ElevatedButton(
-                child: Text(
-                  'タッチしたら',
-                  style: GoogleFonts.zenMaruGothic(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Constant.mainColor,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Constant.white,
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(60),
-                  ),
-                ),
-                onPressed: () {
-                  on_off[image_count] = true;
-                  setState(() {
-                    image_count++;
-                  });
-                  if (image_count == 5) {
-                    endDialog();
-                  }
-                },
-              ),
-            ),
+            // SizedBox(width: 100, height: 50),
+            // SizedBox(
+            //   width: 200,
+            //   height: 60,
+            //   child: ElevatedButton(
+            //     child: Text(
+            //       'タッチしたら',
+            //       style: GoogleFonts.zenMaruGothic(
+            //         fontSize: 20,
+            //         fontWeight: FontWeight.bold,
+            //         color: Constant.mainColor,
+            //       ),
+            //     ),
+            //     style: ElevatedButton.styleFrom(
+            //       backgroundColor: Constant.white,
+            //       elevation: 5,
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(60),
+            //       ),
+            //     ),
+            //     onPressed: () {
+            //       on_off[image_count] = true;
+            //       setState(() {
+            //         image_count++;
+            //       });
+            //       if (image_count == 5) {
+            //         endDialog();
+            //       }
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),
     );
   }
+  
+  @override
+  void initState() {
+    super.initState();
+    //nfcReadFunc()呼び出し
+    nfcReadFunc();
+  }
+
+  //nfcReadFunc()関数
+  void nfcReadFunc() async {
+    //NFCRead().nfcRead()呼び出し
+    await NFCRead().nfcRead().then((_) {
+      setState(() {
+        //on_off[image_count]をtrueにする
+        on_off[image_count] = true;
+        //image_countの値を増やす
+        image_count++;
+      });
+      //image_countが5になったらendDialog()呼び出し
+      if (image_count == 5) {
+        endDialog();
+      }else{
+        //image_countが5になっていない場合はnfcReadFunc()呼び出し
+        nfcReadFunc();
+      }
+    });
+  }
+
 
   void endDialog() {
     Future.delayed(const Duration(milliseconds: 500), () {

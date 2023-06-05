@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class NFCScan {
-  Future<void> nfcScan(String id, int tag_count) async {
+  Future<void> nfcScan(String id, int count) async {
     // NFCから読み取ったデータを返す
     Completer<void> completer = Completer<void>();
 
@@ -26,7 +26,7 @@ class NFCScan {
           await ndef.write(message);
           debugPrint(id);
           debugPrint('書き込みました!"');
-          if (tag_count == 4) {
+          if (count == 4) {
             await NfcManager.instance.stopSession();
           }
           completer.complete(); // スキャン処理が完了したことを通知

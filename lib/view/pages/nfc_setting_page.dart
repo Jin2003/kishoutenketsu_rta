@@ -8,6 +8,7 @@ import 'package:kishoutenketsu_rta/view/pages/components/custom_text_white.dart'
 import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/start_page.dart';
 import 'package:uuid/uuid.dart';
+import 'package:kishoutenketsu_rta/logic/database_helper.dart';
 
 import '../../logic/nav_bar.dart';
 import '../constant.dart';
@@ -67,6 +68,8 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
     await NFCScan().nfcScan(id, tag_count).then((_) {
       //NFCのスキャン処理が終わったらshowDialogFunc()呼び出し
       showDialogFunc(context, tag_count);
+
+      _registerIdInDatabase(id);
       //tag_countが4以下ならtag_countの値を増やしてnfcScanFunc()呼び出し
       if (tag_count < 4) {
         setState(() {
@@ -75,6 +78,13 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
         nfcScanFunc();
       }
     });
+  }
+
+  Future<void> _registerIdInDatabase(String id) async {
+    final db = await DatabaseHelper().db;
+
+    await db.insert('nfc', {'nfc_id': id});
+    // print('inserted id: $id');
   }
 
   void showDialogFunc(BuildContext context, int tag_count) {

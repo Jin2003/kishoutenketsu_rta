@@ -141,4 +141,3 @@ class DatabaseHelper {
 
   // Future<void> _onOpen(Database db) async {}
 }
-

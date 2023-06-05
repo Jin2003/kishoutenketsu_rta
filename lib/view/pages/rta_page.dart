@@ -150,7 +150,7 @@ class _RtaPageState extends State<RtaPage> {
       ),
     );
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -161,7 +161,7 @@ class _RtaPageState extends State<RtaPage> {
   //nfcReadFunc()関数
   void nfcReadFunc() async {
     //NFCRead().nfcRead()呼び出し
-    await NFCRead().nfcRead().then((_) {
+    await NFCRead().nfcRead(image_count).then((_) {
       setState(() {
         //on_off[image_count]をtrueにする
         on_off[image_count] = true;
@@ -171,58 +171,57 @@ class _RtaPageState extends State<RtaPage> {
       //image_countが5になったらendDialog()呼び出し
       if (image_count == 5) {
         endDialog();
-      }else{
+      } else {
         //image_countが5になっていない場合はnfcReadFunc()呼び出し
         nfcReadFunc();
       }
     });
   }
 
-
   void endDialog() {
     Future.delayed(const Duration(milliseconds: 500), () {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Scaffold(
-            backgroundColor: Constant.subColor,
-            body: Stack(
-              children: [
-                SimpleDialog(
-                  children: [
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    const Align(
-                      alignment: Alignment.center,
-                      child: CustomTextBlue(text: '設定が完了しました！', fontSize: 25),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, left: 50, right: 50, bottom: 40),
-                      child: Container(
-                        child: OutlineButton(
-                          title: 'とじる',
-                          width: 50,
-                          height: 50,
-                          shape: 10,
-                          fontsize: 17,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => NavBar()!)),
-                            );
-                          },
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Scaffold(
+              backgroundColor: Constant.subColor,
+              body: Stack(
+                children: [
+                  SimpleDialog(
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      const Align(
+                        alignment: Alignment.center,
+                        child: CustomTextBlue(text: '設定が完了しました！', fontSize: 25),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20, left: 50, right: 50, bottom: 40),
+                        child: Container(
+                          child: OutlineButton(
+                            title: 'とじる',
+                            width: 50,
+                            height: 50,
+                            shape: 10,
+                            fontsize: 17,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => NavBar()!)),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        });
+                    ],
+                  ),
+                ],
+              ),
+            );
+          });
     });
   }
 }

@@ -2,16 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
-
 class NFCRead {
-
   //NFCから読み取ったデータを格納する変数
   String _tagvalue = "";
 
   //NFCから読み取ったデータを返す
   Completer<void> completer = Completer<void>();
 
-  nfcRead() async {
+  nfcRead(int count) async {
     //NFCリーダーをアクティブ状態にする
     await NfcManager.instance.startSession(
       //NFCをスキャンできたらonDiscoveredを呼び出し処理開始
@@ -28,13 +26,16 @@ class NFCRead {
           //NFC内のデータ読み取り
           final message = await ndef.read();
           //NFC内のレコード(最初に入っているデータ)を取り出す
-          final tagValue = String.fromCharCodes(message.records.first.payload);  
+          final tagValue = String.fromCharCodes(message.records.first.payload);
           //NFC内のレコードのデータを格納
           _tagvalue = tagValue.substring(3);
           //NFC内のデータを表示
           debugPrint(_tagvalue);
           //スキャンが完了したことを通知
-          completer.complete(); 
+          completer.complete();
+          if (count == 4) {
+            await NfcManager.instance.stopSession();
+          }
           return;
         }
       },

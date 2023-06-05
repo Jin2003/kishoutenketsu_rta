@@ -20,7 +20,7 @@ class GatchaPage extends StatefulWidget {
 
 class _GatchaPageState extends State<GatchaPage> {
   //現在のポイント
-  int _point = 10;
+  int _point = 0;
 
   //ボタンが押されたかどうk
   bool _isPressed = false;

@@ -64,7 +64,7 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
   void nfcScanFunc() async {
     String id = uuid.v4(); //uuidを生成
     //NFCScan().nfcScan(id)呼び出し
-    await NFCScan().nfcScan(id).then((_) {
+    await NFCScan().nfcScan(id, tag_count).then((_) {
       //NFCのスキャン処理が終わったらshowDialogFunc()呼び出し
       showDialogFunc(context, tag_count);
       //tag_countが4以下ならtag_countの値を増やしてnfcScanFunc()呼び出し

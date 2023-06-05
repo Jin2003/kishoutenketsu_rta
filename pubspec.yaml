@@ -46,6 +46,7 @@ dependencies:
   # flutter_native_splash: ^2.2.18
   flutter_animate: ^4.1.1+1
   flutter_animated_dialog: ^2.0.1
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:

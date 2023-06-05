@@ -4,9 +4,6 @@ import 'package:nfc_manager/nfc_manager.dart';
 
 class NFCScan {
   Future<void> nfcScan(String id) async {
-    // 生成されたIDを格納するためのローカル変数
-    String generatedID = "";
-
     // NFCから読み取ったデータを返す
     Completer<void> completer = Completer<void>();
 
@@ -21,8 +18,6 @@ class NFCScan {
           NfcManager.instance.stopSession(errorMessage: 'error');
           return;
         } else {
-          // 生成されたIDをローカル変数に保存
-          generatedID = id;
           // レコードを生成
           NdefRecord textRecord = NdefRecord.createText(id);
           // レコード内にメッセージ生成

@@ -7,6 +7,7 @@ import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_white.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/start_page.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../logic/nav_bar.dart';
 import '../constant.dart';
@@ -28,11 +29,16 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
   //ScanFileとWriteFileを結合した
   //WriteFileは削除してもいい
 
-  //int a = tagname.length;
-
   int tag_count = 0;
 
-  String id = "1352123456";//仮で作ったID
+  var uuid = Uuid();
+
+  @override
+  void initState() {
+    super.initState();
+    //nfcScanFunc()呼び出し
+    nfcScanFunc();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +61,8 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    //nfcScanFunc()呼び出し
-    nfcScanFunc();
-  }
-
   void nfcScanFunc() async {
+    String id = uuid.v4(); //uuidを生成
     //NFCScan().nfcScan(id)呼び出し
     await NFCScan().nfcScan(id).then((_) {
       //NFCのスキャン処理が終わったらshowDialogFunc()呼び出し
@@ -89,13 +89,12 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
   }
 }
 
-
-
-
-
 class Dialog extends StatelessWidget {
   final int tag_count;
-  const Dialog({Key? key, required this.tag_count,}) : super(key: key);
+  const Dialog({
+    Key? key,
+    required this.tag_count,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -176,61 +175,3 @@ class Dialog extends StatelessWidget {
     );
   }
 }
-
-
-          // Align(
-          //   alignment: const Alignment(0.0, 0.4),
-          //   child: //OutlineButton(title: 'nfcスキャンできたら', width: 250, height: 70, fontsize: 20, shape: 60),
-          //       SizedBox(
-          //     width: 250,
-          //     height: 70,
-          //     child: ElevatedButton(
-          //       style: ElevatedButton.styleFrom(
-          //         backgroundColor: Constant.white,
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(60),
-          //         ),
-          //       ),
-          //       onPressed: () {
-          //         setState(() {
-          //           tag_count++;
-          //         });
-          //         showDialog<void>(
-          //             context: context,
-          //             builder: (_) {
-          //               return Dialog(tag_count: tag_count);
-          //             });
-          //       },
-          //       child: CustomTextBlue(
-          //         text: 'nfcスキャンできたら',
-          //         fontSize: 20,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Align(
-          //   alignment: const Alignment(0.0, 0.6),
-          //   child: //OutlineButton(title: 'nfcスキャンできたら', width: 250, height: 70, fontsize: 20, shape: 60),
-          //       SizedBox(
-          //     width: 250,
-          //     height: 70,
-          //     child: ElevatedButton(
-          //       style: ElevatedButton.styleFrom(
-          //         backgroundColor: Constant.white,
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(60),
-          //         ),
-          //       ),
-          //       onPressed: () {
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(builder: ((context) => NavBar()!)),
-          //         );
-          //       },
-          //       child: CustomTextBlue(
-          //         text: 'main',
-          //         fontSize: 20,
-          //       ),
-          //     ),
-          //   ),
-          // )

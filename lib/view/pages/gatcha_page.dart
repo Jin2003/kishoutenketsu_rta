@@ -7,7 +7,6 @@ import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 import '../../logic/database_helper.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-import 'dart:math' as math;
 
 import '../constant.dart';
 
@@ -22,10 +21,8 @@ class _GatchaPageState extends State<GatchaPage> {
   //現在のポイント
   int _point = 0;
 
-  //ボタンが押されたかどうk
+  //ボタンが押されたかどうか
   bool _isPressed = false;
-
-  var random = math.Random();
 
   @override
   void initState() {
@@ -43,8 +40,6 @@ class _GatchaPageState extends State<GatchaPage> {
     });
   }
 
-  //デバッグ用の_point
-  // int _point = 100;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

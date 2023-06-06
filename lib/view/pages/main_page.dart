@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
 import '../constant.dart';
-import 'components/outline_button.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -15,14 +13,12 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late TimeOfDay _timeOfDay;
-  // 洗濯中のアラーム音
+  // 選択中のアラーム音
   String? _music;
-
-  //List<String> alarmMusic = ['きらきら星', 'せせらぎ', 'アンパンマンマーチ', 'りんご'];
 
   @override
   void initState() {
-    _timeOfDay = TimeOfDay(hour: 0, minute: 0);
+    _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
     super.initState();
   }
 
@@ -59,7 +55,7 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 0,
             height: 30,
           ),
@@ -76,7 +72,7 @@ class _MainPageState extends State<MainPage> {
               if (timeOfDay != null) setState(() => {_timeOfDay = timeOfDay});
             },
           ),
-          SizedBox(
+          const SizedBox(
             width: 0,
             height: 20,
           ),
@@ -102,11 +98,11 @@ class _MainPageState extends State<MainPage> {
               }
             },
           ),
-          SizedBox(
+          const SizedBox(
             width: 0,
             height: 40,
           ),
-          ElevateButton(
+          const ElevateButton(
             title: "アラームが鳴ったら",
             width: 250,
             height: 55,
@@ -120,16 +116,14 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-/// 都道府県を選択するダイアログ
-/// 選択されたら都道府県の文字列を返す
-/// キャンセルされたら null を返す
+// アラーム音を選択するダイアログ
 class _alarmSelectorDialog extends StatelessWidget {
   const _alarmSelectorDialog({
     Key? key,
     this.music,
   }) : super(key: key);
 
-  /// 選択中の都道府県
+  // 選択中のアラーム音
   final String? music;
 
   static const _musics = ['きらきら星', 'せせらぎ', 'たかし〜朝よ〜！', '天国と地獄', '恋愛レボリューション21'];

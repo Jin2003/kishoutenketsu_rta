@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 
 import '../../constant.dart';
@@ -40,7 +38,7 @@ class OutlineButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(shape),
         ),
-        side: BorderSide(
+        side: const BorderSide(
           width: 4,
           color: Constant.mainColor,
         ),

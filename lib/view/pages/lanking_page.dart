@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import '../../logic/database_helper.dart';
 
@@ -82,7 +80,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
       padding: const EdgeInsets.all(9.0),
       child: Row(
         children: [
-          SizedBox(
+          const SizedBox(
             width: 5,
             height: 0,
           ),
@@ -90,7 +88,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
           Container(
             width: 35,
             height: 35,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Constant.mainColor,
               shape: BoxShape.circle,
             ),
@@ -104,7 +102,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 23,
             height: 0,
           ),
@@ -119,14 +117,14 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
                 fontWeight: FontWeight.bold,
                 color: Constant.mainColor),
           ),
-          SizedBox(
+          const SizedBox(
             width: 25,
             height: 0,
           ),
           // 年月日のやつ
           Container(
             alignment: Alignment.center,
-            margin: EdgeInsets.only(top: 10, left: 20),
+            margin: const EdgeInsets.only(top: 10, left: 20),
             width: 75,
             height: 20,
             decoration: BoxDecoration(
@@ -135,7 +133,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             ),
             child: Text(
               "${time['time_datetime']}",
-              style: TextStyle(
+              style: const TextStyle(
                   color: Constant.mainColor, fontWeight: FontWeight.bold),
             ),
           )

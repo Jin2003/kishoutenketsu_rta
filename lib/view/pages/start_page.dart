@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
-import 'dart:async';
-
 import '../../logic/nav_bar.dart';
 import '../constant.dart';
 import 'components/elevate_button.dart';
@@ -28,14 +23,14 @@ class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     // nfcが登録されてるか確認  false==登録なし
-    bool nfc_state = false;
+    bool nfcState = false;
 
-    if (nfc_state == true) {
+    if (nfcState == true) {
       // 登録があった場合
-      return _logoWidget(context, NavBar());
+      return _logoWidget(context, const NavBar());
     } else {
       // 登録がなかった場合
-      return _logoWidget(context, NfcSettingPage());
+      return _logoWidget(context, const NfcSettingPage());
     }
   }
 

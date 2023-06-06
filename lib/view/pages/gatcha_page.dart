@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 import '../../logic/database_helper.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -45,6 +42,7 @@ class _GatchaPageState extends State<GatchaPage> {
     return Scaffold(
       backgroundColor: Constant.mainColor,
       body: Stack(
+        fit: StackFit.expand,
         children: [
           Image.asset(
             "assets/gatcha_page.png",
@@ -53,12 +51,12 @@ class _GatchaPageState extends State<GatchaPage> {
           //画像を表示する
           Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 70,
                 width: 1,
               ),
-              CustomTextBlue(text: '現在のポイント', fontSize: 28),
-              SizedBox(
+              const CustomTextBlue(text: '現在のポイント', fontSize: 28),
+              const SizedBox(
                 height: 10,
                 width: 1,
               ),
@@ -78,17 +76,17 @@ class _GatchaPageState extends State<GatchaPage> {
                     Text(
                       textAlign: TextAlign.center,
                       _point.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                         color: Constant.mainColor,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                       height: 1,
                     ),
-                    Text(
+                    const Text(
                       'pt',
                       style: TextStyle(
                         fontSize: 40,
@@ -101,7 +99,7 @@ class _GatchaPageState extends State<GatchaPage> {
               ),
 
               //ElevateButton(title: 'ガチャをまわす'),
-              SizedBox(
+              const SizedBox(
                 //デバッグ用に300にしている
                 height: 380,
                 width: 1,
@@ -124,7 +122,7 @@ class _GatchaPageState extends State<GatchaPage> {
                         context: context,
                         builder: (_) {
                           return AlertDialog(
-                            title: CustomTextBlue(
+                            title: const CustomTextBlue(
                                 text: '10ポイント消費して\nガチャを回しますか？', fontSize: 20),
                             actions: <Widget>[
                               Row(
@@ -169,7 +167,8 @@ class _GatchaPageState extends State<GatchaPage> {
                                         Navigator.pop(context);
                                         // まわるポップアップ表示
                                         Future.delayed(
-                                            Duration(milliseconds: 3500), () {
+                                            const Duration(milliseconds: 3500),
+                                            () {
                                           showAnimatedDialog<void>(
                                             context: context,
                                             builder: (_) {
@@ -203,7 +202,7 @@ class _GatchaPageState extends State<GatchaPage> {
                                                             },
                                                           ),
                                                         ),
-                                                        SizedBox(
+                                                        const SizedBox(
                                                           height: 20,
                                                         )
                                                       ],
@@ -214,14 +213,14 @@ class _GatchaPageState extends State<GatchaPage> {
                                             },
                                             animationType: DialogTransitionType
                                                 .scaleRotate,
-                                            duration:
-                                                Duration(milliseconds: 300),
+                                            duration: const Duration(
+                                                milliseconds: 300),
                                           );
                                         });
                                       },
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 30,
                                     height: 0,
                                   ),
@@ -242,7 +241,7 @@ class _GatchaPageState extends State<GatchaPage> {
                           );
                         });
                   },
-                  child: CustomTextBlue(
+                  child: const CustomTextBlue(
                     text: 'ガチャをまわす',
                     fontSize: 23,
                   ),
@@ -258,14 +257,14 @@ class _GatchaPageState extends State<GatchaPage> {
           ),
           if (_isPressed)
             Container(
-              color: Color.fromARGB(255, 11, 11, 11).withOpacity(0.5),
+              color: const Color.fromARGB(255, 11, 11, 11).withOpacity(0.5),
             ),
           //_isPressedがtrueの時に表示する
           if (_isPressed)
             Positioned(
               top: 250,
               left: 118,
-              child: Container(
+              child: SizedBox(
                   width: 150,
                   height: 150,
                   child: Animate(
@@ -283,7 +282,6 @@ class _GatchaPageState extends State<GatchaPage> {
                   )),
             ),
         ],
-        fit: StackFit.expand,
       ),
     );
   }

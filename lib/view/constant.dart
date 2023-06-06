@@ -8,5 +8,4 @@ class Constant {
   static const Color subColor = Color(0xffc8ffff);
   // ignore: constant_identifier_names
   static const Color white = Colors.white;
-
 }

@@ -1,9 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/gatcha_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/lanking_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/main_page.dart';
@@ -56,25 +53,21 @@ class _NavBarState extends State<NavBar> {
           Builder(
             builder: (context) {
               _selectPage = [
-                LankingPage(),
-                MainPage(),
-                GatchaPage(),
+                const LankingPage(),
+                const MainPage(),
+                const GatchaPage(),
               ];
               return _selectPage[_selectedIndex];
             },
           ),
-
           Positioned(
             bottom: 15,
             right: 10,
             child: FloatingActionButton(
-              child: Icon(Icons.question_mark),
               backgroundColor: Constant.white,
               foregroundColor: Constant.mainColor,
-              onPressed: (() {
-                
-              }
-            ),
+              onPressed: (() {}),
+              child: const Icon(Icons.question_mark),
             ),
           ),
         ],

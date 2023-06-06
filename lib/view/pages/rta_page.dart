@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 
 import '../../logic/nav_bar.dart';
@@ -19,7 +15,7 @@ class RtaPage extends StatefulWidget {
 
 class _RtaPageState extends State<RtaPage> {
   // アイコン画像
-  final List<String> icon_image = [
+  final List<String> iconImage = [
     'assets/rta/起.png',
     'assets/rta/床.png',
     'assets/rta/点.png',
@@ -29,7 +25,7 @@ class _RtaPageState extends State<RtaPage> {
   ];
 
   // タッチしたかしてないか判定
-  List<bool> on_off = [
+  List<bool> onOff = [
     false,
     false,
     false,
@@ -39,14 +35,14 @@ class _RtaPageState extends State<RtaPage> {
   ];
 
   // running_bar 画像
-  final List<String> rta_image = [
+  final List<String> rtaImage = [
     'assets/rta/rta_circle.png',
     'assets/rta/rta_circle_on.png',
     'assets/rta/rta_bar.png',
   ];
 
   // 画像番号
-  int image_count = 0;
+  int imageCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -59,58 +55,58 @@ class _RtaPageState extends State<RtaPage> {
             SizedBox(
               width: 230,
               height: 230,
-              child: Image.asset(icon_image[image_count]),
+              child: Image.asset(iconImage[imageCount]),
             ),
-            SizedBox(width: 100, height: 20),
-            CustomTextBlue(text: '  をタッチしてね！', fontSize: 25),
-            SizedBox(width: 100, height: 30),
+            const SizedBox(width: 100, height: 20),
+            const CustomTextBlue(text: '  をタッチしてね！', fontSize: 25),
+            const SizedBox(width: 100, height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[on_off[0] ? 1 : 0]),
+                  child: Image.asset(rtaImage[onOff[0] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[2]),
+                  child: Image.asset(rtaImage[2]),
                 ),
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[on_off[1] ? 1 : 0]),
+                  child: Image.asset(rtaImage[onOff[1] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[2]),
+                  child: Image.asset(rtaImage[2]),
                 ),
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[on_off[2] ? 1 : 0]),
+                  child: Image.asset(rtaImage[onOff[2] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[2]),
+                  child: Image.asset(rtaImage[2]),
                 ),
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[on_off[3] ? 1 : 0]),
+                  child: Image.asset(rtaImage[onOff[3] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[2]),
+                  child: Image.asset(rtaImage[2]),
                 ),
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[on_off[4] ? 1 : 0]),
+                  child: Image.asset(rtaImage[onOff[4] ? 1 : 0]),
                 ),
               ],
             ),
@@ -135,11 +131,11 @@ class _RtaPageState extends State<RtaPage> {
             //       ),
             //     ),
             //     onPressed: () {
-            //       on_off[image_count] = true;
+            //       onOff[imageCount] = true;
             //       setState(() {
-            //         image_count++;
+            //         imageCount++;
             //       });
-            //       if (image_count == 5) {
+            //       if (imageCount == 5) {
             //         endDialog();
             //       }
             //     },
@@ -161,18 +157,18 @@ class _RtaPageState extends State<RtaPage> {
   //nfcReadFunc()関数
   void nfcReadFunc() async {
     //NFCRead().nfcRead()呼び出し
-    await NFCRead().nfcRead(image_count).then((_) {
+    await NFCRead().nfcRead(imageCount).then((_) {
       setState(() {
-        //on_off[image_count]をtrueにする
-        on_off[image_count] = true;
-        //image_countの値を増やす
-        image_count++;
+        //onOff[imageCount]をtrueにする
+        onOff[imageCount] = true;
+        //imageCountの値を増やす
+        imageCount++;
       });
-      //image_countが5になったらendDialog()呼び出し
-      if (image_count == 5) {
+      //imageCountが5になったらendDialog()呼び出し
+      if (imageCount == 5) {
         endDialog();
       } else {
-        //image_countが5になっていない場合はnfcReadFunc()呼び出し
+        //imageCountが5になっていない場合はnfcReadFunc()呼び出し
         nfcReadFunc();
       }
     });
@@ -199,21 +195,19 @@ class _RtaPageState extends State<RtaPage> {
                       Padding(
                         padding: const EdgeInsets.only(
                             top: 20, left: 50, right: 50, bottom: 40),
-                        child: Container(
-                          child: OutlineButton(
-                            title: 'とじる',
-                            width: 50,
-                            height: 50,
-                            shape: 10,
-                            fontsize: 17,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: ((context) => NavBar()!)),
-                              );
-                            },
-                          ),
+                        child: OutlineButton(
+                          title: 'とじる',
+                          width: 50,
+                          height: 50,
+                          shape: 10,
+                          fontsize: 17,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => const NavBar())),
+                            );
+                          },
                         ),
                       ),
                     ],

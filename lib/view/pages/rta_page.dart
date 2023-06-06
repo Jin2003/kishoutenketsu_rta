@@ -3,6 +3,7 @@ import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
+import 'package:kishoutenketsu_rta/logic/database_helper.dart';
 
 import '../../logic/nav_bar.dart';
 
@@ -40,6 +41,12 @@ class _RtaPageState extends State<RtaPage> {
     'assets/rta/rta_circle_on.png',
     'assets/rta/rta_bar.png',
   ];
+
+  Future<void> _getNfcTable() async {
+    final db = await DatabaseHelper().db;
+    final List<Map<String, dynamic>> nfcs =
+        await db.rawQuery("SELECT nfc_id FROM nfc ORDER BY RANDOM()");
+  }
 
   // 画像番号
   int imageCount = 0;
@@ -152,6 +159,7 @@ class _RtaPageState extends State<RtaPage> {
     super.initState();
     //nfcReadFunc()呼び出し
     nfcReadFunc();
+    _getNfcTable();
   }
 
   //nfcReadFunc()関数

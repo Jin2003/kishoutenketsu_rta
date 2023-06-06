@@ -77,7 +77,6 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
     final db = await DatabaseHelper().db;
 
     await db.insert('nfc', {'nfc_id': id});
-    // print('inserted id: $id');
   }
 
   void showDialogFunc(BuildContext context, int tagCount) {

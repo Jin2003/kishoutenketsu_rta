@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
+import 'package:kishoutenketsu_rta/logic/database_helper.dart';
 
 import '../../logic/nav_bar.dart';
 
@@ -19,7 +16,7 @@ class RtaPage extends StatefulWidget {
 
 class _RtaPageState extends State<RtaPage> {
   // アイコン画像
-  final List<String> icon_image = [
+  final List<String> iconImage = [
     'assets/rta/起.png',
     'assets/rta/床.png',
     'assets/rta/点.png',
@@ -29,7 +26,7 @@ class _RtaPageState extends State<RtaPage> {
   ];
 
   // タッチしたかしてないか判定
-  List<bool> on_off = [
+  List<bool> onOff = [
     false,
     false,
     false,
@@ -39,14 +36,24 @@ class _RtaPageState extends State<RtaPage> {
   ];
 
   // running_bar 画像
-  final List<String> rta_image = [
+  final List<String> rtaImage = [
     'assets/rta/rta_circle.png',
     'assets/rta/rta_circle_on.png',
     'assets/rta/rta_bar.png',
   ];
 
+  Future<void> _getNfcID() async {
+    // データベースからnfc_idをランダムに取得
+    final db = await DatabaseHelper().db;
+    final List<Map<String, dynamic>> nfcs =
+        await db.rawQuery("SELECT nfc_id FROM nfc ORDER BY RANDOM()");
+    //nfcReadFunc（）呼び出し読み取り開始     
+    nfcReadFunc(nfcs);
+  }
+
   // 画像番号
-  int image_count = 0;
+  int imageCount = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,58 +66,58 @@ class _RtaPageState extends State<RtaPage> {
             SizedBox(
               width: 230,
               height: 230,
-              child: Image.asset(icon_image[image_count]),
+              child: Image.asset(iconImage[imageCount]),
             ),
-            SizedBox(width: 100, height: 20),
-            CustomTextBlue(text: '  をタッチしてね！', fontSize: 25),
-            SizedBox(width: 100, height: 30),
+            const SizedBox(width: 100, height: 20),
+            const CustomTextBlue(text: '  をタッチしてね！', fontSize: 25),
+            const SizedBox(width: 100, height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[on_off[0] ? 1 : 0]),
+                  child: Image.asset(rtaImage[onOff[0] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[2]),
+                  child: Image.asset(rtaImage[2]),
                 ),
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[on_off[1] ? 1 : 0]),
+                  child: Image.asset(rtaImage[onOff[1] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[2]),
+                  child: Image.asset(rtaImage[2]),
                 ),
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[on_off[2] ? 1 : 0]),
+                  child: Image.asset(rtaImage[onOff[2] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[2]),
+                  child: Image.asset(rtaImage[2]),
                 ),
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[on_off[3] ? 1 : 0]),
+                  child: Image.asset(rtaImage[onOff[3] ? 1 : 0]),
                 ),
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: Image.asset(rta_image[2]),
+                  child: Image.asset(rtaImage[2]),
                 ),
                 SizedBox(
                   width: 35,
                   height: 35,
-                  child: Image.asset(rta_image[on_off[4] ? 1 : 0]),
+                  child: Image.asset(rtaImage[onOff[4] ? 1 : 0]),
                 ),
               ],
             ),
@@ -135,11 +142,11 @@ class _RtaPageState extends State<RtaPage> {
             //       ),
             //     ),
             //     onPressed: () {
-            //       on_off[image_count] = true;
+            //       onOff[imageCount] = true;
             //       setState(() {
-            //         image_count++;
+            //         imageCount++;
             //       });
-            //       if (image_count == 5) {
+            //       if (imageCount == 5) {
             //         endDialog();
             //       }
             //     },
@@ -150,57 +157,64 @@ class _RtaPageState extends State<RtaPage> {
       ),
     );
   }
-  
+
   @override
   void initState() {
     super.initState();
-    //nfcReadFunc()呼び出し
-    nfcReadFunc();
+    // _getNfcTable()呼び出し
+    _getNfcID();
   }
 
-  //nfcReadFunc()関数
-  void nfcReadFunc() async {
-    //NFCRead().nfcRead()呼び出し
-    await NFCRead().nfcRead().then((_) {
-      setState(() {
-        //on_off[image_count]をtrueにする
-        on_off[image_count] = true;
-        //image_countの値を増やす
-        image_count++;
-      });
-      //image_countが5になったらendDialog()呼び出し
-      if (image_count == 5) {
-        endDialog();
-      }else{
-        //image_countが5になっていない場合はnfcReadFunc()呼び出し
-        nfcReadFunc();
+void nfcReadFunc(List<Map<String, dynamic>> nfcs, {int nfcIndex = 0}) async {
+  // NFC読み取り
+  bool success = await NFCRead().nfcRead(imageCount, nfcs[nfcIndex]);
+  debugPrint('$success');
+  // データベースに登録しているIDと読み取ったIDが異なるので再度読み取り
+  if (success == false) {
+    nfcReadFunc(nfcs, nfcIndex: nfcIndex); 
+    return;
+  } else {
+    setState(() {
+      // タッチしたかしてないか判定
+      onOff[imageCount] = true;
+      // imageCountをインクリメント
+      imageCount++;
+      //nfcIndexをインクリメント
+      if (nfcIndex <= nfcs.length - 1) {
+        nfcIndex++;
       }
     });
+    // 5回正しく読み取ったら終了
+    if (imageCount == 5) {
+      endDialog();
+    } else {
+      // 再度読み取り
+      nfcReadFunc(nfcs, nfcIndex: nfcIndex); 
+    }
   }
-
+}
 
   void endDialog() {
     Future.delayed(const Duration(milliseconds: 500), () {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Scaffold(
-            backgroundColor: Constant.subColor,
-            body: Stack(
-              children: [
-                SimpleDialog(
-                  children: [
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    const Align(
-                      alignment: Alignment.center,
-                      child: CustomTextBlue(text: '設定が完了しました！', fontSize: 25),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, left: 50, right: 50, bottom: 40),
-                      child: Container(
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Scaffold(
+              backgroundColor: Constant.subColor,
+              body: Stack(
+                children: [
+                  SimpleDialog(
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      const Align(
+                        alignment: Alignment.center,
+                        child: CustomTextBlue(text: '設定が完了しました！', fontSize: 25),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20, left: 50, right: 50, bottom: 40),
                         child: OutlineButton(
                           title: 'とじる',
                           width: 50,
@@ -211,18 +225,17 @@ class _RtaPageState extends State<RtaPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => NavBar()!)),
+                                  builder: ((context) => const NavBar())),
                             );
                           },
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        });
+                    ],
+                  ),
+                ],
+              ),
+            );
+          });
     });
   }
 }

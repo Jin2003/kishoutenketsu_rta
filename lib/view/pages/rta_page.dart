@@ -49,11 +49,11 @@ class _RtaPageState extends State<RtaPage> {
         await db.rawQuery("SELECT nfc_id FROM nfc ORDER BY RANDOM()");
     //nfcReadFunc（）呼び出し読み取り開始     
     nfcReadFunc(nfcs);
+
   }
 
   // 画像番号
   int imageCount = 0;
-
 
   @override
   Widget build(BuildContext context) {
@@ -182,6 +182,7 @@ void nfcReadFunc(List<Map<String, dynamic>> nfcs, {int nfcIndex = 0}) async {
       //nfcIndexをインクリメント
       if (nfcIndex <= nfcs.length - 1) {
         nfcIndex++;
+
       }
     });
     // 5回正しく読み取ったら終了

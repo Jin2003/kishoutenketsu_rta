@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class NFCScan {
-  Future<void> nfcScan(String id) async {
-    // 生成されたIDを格納するためのローカル変数
-    String generatedID = "";
-
+  Future<void> nfcScan(String id, int count) async {
     // NFCから読み取ったデータを返す
     Completer<void> completer = Completer<void>();
 
@@ -21,8 +18,6 @@ class NFCScan {
           NfcManager.instance.stopSession(errorMessage: 'error');
           return;
         } else {
-          // 生成されたIDをローカル変数に保存
-          generatedID = id;
           // レコードを生成
           NdefRecord textRecord = NdefRecord.createText(id);
           // レコード内にメッセージ生成
@@ -31,7 +26,9 @@ class NFCScan {
           await ndef.write(message);
           debugPrint(id);
           debugPrint('書き込みました!"');
-          // await NfcManager.instance.stopSession();
+          if (count == 4) {
+            await NfcManager.instance.stopSession();
+          }
           completer.complete(); // スキャン処理が完了したことを通知
           return;
         }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../constant.dart';
@@ -42,14 +40,6 @@ class ElevateButton extends StatelessWidget {
       width: width,
       height: height,
       child: ElevatedButton(
-        child: Text(
-          title,
-          style: GoogleFonts.zenMaruGothic(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            color: Constant.mainColor,
-          ),
-        ),
         style: ElevatedButton.styleFrom(
           backgroundColor: Constant.white,
           elevation: 5,
@@ -68,6 +58,14 @@ class ElevateButton extends StatelessWidget {
             MaterialPageRoute(builder: ((context) => nextPage!)),
           );
         },
+        child: Text(
+          title,
+          style: GoogleFonts.zenMaruGothic(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+            color: Constant.mainColor,
+          ),
+        ),
       ),
     );
   }

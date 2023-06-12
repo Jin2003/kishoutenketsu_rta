@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_scan.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_white.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
-import 'package:kishoutenketsu_rta/view/pages/start_page.dart';
+import 'package:uuid/uuid.dart';
+import 'package:kishoutenketsu_rta/logic/database_helper.dart';
 
-import '../../logic/nav_bar.dart';
 import '../constant.dart';
 import 'components/outline_button.dart';
 
@@ -28,32 +25,9 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
   //ScanFileとWriteFileを結合した
   //WriteFileは削除してもいい
 
-  //int a = tagname.length;
+  int tagCount = 0;
 
-  int tag_count = 0;
-
-  String id = "1352123456";//仮で作ったID
-
-  @override
-  Widget build(BuildContext context) {
-    String tag_name = tagname[tag_count];
-
-    return Scaffold(
-      backgroundColor: Constant.mainColor,
-      body: Stack(
-        children: [
-          Center(
-            child: Container(
-              child: CustomTextWhite(
-                text: '[$tag_name]のボタンを\n壁に取り付け\nタッチしてください',
-                fontSize: 30,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  var uuid = const Uuid();
 
   @override
   void initState() {
@@ -62,44 +36,71 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
     nfcScanFunc();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    String tagName = tagname[tagCount];
+
+    return Scaffold(
+      backgroundColor: Constant.mainColor,
+      body: Stack(
+        children: [
+          Center(
+            child: CustomTextWhite(
+              text: '[$tagName]のボタンを\n壁に取り付け\nタッチしてください',
+              fontSize: 30,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void nfcScanFunc() async {
+    String id = uuid.v4(); //uuidを生成
     //NFCScan().nfcScan(id)呼び出し
-    await NFCScan().nfcScan(id).then((_) {
+    await NFCScan().nfcScan(id, tagCount).then((_) {
       //NFCのスキャン処理が終わったらshowDialogFunc()呼び出し
-      showDialogFunc(context, tag_count);
-      //tag_countが4以下ならtag_countの値を増やしてnfcScanFunc()呼び出し
-      if (tag_count < 4) {
+      showDialogFunc(context, tagCount);
+
+      _registerIdInDatabase(id);
+      //tagCountが4以下ならtagCountの値を増やしてnfcScanFunc()呼び出し
+      if (tagCount < 4) {
         setState(() {
-          tag_count++;
+          tagCount++;
         });
         nfcScanFunc();
       }
     });
   }
 
-  void showDialogFunc(BuildContext context, int tag_count) {
+  Future<void> _registerIdInDatabase(String id) async {
+    final db = await DatabaseHelper().db;
+
+    await db.insert('nfc', {'nfc_id': id});
+  }
+
+  void showDialogFunc(BuildContext context, int tagCount) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          tag_count: tag_count,
+          tagCount: tagCount,
         );
       },
     );
   }
 }
 
-
-
-
-
 class Dialog extends StatelessWidget {
-  final int tag_count;
-  const Dialog({Key? key, required this.tag_count,}) : super(key: key);
+  final int tagCount;
+  const Dialog({
+    Key? key,
+    required this.tagCount,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (tag_count >= 4) {
+    if (tagCount >= 4) {
       return SimpleDialog(
         shape: RoundedRectangleBorder(
           side: const BorderSide(color: Constant.white, width: 5),
@@ -107,7 +108,7 @@ class Dialog extends StatelessWidget {
         ),
         backgroundColor: Constant.mainColor,
         children: [
-          Container(
+          SizedBox(
             width: 200,
             height: 190,
             child: Column(
@@ -122,20 +123,18 @@ class Dialog extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
-                  child: OutlineButton(
-                    title: 'とじる',
-                    width: 120,
-                    height: 50,
-                    shape: 10,
-                    fontsize: 17,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: ((context) => NavBar()!)),
-                      );
-                    },
-                  ),
+                OutlineButton(
+                  title: 'とじる',
+                  width: 120,
+                  height: 50,
+                  shape: 10,
+                  fontsize: 17,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: ((context) => const NavBar())),
+                    );
+                  },
                 ),
                 // Padding(
                 //   padding:
@@ -161,76 +160,16 @@ class Dialog extends StatelessWidget {
         Padding(
           padding:
               const EdgeInsets.only(top: 20, left: 50, right: 50, bottom: 40),
-          child: Container(
-            child: OutlineButton(
-              title: 'とじる',
-              width: 50,
-              height: 50,
-              shape: 10,
-              fontsize: 17,
-              onPressed: () => Navigator.pop(context),
-            ),
+          child: OutlineButton(
+            title: 'とじる',
+            width: 50,
+            height: 50,
+            shape: 10,
+            fontsize: 17,
+            onPressed: () => Navigator.pop(context),
           ),
         ),
       ],
     );
   }
 }
-
-
-          // Align(
-          //   alignment: const Alignment(0.0, 0.4),
-          //   child: //OutlineButton(title: 'nfcスキャンできたら', width: 250, height: 70, fontsize: 20, shape: 60),
-          //       SizedBox(
-          //     width: 250,
-          //     height: 70,
-          //     child: ElevatedButton(
-          //       style: ElevatedButton.styleFrom(
-          //         backgroundColor: Constant.white,
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(60),
-          //         ),
-          //       ),
-          //       onPressed: () {
-          //         setState(() {
-          //           tag_count++;
-          //         });
-          //         showDialog<void>(
-          //             context: context,
-          //             builder: (_) {
-          //               return Dialog(tag_count: tag_count);
-          //             });
-          //       },
-          //       child: CustomTextBlue(
-          //         text: 'nfcスキャンできたら',
-          //         fontSize: 20,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Align(
-          //   alignment: const Alignment(0.0, 0.6),
-          //   child: //OutlineButton(title: 'nfcスキャンできたら', width: 250, height: 70, fontsize: 20, shape: 60),
-          //       SizedBox(
-          //     width: 250,
-          //     height: 70,
-          //     child: ElevatedButton(
-          //       style: ElevatedButton.styleFrom(
-          //         backgroundColor: Constant.white,
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(60),
-          //         ),
-          //       ),
-          //       onPressed: () {
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(builder: ((context) => NavBar()!)),
-          //         );
-          //       },
-          //       child: CustomTextBlue(
-          //         text: 'main',
-          //         fontSize: 20,
-          //       ),
-          //     ),
-          //   ),
-          // )

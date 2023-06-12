@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 import '../../logic/database_helper.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-import 'dart:math' as math;
 
 import '../constant.dart';
 
@@ -20,12 +16,10 @@ class GatchaPage extends StatefulWidget {
 
 class _GatchaPageState extends State<GatchaPage> {
   //現在のポイント
-  int _point = 10;
+  int _point = 0;
 
-  //ボタンが押されたかどうk
+  //ボタンが押されたかどうか
   bool _isPressed = false;
-
-  var random = math.Random();
 
   @override
   void initState() {
@@ -43,13 +37,12 @@ class _GatchaPageState extends State<GatchaPage> {
     });
   }
 
-  //デバッグ用の_point
-  // int _point = 100;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.mainColor,
       body: Stack(
+        fit: StackFit.expand,
         children: [
           Image.asset(
             "assets/gatcha_page.png",
@@ -58,12 +51,12 @@ class _GatchaPageState extends State<GatchaPage> {
           //画像を表示する
           Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 70,
                 width: 1,
               ),
-              CustomTextBlue(text: '現在のポイント', fontSize: 28),
-              SizedBox(
+              const CustomTextBlue(text: '現在のポイント', fontSize: 28),
+              const SizedBox(
                 height: 10,
                 width: 1,
               ),
@@ -83,17 +76,17 @@ class _GatchaPageState extends State<GatchaPage> {
                     Text(
                       textAlign: TextAlign.center,
                       _point.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                         color: Constant.mainColor,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                       height: 1,
                     ),
-                    Text(
+                    const Text(
                       'pt',
                       style: TextStyle(
                         fontSize: 40,
@@ -106,7 +99,7 @@ class _GatchaPageState extends State<GatchaPage> {
               ),
 
               //ElevateButton(title: 'ガチャをまわす'),
-              SizedBox(
+              const SizedBox(
                 //デバッグ用に300にしている
                 height: 380,
                 width: 1,
@@ -129,7 +122,7 @@ class _GatchaPageState extends State<GatchaPage> {
                         context: context,
                         builder: (_) {
                           return AlertDialog(
-                            title: CustomTextBlue(
+                            title: const CustomTextBlue(
                                 text: '10ポイント消費して\nガチャを回しますか？', fontSize: 20),
                             actions: <Widget>[
                               Row(
@@ -144,36 +137,45 @@ class _GatchaPageState extends State<GatchaPage> {
                                       shape: 10,
                                       onPressed: () async {
                                         final db = await DatabaseHelper().db;
+                                        // ポイントが10ポイント以下の場合はガチャを回せない
                                         if (_point < 10) {
+                                          return;
+                                        }
+                                        // 持っていないアイテムをランダムに1つ取得
+                                        final items = await db.rawQuery(
+                                            'SELECT * FROM items WHERE has_item = 0 ORDER BY RANDOM() LIMIT 1');
+                                        // 持っていないアイテムがない場合は処理を終了
+                                        if (items.isEmpty) {
                                           return;
                                         }
                                         setState(() {
                                           _isPressed = true;
                                         });
-                                        //userテーブルのpointカラムを10減らす
+                                        // 引いたアイテムを所持アイテムにする
+                                        await db.rawUpdate(
+                                            'UPDATE items SET has_item = 1 WHERE item_id = ${items[0]["item_id"]}');
+                                        //10ポイント消費する
                                         await db.rawUpdate(
                                             'UPDATE user SET point = point - 10');
-                                        //userテーブルのpointカラムを取得
+                                        // 変更後のポイントの取得
                                         final point = await db
-                                            .rawQuery('SELECT * FROM user');
-                                        final items = await db.rawQuery(
-                                            //これにしようと思ったけど処理が重すぎる
-                                            // 'SELECT item_id , item_name FROM items WHERE has_item = 0 ORDER BY RAND() LIMIT 1');
-                                            'SELECT * FROM items WHERE has_item = 0 ');
+                                            .rawQuery('SELECT point FROM user');
+                                        //表示するポイントの更新
                                         setState(() {
                                           _point = point[0]['point'] as int;
                                         });
                                         Navigator.pop(context);
                                         // まわるポップアップ表示
                                         Future.delayed(
-                                            Duration(milliseconds: 3500), () {
+                                            const Duration(milliseconds: 3500),
+                                            () {
                                           showAnimatedDialog<void>(
                                             context: context,
                                             builder: (_) {
                                               return AlertDialog(
                                                 title: CustomTextBlue(
                                                     text:
-                                                        '${items[random.nextInt(items.length)]["item_name"]}が当たりました！',
+                                                        '${items[0]["item_name"]}が当たりました！',
                                                     fontSize: 20),
                                                 actions: <Widget>[
                                                   Container(
@@ -200,7 +202,7 @@ class _GatchaPageState extends State<GatchaPage> {
                                                             },
                                                           ),
                                                         ),
-                                                        SizedBox(
+                                                        const SizedBox(
                                                           height: 20,
                                                         )
                                                       ],
@@ -211,14 +213,14 @@ class _GatchaPageState extends State<GatchaPage> {
                                             },
                                             animationType: DialogTransitionType
                                                 .scaleRotate,
-                                            duration:
-                                                Duration(milliseconds: 300),
+                                            duration: const Duration(
+                                                milliseconds: 300),
                                           );
                                         });
                                       },
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 30,
                                     height: 0,
                                   ),
@@ -239,7 +241,7 @@ class _GatchaPageState extends State<GatchaPage> {
                           );
                         });
                   },
-                  child: CustomTextBlue(
+                  child: const CustomTextBlue(
                     text: 'ガチャをまわす',
                     fontSize: 23,
                   ),
@@ -255,14 +257,14 @@ class _GatchaPageState extends State<GatchaPage> {
           ),
           if (_isPressed)
             Container(
-              color: Color.fromARGB(255, 11, 11, 11).withOpacity(0.5),
+              color: const Color.fromARGB(255, 11, 11, 11).withOpacity(0.5),
             ),
           //_isPressedがtrueの時に表示する
           if (_isPressed)
             Positioned(
               top: 250,
               left: 118,
-              child: Container(
+              child: SizedBox(
                   width: 150,
                   height: 150,
                   child: Animate(
@@ -280,7 +282,6 @@ class _GatchaPageState extends State<GatchaPage> {
                   )),
             ),
         ],
-        fit: StackFit.expand,
       ),
     );
   }

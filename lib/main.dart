@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:kishoutenketsu_rta/view/pages/start_page.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 

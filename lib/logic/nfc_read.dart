@@ -11,6 +11,7 @@ class NFCRead {
 
   Future<bool> nfcRead(int count, dynamic id) async {
     // NFCリーダーをアクティブ状態にする
+
     await NfcManager.instance.startSession(
       // NFCをスキャンできたらonDiscoveredを呼び出し処理開始
       onDiscovered: (NfcTag tag) async {
@@ -48,6 +49,7 @@ class NFCRead {
           if (count == 4) {
             await NfcManager.instance.stopSession();
           }
+
         }
       },
       // NFCリーダーがエラーを吐いたらonErrorを呼び出し処理終了

@@ -44,4 +44,4 @@ app.*.map.json
 /android/app/release
 
 # add
-pubspec.lock
+# pubspec.lock

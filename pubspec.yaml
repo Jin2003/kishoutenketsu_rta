@@ -47,6 +47,7 @@ dependencies:
   flutter_animated_dialog: ^2.0.1
   uuid: ^3.0.7
   firebase_core: ^2.13.1
+  firebase_auth: ^4.6.3
   flutter_native_splash: ^2.3.1
 
 flutter_native_splash:
@@ -55,7 +56,6 @@ flutter_native_splash:
   # 画面全体の背景色
   color: "#ffffff"
   fullScreen: true
-
 
 dev_dependencies:
   flutter_test:

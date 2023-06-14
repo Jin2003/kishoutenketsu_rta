@@ -42,10 +42,14 @@ class _RtaPageState extends State<RtaPage> {
     'assets/rta/rta_bar.png',
   ];
 
-  Future<void> _getNfcTable() async {
+  Future<void> _getNfcID() async {
+    // データベースからnfc_idをランダムに取得
     final db = await DatabaseHelper().db;
     final List<Map<String, dynamic>> nfcs =
         await db.rawQuery("SELECT nfc_id FROM nfc ORDER BY RANDOM()");
+    //nfcReadFunc（）呼び出し読み取り開始     
+    nfcReadFunc(nfcs);
+
   }
 
   // 画像番号
@@ -157,30 +161,39 @@ class _RtaPageState extends State<RtaPage> {
   @override
   void initState() {
     super.initState();
-    //nfcReadFunc()呼び出し
-    nfcReadFunc();
-    _getNfcTable();
+    // _getNfcTable()呼び出し
+    _getNfcID();
   }
 
-  //nfcReadFunc()関数
-  void nfcReadFunc() async {
-    //NFCRead().nfcRead()呼び出し
-    await NFCRead().nfcRead(imageCount).then((_) {
-      setState(() {
-        //onOff[imageCount]をtrueにする
-        onOff[imageCount] = true;
-        //imageCountの値を増やす
-        imageCount++;
-      });
-      //imageCountが5になったらendDialog()呼び出し
-      if (imageCount == 5) {
-        endDialog();
-      } else {
-        //imageCountが5になっていない場合はnfcReadFunc()呼び出し
-        nfcReadFunc();
+void nfcReadFunc(List<Map<String, dynamic>> nfcs, {int nfcIndex = 0}) async {
+  // NFC読み取り
+  bool success = await NFCRead().nfcRead(imageCount, nfcs[nfcIndex]);
+  debugPrint('$success');
+  // データベースに登録しているIDと読み取ったIDが異なるので再度読み取り
+  if (success == false) {
+    nfcReadFunc(nfcs, nfcIndex: nfcIndex); 
+    return;
+  } else {
+    setState(() {
+      // タッチしたかしてないか判定
+      onOff[imageCount] = true;
+      // imageCountをインクリメント
+      imageCount++;
+      //nfcIndexをインクリメント
+      if (nfcIndex <= nfcs.length - 1) {
+        nfcIndex++;
+
       }
     });
+    // 5回正しく読み取ったら終了
+    if (imageCount == 5) {
+      endDialog();
+    } else {
+      // 再度読み取り
+      nfcReadFunc(nfcs, nfcIndex: nfcIndex); 
+    }
   }
+}
 
   void endDialog() {
     Future.delayed(const Duration(milliseconds: 500), () {

@@ -7,6 +7,9 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  //スプラッシュ画面の設定
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   // 画面の向きを固定
   // SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp,
@@ -15,9 +18,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  //スプラッシュ画面の設定
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // TODO:removeしないとずっとスプラッシュ画面が表示される(かまのに後で聞く)
+  FlutterNativeSplash.remove();
 
   runApp(const MyApp());
 }

@@ -80,7 +80,6 @@ class _TestLoginPage extends State<TestLoginPage> {
                         'userID': user.uid,
                         'groupID': null
                       });
-                      // TODO:SharedPreferencesにユーザ情報を保存
                       await prefs.setString('userID', user.uid);
                     }
                   } catch (e) {
@@ -120,13 +119,19 @@ class _TestLoginPage extends State<TestLoginPage> {
                         .update({
                       'groupID': documentID,
                     });
-                    // TODO:SharedPreferencesにグループIDを保存
+                    await prefs.setString('groupID', documentID);
                   }),
               ElevatedButton(
-                  child: const Text('shared_preferencesをテスト'),
+                  child: const Text('userIDを表示'),
                   // グループを作成する処理を書く
                   onPressed: () {
                     print(prefs.getString('userID'));
+                  }),
+              ElevatedButton(
+                  child: const Text('groupIDを表示'),
+                  // グループを作成する処理を書く
+                  onPressed: () {
+                    print(prefs.getString('groupID'));
                   }),
             ],
           ),

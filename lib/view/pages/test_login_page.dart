@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TestLoginPage extends StatefulWidget {
   const TestLoginPage({Key? key}) : super(key: key);
@@ -14,6 +15,18 @@ class _TestLoginPage extends State<TestLoginPage> {
   String _name = '';
   String _email = '';
   String _password = '';
+
+  late SharedPreferences prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeSharedPreferences();
+  }
+
+  Future<void> initializeSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +81,7 @@ class _TestLoginPage extends State<TestLoginPage> {
                         'groupID': null
                       });
                       // TODO:SharedPreferencesにユーザ情報を保存
+                      await prefs.setString('userID', user.uid);
                     }
                   } catch (e) {
                     print(e);
@@ -107,6 +121,12 @@ class _TestLoginPage extends State<TestLoginPage> {
                       'groupID': documentID,
                     });
                     // TODO:SharedPreferencesにグループIDを保存
+                  }),
+              ElevatedButton(
+                  child: const Text('shared_preferencesをテスト'),
+                  // グループを作成する処理を書く
+                  onPressed: () {
+                    print(prefs.getString('userID'));
                   }),
             ],
           ),

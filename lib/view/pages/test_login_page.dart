@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TestLoginPage extends StatefulWidget {
   const TestLoginPage({Key? key}) : super(key: key);
@@ -10,8 +12,21 @@ class TestLoginPage extends StatefulWidget {
 
 class _TestLoginPage extends State<TestLoginPage> {
   // 入力したメールアドレス・パスワード
+  String _name = '';
   String _email = '';
   String _password = '';
+
+  late SharedPreferences prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeSharedPreferences();
+  }
+
+  Future<void> initializeSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +37,14 @@ class _TestLoginPage extends State<TestLoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // 1行目 メールアドレス入力用テキストフィールド
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'ニックネーム'),
+                onChanged: (String value) {
+                  setState(() {
+                    _name = value;
+                  });
+                },
+              ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'メールアドレス'),
                 onChanged: (String value) {
@@ -31,7 +53,6 @@ class _TestLoginPage extends State<TestLoginPage> {
                   });
                 },
               ),
-              // 2行目 パスワード入力用テキストフィールド
               TextFormField(
                 decoration: const InputDecoration(labelText: 'パスワード'),
                 obscureText: true,
@@ -41,7 +62,6 @@ class _TestLoginPage extends State<TestLoginPage> {
                   });
                 },
               ),
-              // 3行目 ユーザ登録ボタン
               ElevatedButton(
                 child: const Text('ユーザ登録'),
                 onPressed: () async {
@@ -50,14 +70,23 @@ class _TestLoginPage extends State<TestLoginPage> {
                             .createUserWithEmailAndPassword(
                                 email: _email, password: _password))
                         .user;
-                    if (user != null)
-                      print("ユーザ登録しました ${user.email} , ${user.uid}");
+                    if (user != null) {
+                      // usersコレクションにユーザ情報を登録
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid)
+                          .set({
+                        'name': _name,
+                        'userID': user.uid,
+                        'groupID': null
+                      });
+                      await prefs.setString('userID', user.uid);
+                    }
                   } catch (e) {
                     print(e);
                   }
                 },
               ),
-              // 4行目 ログインボタン
               ElevatedButton(
                 child: const Text('ログイン'),
                 onPressed: () async {
@@ -67,24 +96,42 @@ class _TestLoginPage extends State<TestLoginPage> {
                             .signInWithEmailAndPassword(
                                 email: _email, password: _password))
                         .user;
-                    if (user != null)
-                      print("ログインしました ${user.email} , ${user.uid}");
+                    if (user != null) print("ログイン成功");
                   } catch (e) {
                     print(e);
                   }
                 },
               ),
-              // 5行目 パスワードリセット登録ボタン
               ElevatedButton(
-                  child: const Text('パスワードリセット'),
+                  child: const Text('グループを作成'),
+                  // グループを作成する処理を書く
                   onPressed: () async {
-                    try {
-                      await FirebaseAuth.instance
-                          .sendPasswordResetEmail(email: _email);
-                      print("パスワードリセット用のメールを送信しました");
-                    } catch (e) {
-                      print(e);
-                    }
+                    // groupsを作成
+                    DocumentReference docRef = await FirebaseFirestore.instance
+                        .collection('groups')
+                        .add({});
+                    // 作成したドキュメントIDを取得
+                    String documentID = docRef.id;
+                    // ドキュメントIDに対してgroupIDフィールドを更新
+                    await FirebaseFirestore.instance
+                        .collection('groups')
+                        .doc(documentID)
+                        .update({
+                      'groupID': documentID,
+                    });
+                    await prefs.setString('groupID', documentID);
+                  }),
+              ElevatedButton(
+                  child: const Text('userIDを表示'),
+                  // グループを作成する処理を書く
+                  onPressed: () {
+                    print(prefs.getString('userID'));
+                  }),
+              ElevatedButton(
+                  child: const Text('groupIDを表示'),
+                  // グループを作成する処理を書く
+                  onPressed: () {
+                    print(prefs.getString('groupID'));
                   }),
             ],
           ),

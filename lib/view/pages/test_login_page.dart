@@ -59,22 +59,21 @@ class _TestLoginPage extends State<TestLoginPage> {
                                 email: _email, password: _password))
                         .user;
                     if (user != null) {
-                      print("ユーザ登録しました ${user.email} , ${user.uid}");
                       // usersコレクションにユーザ情報を登録
                       await FirebaseFirestore.instance
                           .collection('users')
                           .doc(user.uid)
                           .set({
                         'name': _name,
+                        'userID': user.uid,
+                        'groupID': null
                       });
-                      print('usersコレクションにユーザ情報を登録しました');
                     }
                   } catch (e) {
                     print(e);
                   }
                 },
               ),
-              // 4行目 ログインボタン
               ElevatedButton(
                 child: const Text('ログイン'),
                 onPressed: () async {
@@ -85,19 +84,17 @@ class _TestLoginPage extends State<TestLoginPage> {
                                 email: _email, password: _password))
                         .user;
                     if (user != null)
-                      print("ログインしました ${user.email} , ${user.uid}");
-                    //firebase_test_page.dartに遷移
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FirebaseTestPage()),
-                    );
+                      //firebase_test_page.dartに遷移
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FirebaseTestPage()),
+                      );
                   } catch (e) {
                     print(e);
                   }
                 },
               ),
-              // 5行目 パスワードリセット登録ボタン
               ElevatedButton(
                   child: const Text('パスワードリセット'),
                   onPressed: () async {

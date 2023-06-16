@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:kishoutenketsu_rta/view/pages/firebase_test_page.dart';
 
 class TestLoginPage extends StatefulWidget {
   const TestLoginPage({Key? key}) : super(key: key);
@@ -68,6 +67,7 @@ class _TestLoginPage extends State<TestLoginPage> {
                         'userID': user.uid,
                         'groupID': null
                       });
+                      // TODO:SharedPreferencesにユーザ情報を保存
                     }
                   } catch (e) {
                     print(e);
@@ -83,28 +83,30 @@ class _TestLoginPage extends State<TestLoginPage> {
                             .signInWithEmailAndPassword(
                                 email: _email, password: _password))
                         .user;
-                    if (user != null)
-                      //firebase_test_page.dartに遷移
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FirebaseTestPage()),
-                      );
+                    if (user != null) print("ログイン成功");
                   } catch (e) {
                     print(e);
                   }
                 },
               ),
               ElevatedButton(
-                  child: const Text('パスワードリセット'),
+                  child: const Text('グループを作成'),
+                  // グループを作成する処理を書く
                   onPressed: () async {
-                    try {
-                      await FirebaseAuth.instance
-                          .sendPasswordResetEmail(email: _email);
-                      print("パスワードリセット用のメールを送信しました");
-                    } catch (e) {
-                      print(e);
-                    }
+                    // groupsを作成
+                    DocumentReference docRef = await FirebaseFirestore.instance
+                        .collection('groups')
+                        .add({});
+                    // 作成したドキュメントIDを取得
+                    String documentID = docRef.id;
+                    // ドキュメントIDに対してgroupIDフィールドを更新
+                    await FirebaseFirestore.instance
+                        .collection('groups')
+                        .doc(documentID)
+                        .update({
+                      'groupID': documentID,
+                    });
+                    // TODO:SharedPreferencesにグループIDを保存
                   }),
             ],
           ),

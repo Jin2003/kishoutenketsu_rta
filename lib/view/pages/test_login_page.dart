@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/view/pages/firebase_test_page.dart';
 
 class TestLoginPage extends StatefulWidget {
   const TestLoginPage({Key? key}) : super(key: key);
@@ -10,6 +12,7 @@ class TestLoginPage extends StatefulWidget {
 
 class _TestLoginPage extends State<TestLoginPage> {
   // 入力したメールアドレス・パスワード
+  String _name = '';
   String _email = '';
   String _password = '';
 
@@ -22,7 +25,14 @@ class _TestLoginPage extends State<TestLoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // 1行目 メールアドレス入力用テキストフィールド
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'ニックネーム'),
+                onChanged: (String value) {
+                  setState(() {
+                    _name = value;
+                  });
+                },
+              ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'メールアドレス'),
                 onChanged: (String value) {
@@ -31,7 +41,6 @@ class _TestLoginPage extends State<TestLoginPage> {
                   });
                 },
               ),
-              // 2行目 パスワード入力用テキストフィールド
               TextFormField(
                 decoration: const InputDecoration(labelText: 'パスワード'),
                 obscureText: true,
@@ -41,7 +50,6 @@ class _TestLoginPage extends State<TestLoginPage> {
                   });
                 },
               ),
-              // 3行目 ユーザ登録ボタン
               ElevatedButton(
                 child: const Text('ユーザ登録'),
                 onPressed: () async {
@@ -50,8 +58,17 @@ class _TestLoginPage extends State<TestLoginPage> {
                             .createUserWithEmailAndPassword(
                                 email: _email, password: _password))
                         .user;
-                    if (user != null)
+                    if (user != null) {
                       print("ユーザ登録しました ${user.email} , ${user.uid}");
+                      // usersコレクションにユーザ情報を登録
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid)
+                          .set({
+                        'name': _name,
+                      });
+                      print('usersコレクションにユーザ情報を登録しました');
+                    }
                   } catch (e) {
                     print(e);
                   }
@@ -69,6 +86,12 @@ class _TestLoginPage extends State<TestLoginPage> {
                         .user;
                     if (user != null)
                       print("ログインしました ${user.email} , ${user.uid}");
+                    //firebase_test_page.dartに遷移
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FirebaseTestPage()),
+                    );
                   } catch (e) {
                     print(e);
                   }

@@ -40,6 +40,7 @@ class _LankingPageState extends State<LankingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Constant.subYellow,
       body: Stack(children: [
         Positioned.fill(
           child: Image.asset(

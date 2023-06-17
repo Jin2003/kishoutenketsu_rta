@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
+import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 
 import '../../constant.dart';
 
@@ -32,15 +32,15 @@ class OutlineButton extends StatelessWidget {
           fontSize: fontsize,
           fontWeight: FontWeight.bold,
         ),
-        foregroundColor: Constant.mainColor,
+        foregroundColor: Constant.gray,
         backgroundColor: Constant.white,
         fixedSize: Size(width, height),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(shape),
         ),
         side: const BorderSide(
-          width: 4,
-          color: Constant.mainColor,
+          width: 2,
+          color: Constant.gray,
         ),
         elevation: 6,
       ),
@@ -58,7 +58,7 @@ class OutlineButton extends StatelessWidget {
           );
         }
       },
-      child: CustomTextBlue(text: title, fontSize: fontsize),
+      child: CustomText(text: title, fontSize: fontsize, Color: Constant.gray ),
     );
   }
 }

@@ -63,7 +63,7 @@ class ElevateButton extends StatelessWidget {
           style: GoogleFonts.zenMaruGothic(
             fontSize: fontSize,
             fontWeight: FontWeight.bold,
-            color: Constant.mainColor,
+            color: Constant.gray,
           ),
         ),
       ),

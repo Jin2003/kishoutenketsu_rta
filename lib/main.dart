@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/view/pages/start_page.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -35,6 +36,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.lightBlue,
       ),
+
+      // TODO:NFCのデータがあった場合 → NavBar()
+
+      // TODO:NFCのデータがなかった場合 → LogIn()
+
       home: const StartPage(),
     );
   }

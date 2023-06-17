@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
+import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 import 'package:kishoutenketsu_rta/logic/database_helper.dart';
 
@@ -58,7 +58,7 @@ class _RtaPageState extends State<RtaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.subColor,
+      backgroundColor: Constant.subYellow,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +69,7 @@ class _RtaPageState extends State<RtaPage> {
               child: Image.asset(iconImage[imageCount]),
             ),
             const SizedBox(width: 100, height: 20),
-            const CustomTextBlue(text: '  をタッチしてね！', fontSize: 25),
+            const CustomText(text: '  をタッチしてね！', fontSize: 25, Color: Constant.yellow),
             const SizedBox(width: 100, height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +201,7 @@ void nfcReadFunc(List<Map<String, dynamic>> nfcs, {int nfcIndex = 0}) async {
           context: context,
           builder: (context) {
             return Scaffold(
-              backgroundColor: Constant.subColor,
+              backgroundColor: Constant.subYellow,
               body: Stack(
                 children: [
                   SimpleDialog(
@@ -211,7 +211,7 @@ void nfcReadFunc(List<Map<String, dynamic>> nfcs, {int nfcIndex = 0}) async {
                       ),
                       const Align(
                         alignment: Alignment.center,
-                        child: CustomTextBlue(text: '設定が完了しました！', fontSize: 25),
+                        child: CustomText(text: '設定が完了しました！', fontSize: 25, Color: Constant.gray),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(

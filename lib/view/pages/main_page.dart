@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
 import '../constant.dart';
+import 'package:flutter/cupertino.dart';
+
+import 'alarm_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -15,6 +19,8 @@ class _MainPageState extends State<MainPage> {
   late TimeOfDay _timeOfDay;
   // 選択中のアラーム音
   String? _music;
+  // アラームオンオフの切り替え
+  bool _value = true;
 
   @override
   void initState() {
@@ -25,92 +31,116 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.subColor,
-      body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(
-            alignment: Alignment.center,
-            width: 260,
-            height: 90,
-            decoration: BoxDecoration(
-              border: Border.all(color: Constant.mainColor, width: 5),
-              borderRadius: BorderRadius.circular(60),
-              // color と boxdecorationの共存はNG
-              color: Constant.white,
+      backgroundColor: Constant.subYellow,
+      body: Container(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // 背景画像
+            Image.asset(
+              "assets/y_main_page.png",
+              fit: BoxFit.cover,
             ),
-            child: Center(
-              child: SizedBox(
-                width: 240,
-                height: 120,
-                //timeOfDayを18:00のような時間を表示する
-                child: Text(
-                  textAlign: TextAlign.center,
-                  '${_timeOfDay.hour.toString().padLeft(2, '0')}:${_timeOfDay.minute.toString().padLeft(2, '0')}',
-                  style: GoogleFonts.zenMaruGothic(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 60,
-                    color: Constant.mainColor,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center, 
+              children: [
+                // 時刻とか表示させてる箱
+                Container(
+                  alignment: Alignment.center,
+                  width: 330,
+                  height: 150,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      side: BorderSide(
+                        color: Constant.yellow, //枠線の色
+                        width: 4, //太さ
+                      ),
+                      backgroundColor: Constant.white,
+                      elevation: 8,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: ((context) => AlarmPage()!)),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(width: 25),
+                        Container(
+                          width: 200,
+                          child: Column(
+                            children: [
+                              SizedBox(height: 5,),
+                              Container(
+                                alignment: Alignment(-0.65,0),
+                                // アラームが鳴る時刻
+                                child: Text(
+                                  '${_timeOfDay.hour.toString().padLeft(2, '0')}:${_timeOfDay.minute.toString().padLeft(2, '0')}',
+                                  style: GoogleFonts.zenMaruGothic(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 65,
+                                    color: Constant.yellow,
+                                  ),
+                                ),
+                              ),
+                              //　アラーム音の表示
+                              Container(
+                                alignment: Alignment(-0.68,-0.8),
+                                width: 300,
+                                height: 30,
+                                child: CustomText(text: '♪きらきら星', fontSize: 19, Color: Constant.gray),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        // アラームのオンオフを切り替えるボタン
+                        CupertinoSwitch(
+                          activeColor: Color(0xFFFFA08A),
+                          trackColor: Colors.grey,
+                          value: _value,
+                          onChanged: (value) => setState(() => _value = value),
+                        ),
+                      ],
+                    ),
                   ),
+                ),
+                SizedBox(height: 150),
+              ],
+            ),
+            // 吹き出し
+            Align(
+              alignment: Alignment(-0.5, 0.85),
+              child: Container(
+                width: 250,
+                height: 190,
+                child: Image.asset(
+                  "assets/speech_bubble.png",
                 ),
               ),
             ),
-          ),
-          const SizedBox(
-            width: 0,
-            height: 30,
-          ),
-          ElevateButton(
-            title: "時刻設定",
-            width: 180,
-            height: 55,
-            fontSize: 20,
-            shape: 30,
-            //時刻の設定をする処理
-            onPressed: () async {
-              final TimeOfDay? timeOfDay = await showTimePicker(
-                  context: context, initialTime: _timeOfDay);
-              if (timeOfDay != null) setState(() => {_timeOfDay = timeOfDay});
-            },
-          ),
-          const SizedBox(
-            width: 0,
-            height: 20,
-          ),
-          ElevateButton(
-            title: "アラーム音設定",
-            width: 180,
-            height: 55,
-            fontSize: 20,
-            shape: 30,
-            onPressed: () async {
-              // アラーム音のダイアログを表示して、選択したアラーム音を受け取る
-              final selectedAlarm = await showDialog<String>(
-                context: context,
-                builder: (context) => _alarmSelectorDialog(
-                  music: _music,
+            // TODO: ここにchatGPT
+            Align(
+              alignment: Alignment(-0.40, 0.62),
+              child: CustomText(text:'今日のラッキーアイテム', fontSize: 18, Color: Constant.gray,),
+            ),
+            // 鶏の画像
+            Align(
+              alignment: Alignment(0.8, 0.95),
+              child: Container(
+                width: 120,
+                height: 120,
+                child: Image.asset(
+                  "assets/chicken.png",
                 ),
-              );
-              if (selectedAlarm != null) {
-                // 選択中のアラームを更新してリビルドする
-                setState(() {
-                  _music = selectedAlarm;
-                });
-              }
-            },
-          ),
-          const SizedBox(
-            width: 0,
-            height: 40,
-          ),
-          const ElevateButton(
-            title: "アラームが鳴ったら",
-            width: 250,
-            height: 55,
-            fontSize: 20,
-            shape: 30,
-            nextPage: RtaPage(),
-          )
-        ]),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -143,7 +173,7 @@ class _alarmSelectorDialog extends StatelessWidget {
                 style: GoogleFonts.zenMaruGothic(
                   fontWeight: FontWeight.bold,
                   fontSize: 21,
-                  color: Constant.mainColor,
+                  color: Constant.blue,
                 ),
               ),
               onTap: () {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import '../../logic/database_helper.dart';
+import 'components/custom_text.dart';
 
 class LankingPage extends StatefulWidget {
   const LankingPage({super.key});
@@ -42,28 +43,60 @@ class _LankingPageState extends State<LankingPage> {
       body: Stack(children: [
         Positioned.fill(
           child: Image.asset(
-            "assets/ranking_page.png",
+            "assets/y_ranking_page.png",
             fit: BoxFit.cover,
           ),
         ),
-        Align(
-            alignment: Alignment.center,
-            child: Container(
-              padding: const EdgeInsets.only(top: 55),
-              width: 310,
-              height: 420,
-              child: Scrollbar(
-                child: ListView.separated(
-                  padding: const EdgeInsets.all(20),
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 9),
-                  //ここでリストの数を決めている
-                  itemCount: _lankingCount,
-                  itemBuilder: (context, index) =>
-                      _buildCard(index + 1, _times[index]),
+        Column(
+          children: [
+            SizedBox(height: 58),
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                padding: const EdgeInsets.only(top: 55),
+                width: 310,
+                height: 420,
+                child: Scrollbar(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(20),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 9),
+                    //ここでリストの数を決めている
+                    itemCount: _lankingCount,
+                    itemBuilder: (context, index) =>
+                        _buildCard(index + 1, _times[index]),
+                  ),
+                ),
+              )),
+          ],
+        ),
+          // 吹き出し
+            Align(
+              alignment: Alignment(-0.5, 0.85),
+              child: Container(
+                width: 250,
+                height: 190,
+                child: Image.asset(
+                  "assets/speech_bubble.png",
                 ),
               ),
-            ))
+            ),
+            // TODO: ここにchatGPT
+            Align(
+              alignment: Alignment(-0.40, 0.62),
+              child: CustomText(text:'今日のラッキーアイテム', fontSize: 18, Color: Constant.gray,),
+            ),
+            // 鶏の画像
+            Align(
+              alignment: Alignment(0.8, 0.95),
+              child: Container(
+                width: 120,
+                height: 120,
+                child: Image.asset(
+                  "assets/chicken.png",
+                ),
+              ),
+            ),
       ]),
     );
   }
@@ -88,8 +121,9 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
           Container(
             width: 35,
             height: 35,
-            decoration: const BoxDecoration(
-              color: Constant.mainColor,
+            decoration: BoxDecoration(
+              border: Border.all(color: Constant.accentYellow),
+              color: Constant.white,
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -98,7 +132,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
                 style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Constant.white),
+                    color: Constant.accentYellow),
               ),
             ),
           ),
@@ -107,18 +141,23 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             height: 0,
           ),
           // RTAのタイム
-          Text(
-            //timesが秒数で入っているので分と秒に変換し、00:00の形にする
-            '${time['time_record'] ~/ 60}'.padLeft(2, '0') +
-                ':' +
-                '${time['time_record'] % 60}'.padLeft(2, '0'),
-            style: const TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: Constant.mainColor),
+          Column(
+            children: [
+              CustomText(text: 'りんご', fontSize: 14, Color: Constant.gray),
+              Text(
+                //timesが秒数で入っているので分と秒に変換し、00:00の形にする
+                '${time['time_record'] ~/ 60}'.padLeft(2, '0') +
+                    ':' +
+                    '${time['time_record'] % 60}'.padLeft(2, '0'),
+                style: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Constant.accentYellow),
+              ),
+            ],
           ),
           const SizedBox(
-            width: 25,
+            width: 20,
             height: 0,
           ),
           // 年月日のやつ
@@ -128,13 +167,13 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             width: 75,
             height: 20,
             decoration: BoxDecoration(
-              color: Constant.subColor,
+              color: Constant.subYellow,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               "${time['time_datetime']}",
               style: const TextStyle(
-                  color: Constant.mainColor, fontWeight: FontWeight.bold),
+                  color: Constant.accentYellow, fontWeight: FontWeight.bold),
             ),
           )
         ],

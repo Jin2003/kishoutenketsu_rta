@@ -24,6 +24,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Constant.subYellow,
       body: Stack(
         children: [
           //　背景画像
@@ -164,11 +165,7 @@ class _SignUpState extends State<SignUp> {
               ),
               Align(
                 alignment: Alignment(0,0.75),
-                child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                ),
+                child: TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,

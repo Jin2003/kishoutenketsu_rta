@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
+import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 import '../../logic/database_helper.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -40,12 +40,12 @@ class _GatchaPageState extends State<GatchaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.mainColor,
+      backgroundColor: Constant.subYellow,
       body: Stack(
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/gatcha_page.png",
+            "assets/y_gatcha_page.png",
             fit: BoxFit.cover,
           ),
           //画像を表示する
@@ -55,7 +55,7 @@ class _GatchaPageState extends State<GatchaPage> {
                 height: 70,
                 width: 1,
               ),
-              const CustomTextBlue(text: '現在のポイント', fontSize: 28),
+              const CustomText(text: '現在のポイント', fontSize: 28, Color: Constant.gray),
               const SizedBox(
                 height: 10,
                 width: 1,
@@ -65,7 +65,7 @@ class _GatchaPageState extends State<GatchaPage> {
                 width: 260,
                 height: 90,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Constant.mainColor, width: 5),
+                  border: Border.all(color: Constant.yellow, width: 5),
                   borderRadius: BorderRadius.circular(60),
                   // color と boxdecorationの共存はNG
                   color: Constant.white,
@@ -79,7 +79,7 @@ class _GatchaPageState extends State<GatchaPage> {
                       style: const TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
-                        color: Constant.mainColor,
+                        color: Constant.accentYellow,
                       ),
                     ),
                     const SizedBox(
@@ -91,7 +91,7 @@ class _GatchaPageState extends State<GatchaPage> {
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        color: Constant.mainColor,
+                        color: Constant.accentYellow,
                       ),
                     ),
                   ],
@@ -115,6 +115,7 @@ class _GatchaPageState extends State<GatchaPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
+                    elevation: 5,
                   ),
                   onPressed: () async {
                     // ポップアップ表示
@@ -122,8 +123,8 @@ class _GatchaPageState extends State<GatchaPage> {
                         context: context,
                         builder: (_) {
                           return AlertDialog(
-                            title: const CustomTextBlue(
-                                text: '10ポイント消費して\nガチャを回しますか？', fontSize: 20),
+                            title: const CustomText(
+                                text: '10ポイント消費して\nガチャを回しますか？', fontSize: 20, Color: Constant.gray),
                             actions: <Widget>[
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -173,10 +174,12 @@ class _GatchaPageState extends State<GatchaPage> {
                                             context: context,
                                             builder: (_) {
                                               return AlertDialog(
-                                                title: CustomTextBlue(
+                                                title: CustomText(
                                                     text:
                                                         '${items[0]["item_name"]}が当たりました！',
-                                                    fontSize: 20),
+                                                    fontSize: 20,
+                                                    Color: Constant.gray
+                                                    ),
                                                 actions: <Widget>[
                                                   Container(
                                                     alignment: Alignment.center,
@@ -241,13 +244,14 @@ class _GatchaPageState extends State<GatchaPage> {
                           );
                         });
                   },
-                  child: const CustomTextBlue(
+                  child: const CustomText(
                     text: 'ガチャをまわす',
-                    fontSize: 23,
+                    fontSize: 21,
+                    Color: Constant.gray
                   ),
                   // child: Text(
                   //   style: TextStyle(
-                  //     color: Constant.mainColor,
+                  //     color: Constant.blue,
                   //   ),
                   //   'ガチャを回す'
                   // ),

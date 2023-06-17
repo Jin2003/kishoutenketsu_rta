@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_scan.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/custom_text_blue.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/custom_text_white.dart';
+import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:uuid/uuid.dart';
 import 'package:kishoutenketsu_rta/logic/database_helper.dart';
 
@@ -41,13 +40,14 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
     String tagName = tagname[tagCount];
 
     return Scaffold(
-      backgroundColor: Constant.mainColor,
+      backgroundColor: Constant.subYellow,
       body: Stack(
         children: [
           Center(
-            child: CustomTextWhite(
+            child: CustomText(
               text: '[$tagName]のボタンを\n壁に取り付け\nタッチしてください',
               fontSize: 30,
+              Color: Constant.gray
             ),
           ),
         ],
@@ -106,7 +106,7 @@ class Dialog extends StatelessWidget {
           side: const BorderSide(color: Constant.white, width: 5),
           borderRadius: BorderRadius.circular(10.0),
         ),
-        backgroundColor: Constant.mainColor,
+        backgroundColor: Constant.subYellow,
         children: [
           SizedBox(
             width: 200,
@@ -118,7 +118,7 @@ class Dialog extends StatelessWidget {
                 ),
                 const Align(
                   alignment: Alignment.center,
-                  child: CustomTextWhite(text: '設定が完了しました！', fontSize: 25),
+                  child: CustomText(text: '設定が完了しました！', fontSize: 25, Color: Constant.gray),
                 ),
                 const SizedBox(
                   height: 20,
@@ -155,7 +155,7 @@ class Dialog extends StatelessWidget {
         ),
         const Align(
           alignment: Alignment.center,
-          child: CustomTextBlue(text: 'スキャン完了！', fontSize: 25),
+          child: CustomText(text: 'スキャン完了！', fontSize: 25, Color: Constant.gray),
         ),
         Padding(
           padding:

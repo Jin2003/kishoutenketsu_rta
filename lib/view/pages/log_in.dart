@@ -24,6 +24,7 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Constant.subYellow,
       body: Stack(
         children: [
           Positioned.fill(
@@ -149,11 +150,7 @@ class _LogInState extends State<LogIn> {
               ),
               Align(
                 alignment: Alignment(0, 0.59),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                  ),
+                child: TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,

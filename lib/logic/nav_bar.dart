@@ -21,6 +21,10 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // appbarの高さ指定
+        toolbarHeight: 90,
+        // 影の深さ
+        elevation: 5,
         // titleをcenter固定
         centerTitle: true,
         // 戻るボタンオフ
@@ -28,13 +32,15 @@ class _NavBarState extends State<NavBar> {
         // ロゴ表示
         title: Image.asset(
           'assets/logo.png',
-          height: 40,
-          width: 120,
+          height: 50,
+          width: 130,
         ),
-        backgroundColor: Constant.mainColor,
+        
+        backgroundColor: Constant.yellow,
         actions: <Widget>[
           IconButton(
               icon: const ImageIcon(
+                size: 40, 
                 AssetImage('assets/icon/setting_icon.png'),
                 color: Constant.white,
               ),
@@ -60,41 +66,31 @@ class _NavBarState extends State<NavBar> {
               return _selectPage[_selectedIndex];
             },
           ),
-          Positioned(
-            bottom: 15,
-            right: 10,
-            child: FloatingActionButton(
-              backgroundColor: Constant.white,
-              foregroundColor: Constant.mainColor,
-              onPressed: (() {}),
-              child: const Icon(Icons.question_mark),
-            ),
-          ),
         ],
       ),
       bottomNavigationBar: CurvedNavigationBar(
         index: _selectedIndex,
         height: 75,
-        color: Constant.mainColor,
+        color: Constant.yellow,
         //背景色と同色
-        backgroundColor: Constant.subColor,
+        backgroundColor: Constant.subYellow,
         items: const <Widget>[
           ImageIcon(
             AssetImage(
               'assets/icon/ranking_icon.png',
             ),
             color: Constant.white,
-            size: 30,
+            size: 40,
           ),
           ImageIcon(
             AssetImage('assets/icon/home_icon.png'),
             color: Constant.white,
-            size: 30,
+            size: 40,
           ),
           ImageIcon(
             AssetImage('assets/icon/gatcha_icon.png'),
             color: Constant.white,
-            size: 30,
+            size: 40,
           ),
         ],
         onTap: (index) {
@@ -106,21 +102,6 @@ class _NavBarState extends State<NavBar> {
     );
   }
 }
-
-// import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/src/widgets/container.dart';
-// import 'package:flutter/src/widgets/framework.dart';
-
-// import '../view/constant.dart';
-
-//         body: Container(
-//           color: Colors.blueAccent,
-//           child: Center(
-//             child: Text(toString(), textScaleFactor: 10.0),
-//           ),
-//         ));
-//   }
 
 // 設定の中
 Widget _bottomSheetWidget(BuildContext context) {
@@ -139,8 +120,4 @@ Widget _bottomSheetWidget(BuildContext context) {
         ),
       ));
 }
-
-
-//}
-
 

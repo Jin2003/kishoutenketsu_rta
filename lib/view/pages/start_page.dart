@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../logic/nav_bar.dart';
 import '../constant.dart';
 import 'components/elevate_button.dart';
+import 'log_in.dart';
 import 'nfc_setting_page.dart';
 
 class StartPage extends StatefulWidget {
@@ -30,14 +31,14 @@ class _StartPageState extends State<StartPage> {
       return _logoWidget(context, const NavBar());
     } else {
       // 登録がなかった場合
-      return _logoWidget(context, const NfcSettingPage());
+      return _logoWidget(context, const LogIn());
     }
   }
 
   // ロゴを表示するウィジェト
   Widget _logoWidget(BuildContext context, Widget? nextPage) {
     return Scaffold(
-        backgroundColor: Constant.mainColor,
+        backgroundColor: Constant.blue,
         body: Stack(
           children: [
             Positioned.fill(
@@ -49,6 +50,7 @@ class _StartPageState extends State<StartPage> {
             //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           ],
         ),
+        
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: ElevateButton(
           shape: 60,
@@ -58,5 +60,6 @@ class _StartPageState extends State<StartPage> {
           height: 60,
           nextPage: nextPage,
         ));
+
   }
 }

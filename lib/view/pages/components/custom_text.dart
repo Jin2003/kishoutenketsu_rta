@@ -4,13 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../constant.dart';
 
-class CustomTextWhite extends StatelessWidget {
+class CustomText extends StatelessWidget {
   final String text;
   final double fontSize;
-  const CustomTextWhite({
+  final Color;
+  const CustomText({
     super.key,
     required this.text,
     required this.fontSize,
+    required this.Color,
   });
 
   @override
@@ -19,10 +21,9 @@ class CustomTextWhite extends StatelessWidget {
       textAlign: TextAlign.center,
       text,
       style: GoogleFonts.zenMaruGothic(
-        height: 1.5,
         fontWeight: FontWeight.bold,
         fontSize: fontSize,
-        color: Constant.white,
+        color: Color,
       ),
     );
   }

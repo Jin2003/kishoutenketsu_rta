@@ -17,12 +17,12 @@ class RtaPage extends StatefulWidget {
 class _RtaPageState extends State<RtaPage> {
   // アイコン画像
   final List<String> iconImage = [
-    'assets/rta/起.png',
-    'assets/rta/床.png',
-    'assets/rta/点.png',
-    'assets/rta/結.png',
-    'assets/rta/RTA.png',
-    'assets/rta/RTA.png',
+    'assets/rta/yellow/起.png',
+    'assets/rta/yellow/床.png',
+    'assets/rta/yellow/点.png',
+    'assets/rta/yellow/結.png',
+    'assets/rta/yellow/RTA.png',
+    'assets/rta/yellow/RTA.png',
   ];
 
   // タッチしたかしてないか判定
@@ -37,9 +37,9 @@ class _RtaPageState extends State<RtaPage> {
 
   // running_bar 画像
   final List<String> rtaImage = [
-    'assets/rta/rta_circle.png',
-    'assets/rta/rta_circle_on.png',
-    'assets/rta/rta_bar.png',
+    'assets/rta/yellow/rta_circle.png',
+    'assets/rta/yellow/rta_circle_on.png',
+    'assets/rta/yellow/rta_bar.png',
   ];
 
   Future<void> _getNfcID() async {

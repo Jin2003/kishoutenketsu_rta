@@ -1,9 +1,18 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
+import 'package:kishoutenketsu_rta/view/pages/chara_set_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/gatcha_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/help_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/invitation_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/join_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/lanking_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/log_in.dart';
 import 'package:kishoutenketsu_rta/view/pages/main_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/wallpaper_set_page.dart';
+
+import '../view/pages/account_set_page.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -16,6 +25,8 @@ class _NavBarState extends State<NavBar> {
   List<StatefulWidget> _selectPage = [];
   //自分が見ているページ
   var _selectedIndex = 1;
+  // ScaffoldStateのGlobalKeyを変数として定義
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,25 +46,78 @@ class _NavBarState extends State<NavBar> {
           height: 50,
           width: 130,
         ),
-        
+
         backgroundColor: Constant.yellow,
+
         actions: <Widget>[
-          IconButton(
-              icon: const ImageIcon(
-                size: 40, 
-                AssetImage('assets/icon/setting_icon.png'),
-                color: Constant.white,
-              ),
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return _bottomSheetWidget(context);
-                  },
-                );
-              })
+          // ハンバーガーボタンをカスタム
+          InkWell(
+            onTap: () => _scaffoldKey.currentState?.openEndDrawer(),
+            child: const Row(
+              children: [
+                ImageIcon(
+                  AssetImage('assets/icon/humberger_icon.png'),
+                  color: Constant.white,
+                ),
+                SizedBox(width: 10),
+              ],
+            ),
+          ),
         ],
       ),
+      // 定義した _scaffoldKey をkeyプロパティに適用
+      key: _scaffoldKey,
+
+      // drawerの表示（ハンバーガーメニュー）
+      endDrawer: Drawer(
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  SizedBox(
+                    height: 110,
+                    child: DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: Constant.white,
+                        border: Border(
+                            bottom: BorderSide(color: Constant.gray, width: 2)),
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 15),
+                          CustomText(text: '設定', fontSize: 20, Color: Constant.gray),
+                        ],
+                      ),
+                    ),
+                  ),
+                  _DrawerWidget(context, 'person_icon', 'アカウント設定', AccountSetPage()),
+                  _DrawerWidget(context, 'character_icon', 'キャラクター変更', CharaSetPage()),
+                  // 時間があれば
+                  _DrawerWidget(context, 'color_icon', 'テーマカラー変更', NavBar()),
+                  _DrawerWidget(context, 'wallpaper_icon', '壁紙変更', WallpaperSetPage()),
+                  _DrawerWidget(context, 'adduser_icon', 'グループ招待', InvitationPage()),
+                  _DrawerWidget(context, 'invitaion_icon', 'グループ参加', JoinPage()),
+                  _DrawerWidget(context, 'help_icon', 'ヘルプ', HelpPage()),
+                ],
+              ),
+            ),
+            // ログアウトボタン
+            TextButton(
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: ((context) => LogIn())),
+                );
+              }, 
+              child: CustomText(text: 'ログアウト', Color: Constant.accentYellow, fontSize: 20,),
+            ),
+            SizedBox(height: 20),
+          ],
+        ),
+      ),
+
       body: Stack(
         children: [
           Builder(
@@ -103,21 +167,27 @@ class _NavBarState extends State<NavBar> {
   }
 }
 
-// 設定の中
-Widget _bottomSheetWidget(BuildContext context) {
-  return SizedBox(
-      height: 400,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.settings, size: 36),
-              title: const Text('設定'),
-              onTap: () {},
-            ),
-          ],
+// ハンバーガーメニューの中
+Widget _DrawerWidget(context, String iconName, String listTitle, Widget nextPage) {
+  return ListTile(
+    leading: ImageIcon(
+      AssetImage('assets/icon/$iconName.png'),
+      color: Constant.gray,
+    ),
+    title: Row(
+      children: [
+        CustomText(text: listTitle, fontSize: 18, Color: Constant.gray),
+        SizedBox(
+          width: 0,
         ),
-      ));
+      ],
+    ),
+    // 画面遷移
+    onTap: () async {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: ((context) => nextPage)),
+      );
+    },
+  );
 }
-

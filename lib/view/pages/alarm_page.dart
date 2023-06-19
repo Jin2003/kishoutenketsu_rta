@@ -28,7 +28,7 @@ class _AlarmPageState extends State<AlarmPage> {
         children: [
           // 背景画像
           Image.asset(
-            "assets/y_alarm_page.png",
+            "assets/pages/yellow/alarm_page.png",
             fit: BoxFit.cover,
           ),
 
@@ -62,7 +62,7 @@ class _AlarmPageState extends State<AlarmPage> {
                     //     if (timeOfDay != null) setState(() => {_timeOfDay = timeOfDay});
                     //   },
                     onPressed: () {
-                      // 時刻設定ダイアログ
+                      // TODO：時刻設定ダイアログ
                       DatePicker.showTimePicker(context,
                           //DatetimePickerのモーダル内の「キャンセル」「完了」を表示
                           showTitleActions: true,
@@ -77,12 +77,12 @@ class _AlarmPageState extends State<AlarmPage> {
                       // 日本語設定
                       locale: LocaleType.jp);
                     },
-                    child: Container(
+                    child: SizedBox(
                       width: 270,
                       height: 110,
                       child: Column(
                         children: [
-                          SizedBox(height: 23),
+                          const SizedBox(height: 23),
                           Row(
                             children: [
                               SizedBox(width: 10),
@@ -188,6 +188,10 @@ class _AlarmPageState extends State<AlarmPage> {
                   shape: 16,
                   onPressed: () async {
                     // TODO: 変更内容保存
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: ((context) => NavBar()!)),
+                    );
                   },
                 ),
                 SizedBox(height: 12),

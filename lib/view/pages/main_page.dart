@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> {
           children: [
             // 背景画像
             Image.asset(
-              "assets/y_main_page.png",
+              "assets/pages/yellow/main_page.png",
               fit: BoxFit.cover,
             ),
             Column(

@@ -14,21 +14,21 @@ class JoinGroup extends StatelessWidget {
       backgroundColor: Constant.subYellow,
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // TODO: SizedBoxで無理やり置いてる
-            SizedBox(
-              width: 100,
-              height: 350,
-            ),
             CustomText(
-                text: 'グループ作成者のQRコードを\n読み取ることで\nグループに参加できます',
-                fontSize: 20,
-                Color: Constant.gray),
-            // TODO:ここでカメラ起動
-            SizedBox(
-              width: 100,
-              height: 35,
+              text: 'グループ作成者のQRコードを\n読み取ることで\nグループに参加できます',
+              fontSize: 20,
+              Color: Constant.gray
             ),
+            SizedBox(height: 30),
+            // TODO:ここでカメラ起動
+            Container(
+              width: 400,
+              height: 400,
+              color: Constant.gray,
+            ),
+            SizedBox(height: 35),
             ElevateButton(
               title: 'もどる',
               shape: 16,

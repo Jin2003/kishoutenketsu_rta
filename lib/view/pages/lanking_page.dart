@@ -44,7 +44,7 @@ class _LankingPageState extends State<LankingPage> {
       body: Stack(children: [
         Positioned.fill(
           child: Image.asset(
-            "assets/y_ranking_page.png",
+            "assets/pages/yellow/ranking_page.png",
             fit: BoxFit.cover,
           ),
         ),
@@ -52,52 +52,56 @@ class _LankingPageState extends State<LankingPage> {
           children: [
             SizedBox(height: 58),
             Align(
-              alignment: Alignment.center,
-              child: Container(
-                padding: const EdgeInsets.only(top: 55),
-                width: 310,
-                height: 420,
-                child: Scrollbar(
-                  child: ListView.separated(
-                    padding: const EdgeInsets.all(20),
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 9),
-                    //ここでリストの数を決めている
-                    itemCount: _lankingCount,
-                    itemBuilder: (context, index) =>
-                        _buildCard(index + 1, _times[index]),
+                alignment: Alignment.center,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 55),
+                  width: 310,
+                  height: 420,
+                  child: Scrollbar(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(20),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 9),
+                      //ここでリストの数を決めている
+                      itemCount: _lankingCount,
+                      itemBuilder: (context, index) =>
+                          _buildCard(index + 1, _times[index]),
+                    ),
                   ),
-                ),
-              )),
+                )),
           ],
         ),
-          // 吹き出し
-            Align(
-              alignment: Alignment(-0.5, 0.85),
-              child: Container(
-                width: 250,
-                height: 190,
-                child: Image.asset(
-                  "assets/speech_bubble.png",
-                ),
-              ),
+        // 吹き出し
+        Align(
+          alignment: Alignment(-0.5, 0.85),
+          child: Container(
+            width: 250,
+            height: 190,
+            child: Image.asset(
+              "assets/speech_bubble.png",
             ),
-            // TODO: ここにchatGPT
-            Align(
-              alignment: Alignment(-0.40, 0.62),
-              child: CustomText(text:'今日のラッキーアイテム', fontSize: 18, Color: Constant.gray,),
+          ),
+        ),
+        // TODO: ここにchatGPT
+        Align(
+          alignment: Alignment(-0.40, 0.62),
+          child: CustomText(
+            text: '今日のラッキーアイテム',
+            fontSize: 18,
+            Color: Constant.gray,
+          ),
+        ),
+        // 鶏の画像
+        Align(
+          alignment: Alignment(0.8, 0.95),
+          child: Container(
+            width: 120,
+            height: 120,
+            child: Image.asset(
+              "assets/chicken.png",
             ),
-            // 鶏の画像
-            Align(
-              alignment: Alignment(0.8, 0.95),
-              child: Container(
-                width: 120,
-                height: 120,
-                child: Image.asset(
-                  "assets/chicken.png",
-                ),
-              ),
-            ),
+          ),
+        ),
       ]),
     );
   }

@@ -16,6 +16,7 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  // コントローラーから入力値を取得
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   // password 表示非表示の切り替え

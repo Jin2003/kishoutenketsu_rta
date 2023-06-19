@@ -45,7 +45,7 @@ class _GatchaPageState extends State<GatchaPage> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/y_gatcha_page.png",
+            "assets/pages/yellow/gatcha_page.png",
             fit: BoxFit.cover,
           ),
           //画像を表示する
@@ -279,6 +279,7 @@ class _GatchaPageState extends State<GatchaPage> {
                           delay: 2.seconds, duration: 800.milliseconds),
                     ],
                     child: Image.asset(
+                      // TODO:今、水色のまま。そもそもアニメーションになる
                       "assets/capsule.png",
                       fit: BoxFit.cover,
                       height: 500,

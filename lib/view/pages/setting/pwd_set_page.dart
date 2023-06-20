@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../constant.dart';
+import '../../constant.dart';
 import 'account_set_page.dart';
-import 'components/custom_text.dart';
-import 'components/outline_button.dart';
+import '../components/custom_text.dart';
+import '../components/outline_button.dart';
 
 class PwdSetPage extends StatefulWidget {
   const PwdSetPage({super.key});
@@ -24,32 +24,32 @@ class _PwdSetPageState extends State<PwdSetPage> {
       backgroundColor: Constant.white,
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           // < のアイコン表示
           Align(
-            alignment: Alignment(-0.9, 0),
+            alignment: const Alignment(-0.9, 0),
             child: IconButton(
               iconSize: 22,
-              icon: ImageIcon(
+              icon: const ImageIcon(
                 AssetImage('assets/icon/l_arrow_icon.png'),
                 color: Constant.gray,
               ),
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: ((context) => AccountSetPage())),
+                  MaterialPageRoute(builder: ((context) => const AccountSetPage())),
                 );
               },
             ),
           ),
 
-          CustomText(text: 'パスワード', fontSize: 22, Color: Constant.gray),
-          SizedBox(height: 20),
+          const CustomText(text: 'パスワード', fontSize: 22, Color: Constant.gray),
+          const SizedBox(height: 20),
           Container(
             width: 380,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border:
                   Border(bottom: BorderSide(color: Constant.gray, width: 2)),
             ),
@@ -58,8 +58,8 @@ class _PwdSetPageState extends State<PwdSetPage> {
           Column(
             children: [
               // パスワード
-              SizedBox(height: 30),
-              Align(
+              const SizedBox(height: 30),
+              const Align(
                 alignment: Alignment(-0.5,0),
                 child: CustomText(
                   text: 'パスワード',
@@ -68,7 +68,7 @@ class _PwdSetPageState extends State<PwdSetPage> {
                 ),
               ),
 
-              SizedBox(
+              const SizedBox(
                 width: 100,
                 height: 10,
               ),
@@ -107,8 +107,8 @@ class _PwdSetPageState extends State<PwdSetPage> {
                       ),
                     ),
                   ),
-              SizedBox(height: 20,),
-              OutlineButton(
+              const SizedBox(height: 20,),
+              const OutlineButton(
                 title: '保存',
                 width: 170,
                 height: 50,

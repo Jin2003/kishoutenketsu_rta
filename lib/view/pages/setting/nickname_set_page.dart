@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kishoutenketsu_rta/view/pages/account_set_page.dart';
-
-import '../../logic/nav_bar.dart';
-import '../constant.dart';
-import 'components/custom_text.dart';
-import 'components/outline_button.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/account_set_page.dart';
+import '../../constant.dart';
+import '../components/custom_text.dart';
+import '../components/outline_button.dart';
 
 class NicknameSetPage extends StatefulWidget {
   const NicknameSetPage({super.key});
@@ -24,32 +22,32 @@ class _NicknameSetPageState extends State<NicknameSetPage> {
       backgroundColor: Constant.white,
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           // < のアイコン表示
           Align(
-            alignment: Alignment(-0.9, 0),
+            alignment: const Alignment(-0.9, 0),
             child: IconButton(
               iconSize: 22,
-              icon: ImageIcon(
+              icon: const ImageIcon(
                 AssetImage('assets/icon/l_arrow_icon.png'),
                 color: Constant.gray,
               ),
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: ((context) =>  AccountSetPage())),
+                  MaterialPageRoute(builder: ((context) =>  const AccountSetPage())),
                 );
               },
             ),
           ),
 
-          CustomText(text: 'ニックネーム', fontSize: 22, Color: Constant.gray),
-          SizedBox(height: 20),
+          const CustomText(text: 'ニックネーム', fontSize: 22, Color: Constant.gray),
+          const SizedBox(height: 20),
           Container(
             width: 380,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border:
                   Border(bottom: BorderSide(color: Constant.gray, width: 2)),
             ),
@@ -58,8 +56,8 @@ class _NicknameSetPageState extends State<NicknameSetPage> {
           Column(
             children: [
               // ニックネーム
-              SizedBox(height: 30),
-              Align(
+              const SizedBox(height: 30),
+              const Align(
                 alignment: Alignment(-0.5,0),
                 child: CustomText(
                   text: 'ニックネーム',
@@ -68,7 +66,7 @@ class _NicknameSetPageState extends State<NicknameSetPage> {
                 ),
               ),
 
-              SizedBox(
+              const SizedBox(
                 width: 100,
                 height: 10,
               ),
@@ -88,6 +86,7 @@ class _NicknameSetPageState extends State<NicknameSetPage> {
                         color: Constant.gray,
                       ),
                     ),
+                    //　TODO： ここはlabelじゃなくてplaceholderみたいにしたい
                     labelText: 'nickname',
                     //TODO: アイコン表示上手くいかん
                     // suffixIcon:  ImageIcon(
@@ -98,8 +97,8 @@ class _NicknameSetPageState extends State<NicknameSetPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20,),
-              OutlineButton(
+              const SizedBox(height: 20,),
+              const OutlineButton(
                 title: '保存',
                 width: 170,
                 height: 50,

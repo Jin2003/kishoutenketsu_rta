@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/date_picker_theme.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
@@ -28,7 +27,7 @@ class _AlarmPageState extends State<AlarmPage> {
         children: [
           // 背景画像
           Image.asset(
-            "assets/pages/yellow/alarm_page.png",
+            "assets/pages/yellow/dots/alarm_page.png",
             fit: BoxFit.cover,
           ),
 
@@ -37,80 +36,77 @@ class _AlarmPageState extends State<AlarmPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-                SizedBox(
+                const SizedBox(
                   height: 60,
                 ),
                 // 時刻設定
-                Container(
-                  //alignment: Alignment.center,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      side: BorderSide(
-                        color: Constant.yellow, //枠線の色
-                        width: 4, //太さ
-                      ),
-                      backgroundColor: Constant.white,
-                      elevation: 8,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    //時刻の設定をする処理(ブラッシュアップ前のやつ)
-                    //   onPressed: () async {
-                    //     final TimeOfDay? timeOfDay = await showTimePicker(
-                    //         context: context, initialTime: _timeOfDay);
-                    //     if (timeOfDay != null) setState(() => {_timeOfDay = timeOfDay});
-                    //   },
-                    onPressed: () {
-                      // TODO：時刻設定ダイアログ
-                      DatePicker.showTimePicker(context,
-                          //DatetimePickerのモーダル内の「キャンセル」「完了」を表示
-                          showTitleActions: true,
-                          //「秒」の表記が不要->showSecondsColumnをfalse
-                          showSecondsColumn: false, onChanged: (date) {
-                        //print(date);
-                      }, onConfirm: (date) {
-                        //print(date);
-                      },
-                      // DatetimePickerの初期値を設定
-                      currentTime: DateTime.now(),
-                      // 日本語設定
-                      locale: LocaleType.jp);
+                    side: const BorderSide(
+                      color: Constant.yellow, //枠線の色
+                      width: 4, //太さ
+                    ),
+                    backgroundColor: Constant.white,
+                    elevation: 8,
+                  ),
+                  //時刻の設定をする処理(ブラッシュアップ前のやつ)
+                  //   onPressed: () async {
+                  //     final TimeOfDay? timeOfDay = await showTimePicker(
+                  //         context: context, initialTime: _timeOfDay);
+                  //     if (timeOfDay != null) setState(() => {_timeOfDay = timeOfDay});
+                  //   },
+                  onPressed: () {
+                    // TODO：時刻設定ダイアログ
+                    DatePicker.showTimePicker(context,
+                        //DatetimePickerのモーダル内の「キャンセル」「完了」を表示
+                        showTitleActions: true,
+                        //「秒」の表記が不要->showSecondsColumnをfalse
+                        showSecondsColumn: false, onChanged: (date) {
+                      //print(date);
+                    }, onConfirm: (date) {
+                      //print(date);
                     },
-                    child: SizedBox(
-                      width: 270,
-                      height: 110,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 23),
-                          Row(
-                            children: [
-                              SizedBox(width: 10),
-                              Image.asset(
-                                "assets/icon/alarm_icon.png",
-                                width: 40,
-                              ),
-                              SizedBox(width: 10),
-                              CustomText(
-                                  text: '時刻設定',
-                                  fontSize: 20,
-                                  Color: Constant.gray),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment(0.9, 0),
-                            child: CustomText(
-                                text: '8 : 4 0',
-                                fontSize: 25,
+                    // DatetimePickerの初期値を設定
+                    currentTime: DateTime.now(),
+                    // 日本語設定
+                    locale: LocaleType.jp);
+                  },
+                  child: SizedBox(
+                    width: 270,
+                    height: 110,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 23),
+                        Row(
+                          children: [
+                            const SizedBox(width: 10),
+                            Image.asset(
+                              "assets/icon/alarm_icon.png",
+                              width: 40,
+                            ),
+                            const SizedBox(width: 10),
+                            const CustomText(
+                                text: '時刻設定',
+                                fontSize: 20,
                                 Color: Constant.gray),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                        const Align(
+                          alignment: Alignment(0.9, 0),
+                          child: CustomText(
+                              text: '8 : 4 0',
+                              fontSize: 25,
+                              Color: Constant.gray),
+                        ),
+                      ],
                     ),
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //　アラーム音設定
                 Container(
@@ -120,7 +116,7 @@ class _AlarmPageState extends State<AlarmPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
                       ),
-                      side: BorderSide(
+                      side: const BorderSide(
                         color: Constant.yellow, //枠線の色
                         width: 4, //太さ
                       ),
@@ -143,28 +139,28 @@ class _AlarmPageState extends State<AlarmPage> {
                       }
                     },
                     // アラーム音設定
-                    child: Container(
+                    child: SizedBox(
                       width: 270,
                       height: 110,
                       child: Column(
                         children: [
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Row(
                             children: [
-                              SizedBox(width: 12),
+                              const SizedBox(width: 12),
                               Image.asset(
                                 "assets/icon/music_icon.png",
                                 width: 32,
                               ),
-                              SizedBox(width: 15),
-                              CustomText(
+                              const SizedBox(width: 15),
+                              const CustomText(
                                   text: 'アラーム音設定',
                                   fontSize: 20,
                                   Color: Constant.gray),
                             ],
                           ),
-                          SizedBox(height: 14),
-                          Align(
+                          const SizedBox(height: 14),
+                          const Align(
                             alignment: Alignment(0.9, 0),
                             child: CustomText(
                                 text: '♪ きらきら星',
@@ -177,7 +173,7 @@ class _AlarmPageState extends State<AlarmPage> {
                   ),
                 ),
 
-                SizedBox(height: 35),
+                const SizedBox(height: 35),
 
                 // 変更内容保存ボタン
                 ElevateButton(
@@ -190,11 +186,11 @@ class _AlarmPageState extends State<AlarmPage> {
                     // TODO: 変更内容保存
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: ((context) => NavBar()!)),
+                      MaterialPageRoute(builder: ((context) => const NavBar())),
                     );
                   },
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 // キャンセルボタン
                 ElevateButton(
                   title: "キャンセル",
@@ -205,7 +201,7 @@ class _AlarmPageState extends State<AlarmPage> {
                   onPressed: () async {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: ((context) => NavBar()!)),
+                      MaterialPageRoute(builder: ((context) => const NavBar())),
                     );
                   },
                 ),
@@ -220,6 +216,7 @@ class _AlarmPageState extends State<AlarmPage> {
 
 
 // アラーム音を選択するダイアログ
+// ignore: camel_case_types
 class _alarmSelectorDialog extends StatelessWidget {
   const _alarmSelectorDialog({
     Key? key,
@@ -239,14 +236,17 @@ class _alarmSelectorDialog extends StatelessWidget {
             (p) => ListTile(
               leading: Visibility(
                 visible: p == music,
-                child: const Icon(Icons.check),
+                child: const Icon(
+                  Icons.circle,
+                  color: Constant.accentYellow,
+                ),
               ),
               title: Text(
                 p,
                 style: GoogleFonts.zenMaruGothic(
                   fontWeight: FontWeight.bold,
                   fontSize: 21,
-                  color: Constant.accentYellow,
+                  color: Constant.gray,
                 ),
               ),
               onTap: () {

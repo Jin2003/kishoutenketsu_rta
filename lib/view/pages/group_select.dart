@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
-import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/nfc_setting_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/use_select.dart';
 
@@ -12,7 +11,7 @@ class GroupSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Constant.subYellow,
       body: Center(
         child: Column(

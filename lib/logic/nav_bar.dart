@@ -1,18 +1,18 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
-import 'package:kishoutenketsu_rta/view/pages/chara_set_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/chara_set_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/gatcha_page.dart';
-import 'package:kishoutenketsu_rta/view/pages/help_page.dart';
-import 'package:kishoutenketsu_rta/view/pages/invitation_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/help_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/invitation_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/join_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/lanking_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/log_in.dart';
 import 'package:kishoutenketsu_rta/view/pages/main_page.dart';
-import 'package:kishoutenketsu_rta/view/pages/wallpaper_set_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/wallpaper_set_page.dart';
 
-import '../view/pages/account_set_page.dart';
+import '../view/pages/setting/account_set_page.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -76,8 +76,8 @@ class _NavBarState extends State<NavBar> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  SizedBox(
-                    height: 110,
+                  const SizedBox(
+                    height: 120,
                     child: DrawerHeader(
                       decoration: BoxDecoration(
                         color: Constant.white,
@@ -86,20 +86,21 @@ class _NavBarState extends State<NavBar> {
                       ),
                       child: Column(
                         children: [
-                          SizedBox(height: 15),
                           CustomText(text: '設定', fontSize: 20, Color: Constant.gray),
                         ],
                       ),
                     ),
                   ),
-                  _DrawerWidget(context, 'person_icon', 'アカウント設定', AccountSetPage()),
-                  _DrawerWidget(context, 'character_icon', 'キャラクター変更', CharaSetPage()),
+                  _DrawerWidget(context, 'person_icon', 'アカウント設定', const AccountSetPage()),
+                  _DrawerWidget(context, 'character_icon', 'キャラクター変更', const CharaSetPage()),
                   // 時間があれば
-                  _DrawerWidget(context, 'color_icon', 'テーマカラー変更', NavBar()),
-                  _DrawerWidget(context, 'wallpaper_icon', '壁紙変更', WallpaperSetPage()),
-                  _DrawerWidget(context, 'adduser_icon', 'グループ招待', InvitationPage()),
-                  _DrawerWidget(context, 'invitaion_icon', 'グループ参加', JoinPage()),
-                  _DrawerWidget(context, 'help_icon', 'ヘルプ', HelpPage()),
+                  _DrawerWidget(context, 'color_icon', 'テーマカラー変更', const NavBar()),
+                  _DrawerWidget(context, 'wallpaper_icon', '壁紙変更', const WallpaperSetPage()),
+                  _DrawerWidget(context, 'adduser_icon', 'グループ招待', const InvitationPage()),
+                  _DrawerWidget(context, 'invitaion_icon', 'グループ参加', const JoinPage()),
+                  _DrawerWidget(context, 'help_icon', 'ヘルプ', const HelpPage()),
+                  _DrawerWidget(context, 'help_icon', 'ヘルプ', const HelpPage()),
+
                 ],
               ),
             ),
@@ -108,12 +109,12 @@ class _NavBarState extends State<NavBar> {
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: ((context) => LogIn())),
+                  MaterialPageRoute(builder: ((context) => const LogIn())),
                 );
               }, 
-              child: CustomText(text: 'ログアウト', Color: Constant.accentYellow, fontSize: 20,),
+              child: const CustomText(text: 'ログアウト', Color: Constant.accentYellow, fontSize: 20,),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -168,6 +169,7 @@ class _NavBarState extends State<NavBar> {
 }
 
 // ハンバーガーメニューの中
+// ignore: non_constant_identifier_names
 Widget _DrawerWidget(context, String iconName, String listTitle, Widget nextPage) {
   return ListTile(
     leading: ImageIcon(
@@ -177,7 +179,7 @@ Widget _DrawerWidget(context, String iconName, String listTitle, Widget nextPage
     title: Row(
       children: [
         CustomText(text: listTitle, fontSize: 18, Color: Constant.gray),
-        SizedBox(
+        const SizedBox(
           width: 0,
         ),
       ],

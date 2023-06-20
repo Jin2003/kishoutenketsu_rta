@@ -16,20 +16,20 @@ class JoinGroup extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomText(
+            const CustomText(
               text: 'グループ作成者のQRコードを\n読み取ることで\nグループに参加できます',
               fontSize: 20,
               Color: Constant.gray
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             // TODO:ここでカメラ起動
             Container(
               width: 400,
               height: 400,
               color: Constant.gray,
             ),
-            SizedBox(height: 35),
-            ElevateButton(
+            const SizedBox(height: 35),
+            const ElevateButton(
               title: 'もどる',
               shape: 16,
               fontSize: 20,

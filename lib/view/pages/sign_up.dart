@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../logic/nav_bar.dart';
 import '../constant.dart';
 import 'components/custom_text.dart';
 import 'components/elevate_button.dart';
@@ -41,7 +39,7 @@ class _SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // ユーザーネーム
-                  CustomText(text: 'ユーザーネーム', fontSize: 20, Color: Constant.gray,),
+                  const CustomText(text: 'ユーザーネーム', fontSize: 20, Color: Constant.gray,),
                   
                   const SizedBox(
                     width: 100,
@@ -65,7 +63,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                   // メールアドレス
-                  CustomText(text: 'メールアドレス', fontSize: 20, Color: Constant.gray,),
+                  const CustomText(text: 'メールアドレス', fontSize: 20, Color: Constant.gray,),
                   
                   const SizedBox(
                     width: 100,
@@ -90,7 +88,7 @@ class _SignUpState extends State<SignUp> {
                   ),
 
                   // パスワード
-                  CustomText(text: 'パスワード', fontSize: 20, Color: Constant.gray,),
+                  const CustomText(text: 'パスワード', fontSize: 20, Color: Constant.gray,),
                   const SizedBox(
                     width: 100,
                     height: 8,
@@ -105,14 +103,14 @@ class _SignUpState extends State<SignUp> {
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Constant.white,
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             borderSide: BorderSide.none,
                           ),
                           // TextFieldの表示非表示
                           suffixIcon: isDisplay != true
                             ? IconButton(
-                                icon: Icon(Icons.visibility),
+                                icon: const Icon(Icons.visibility),
                                 onPressed: () {
                                   setState(() {
                                     isDisplay = !isDisplay;
@@ -120,7 +118,7 @@ class _SignUpState extends State<SignUp> {
                                 },
                               )
                             : IconButton(
-                                icon: Icon(Icons.visibility_off),
+                                icon: const Icon(Icons.visibility_off),
                                 onPressed: () {
                                   setState(() {
                                     isDisplay = !isDisplay;
@@ -143,7 +141,7 @@ class _SignUpState extends State<SignUp> {
                       // Navbar経由でloginページへ
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: ((context) => LogIn()!)),
+                        MaterialPageRoute(builder: ((context) => const LogIn())),
                       );
                     },
                   ),
@@ -159,17 +157,17 @@ class _SignUpState extends State<SignUp> {
           // Stackなら言うこと聞くのにColumnなら指定の位置行ってくれない
           Stack(
             children: [
-              Align(
+              const Align(
                 alignment: Alignment(0,0.65),
                 child: CustomText(text: 'アカウントをお持ちの方', fontSize: 16, Color: Constant.gray),
               ),
               Align(
-                alignment: Alignment(0,0.75),
+                alignment: const Alignment(0,0.75),
                 child: TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: ((context) => LogIn()!)),
+                    MaterialPageRoute(builder: ((context) => const LogIn())),
                   );
                 },
                 child: Text(

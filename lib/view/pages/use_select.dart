@@ -11,7 +11,7 @@ class UseSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Constant.subYellow,
       body: Center(
         child: Column(

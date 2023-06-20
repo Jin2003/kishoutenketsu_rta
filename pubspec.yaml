@@ -36,7 +36,7 @@ dependencies:
   sqflite: ^2.2.7
   nfc_manager: ^3.2.0
 
-  google_fonts: ^4.0.5
+  google_fonts: ^5.1.0
 
   # The following flutteradds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -85,15 +85,12 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-    - assets/pages/blue/
-    - assets/pages/yellow/
-    - assets/pages/red/
-    - assets/characters/blue/
+    - assets/pages/yellow/dots/
+    - assets/pages/yellow/plaid/
+    - assets/pages/yellow/stripe/
+
     - assets/characters/yellow/
-    - assets/characters/red/
-    - assets/wallpaper/blue/
     - assets/wallpaper/yellow/
-    - assets/wallpaper/red/
 
     - assets/icon/
     - assets/rta/yellow/

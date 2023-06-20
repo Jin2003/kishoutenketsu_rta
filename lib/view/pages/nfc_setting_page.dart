@@ -77,6 +77,10 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
         SharedPreferencesLogic sharedPreferencesLogic =
             SharedPreferencesLogic();
         sharedPreferencesLogic.setGroupID(documentID);
+        // groupIDをusersコレクションに登録
+        String? userID =
+            await sharedPreferencesLogic.getUserID(); // 非同期で実行し、結果を取得
+        await firebaseHelper.addUser(documentID, userID!);
       }
     });
   }

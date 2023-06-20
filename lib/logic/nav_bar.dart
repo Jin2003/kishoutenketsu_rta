@@ -86,21 +86,26 @@ class _NavBarState extends State<NavBar> {
                       ),
                       child: Column(
                         children: [
-                          CustomText(text: '設定', fontSize: 20, Color: Constant.gray),
+                          CustomText(
+                              text: '設定', fontSize: 20, Color: Constant.gray),
                         ],
                       ),
                     ),
                   ),
-                  _DrawerWidget(context, 'person_icon', 'アカウント設定', const AccountSetPage()),
-                  _DrawerWidget(context, 'character_icon', 'キャラクター変更', const CharaSetPage()),
+                  _DrawerWidget(context, 'person_icon', 'アカウント設定',
+                      const AccountSetPage()),
+                  _DrawerWidget(context, 'character_icon', 'キャラクター変更',
+                      const CharaSetPage()),
                   // 時間があれば
-                  _DrawerWidget(context, 'color_icon', 'テーマカラー変更', const NavBar()),
-                  _DrawerWidget(context, 'wallpaper_icon', '壁紙変更', const WallpaperSetPage()),
-                  _DrawerWidget(context, 'adduser_icon', 'グループ招待', const InvitationPage()),
-                  _DrawerWidget(context, 'invitaion_icon', 'グループ参加', const JoinPage()),
+                  _DrawerWidget(
+                      context, 'color_icon', 'テーマカラー変更', const NavBar()),
+                  _DrawerWidget(context, 'wallpaper_icon', '壁紙変更',
+                      const WallpaperSetPage()),
+                  _DrawerWidget(context, 'adduser_icon', 'グループ招待',
+                      const InvitationPage()),
+                  _DrawerWidget(
+                      context, 'invitaion_icon', 'グループ参加', const JoinPage()),
                   _DrawerWidget(context, 'help_icon', 'ヘルプ', const HelpPage()),
-                  _DrawerWidget(context, 'help_icon', 'ヘルプ', const HelpPage()),
-
                 ],
               ),
             ),
@@ -111,8 +116,12 @@ class _NavBarState extends State<NavBar> {
                   context,
                   MaterialPageRoute(builder: ((context) => const LogIn())),
                 );
-              }, 
-              child: const CustomText(text: 'ログアウト', Color: Constant.accentYellow, fontSize: 20,),
+              },
+              child: const CustomText(
+                text: 'ログアウト',
+                Color: Constant.accentYellow,
+                fontSize: 20,
+              ),
             ),
             const SizedBox(height: 20),
           ],
@@ -170,7 +179,8 @@ class _NavBarState extends State<NavBar> {
 
 // ハンバーガーメニューの中
 // ignore: non_constant_identifier_names
-Widget _DrawerWidget(context, String iconName, String listTitle, Widget nextPage) {
+Widget _DrawerWidget(
+    context, String iconName, String listTitle, Widget nextPage) {
   return ListTile(
     leading: ImageIcon(
       AssetImage('assets/icon/$iconName.png'),

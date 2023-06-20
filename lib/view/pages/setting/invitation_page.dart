@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../logic/nav_bar.dart';
@@ -13,6 +14,17 @@ class InvitationPage extends StatefulWidget {
 }
 
 class _InvitationPageState extends State<InvitationPage> {
+  Future<String?>? groupID;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    groupID = sharedPreferencesLogic.getGroupID();
+  }
+
+  // groupIDを取得
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,19 +63,37 @@ class _InvitationPageState extends State<InvitationPage> {
 
           const SizedBox(height: 100),
 
-          QrImageView(
-            data: '12030103jofajo',
-            version: QrVersions.auto,
-            size: 300,
-            gapless: false,
+          FutureBuilder<String?>(
+            future: groupID,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // フューチャーの結果を待っている間にローディングインジケータを表示
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasData) {
+                String? groupID = snapshot.data;
+                // groupIDの値を必要に応じて使用
+                return Column(
+                  children: [
+                    QrImageView(
+                      data: groupID ?? '',
+                      version: QrVersions.auto,
+                      size: 300,
+                      gapless: false,
+                    ),
+                    const SizedBox(height: 30),
+                    const CustomText(
+                      text: 'こちらのQRコードを\nグループに参加する方の\n端末で読み取ってください',
+                      fontSize: 20,
+                      Color: Constant.gray,
+                    ),
+                  ],
+                );
+              } else {
+                // フューチャーがエラーまたはデータなしで完了した場合の処理
+                return const Text('groupIDの読み込みに失敗しました');
+              }
+            },
           ),
-
-          const SizedBox(height: 30),
-
-          const CustomText(
-              text: 'こちらのQRコードを\nグループに参加する方の\n端末で読み取ってください',
-              fontSize: 20,
-              Color: Constant.gray),
         ],
       ),
     );

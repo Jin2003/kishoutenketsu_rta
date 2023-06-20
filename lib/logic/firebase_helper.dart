@@ -27,4 +27,11 @@ class FirebaseHelper {
       'nfcIdMap': nfcIdMap,
     });
   }
+
+  // ユーザにgroupIDを追加するメソッド
+  Future<void> addUser(String groupID, String userID) async {
+    await FirebaseFirestore.instance.collection('users').doc(userID).update({
+      'groupID': groupID,
+    });
+  }
 }

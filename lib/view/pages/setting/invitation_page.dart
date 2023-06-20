@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../logic/nav_bar.dart';
 import '../../constant.dart';
@@ -50,16 +51,19 @@ class _InvitationPageState extends State<InvitationPage> {
 
           const SizedBox(height: 100),
 
-          // TODO:ここにQRコード表示
-          Container(
-            width: 300,
-            height: 300,
-            color: Constant.gray,
+          QrImageView(
+            data: '12030103jofajo',
+            version: QrVersions.auto,
+            size: 300,
+            gapless: false,
           ),
 
           const SizedBox(height: 30),
 
-          const CustomText(text: 'こちらのQRコードを\nグループに参加する方の\n端末で読み取ってください', fontSize: 20, Color: Constant.gray),
+          const CustomText(
+              text: 'こちらのQRコードを\nグループに参加する方の\n端末で読み取ってください',
+              fontSize: 20,
+              Color: Constant.gray),
         ],
       ),
     );

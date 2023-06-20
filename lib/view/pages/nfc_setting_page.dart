@@ -81,6 +81,8 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
         String? userID =
             await sharedPreferencesLogic.getUserID(); // 非同期で実行し、結果を取得
         await firebaseHelper.addUser(documentID, userID!);
+        // isNfcSettingをtrueに変更
+        sharedPreferencesLogic.setExistsNFC(true);
       }
     });
   }

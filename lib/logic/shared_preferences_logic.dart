@@ -16,7 +16,7 @@ class SharedPreferencesLogic {
   // アラームのONOFF
   static const keySettedAlarm = 'settedAlarm';
   // NFCを登録しているかどうか
-  static const keyRegisteredNFC = 'registeredNFC';
+  static const keyExistsNFC = 'ExistsNFC';
 
   late SharedPreferences sharedPreferences;
 
@@ -45,9 +45,9 @@ class SharedPreferencesLogic {
   }
 
   // NFCを登録しているかどうかをローカルに保存
-  Future<void> setRegisteredNFC(bool registeredNFC) async {
+  Future<void> setExistsNFC(bool existsNFC) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setBool(keyRegisteredNFC, registeredNFC);
+    await sharedPreferences.setBool(keyExistsNFC, existsNFC);
   }
 
   // 選択の音楽をローカルに保存
@@ -93,9 +93,9 @@ class SharedPreferencesLogic {
   }
 
   // NFCを登録しているかどうかをローカルから取得
-  Future<bool?> getRegisteredNFC() async {
+  Future<bool?> getExistsNFC() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getBool(keyRegisteredNFC);
+    return sharedPreferences.getBool(keyExistsNFC);
   }
 
   // 選択の音楽をローカルから取得

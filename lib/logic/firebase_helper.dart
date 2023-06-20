@@ -18,12 +18,13 @@ class FirebaseHelper {
   }
 
   // グループにnfcIdListを保存するメソッド
-  Future<void> saveNfcIdList(String documentID, List<String> nfcIdList) async {
+  Future<void> saveNfcIdMap(
+      String documentID, Map<String, String> nfcIdMap) async {
     await FirebaseFirestore.instance
         .collection('groups')
         .doc(documentID)
         .update({
-      'nfcIdList': nfcIdList,
+      'nfcIdMap': nfcIdMap,
     });
   }
 }

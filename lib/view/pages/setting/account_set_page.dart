@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
-import 'package:kishoutenketsu_rta/view/pages/email_set_page.dart';
-import 'package:kishoutenketsu_rta/view/pages/nickname_set_page.dart';
-import 'package:kishoutenketsu_rta/view/pages/pwd_set_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/email_set_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/nickname_set_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/pwd_set_page.dart';
 
 class AccountSetPage extends StatefulWidget {
   const AccountSetPage({super.key});
@@ -20,39 +20,40 @@ class _AccountSetPageState extends State<AccountSetPage> {
       backgroundColor: Constant.white,
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           // × のアイコン表示
           Align(
-              alignment: Alignment(-0.9, 0),
+              alignment: const Alignment(-0.9, 0),
               child: IconButton(
                 iconSize: 20,
-                icon: ImageIcon(
+                icon: const ImageIcon(
                   AssetImage('assets/icon/close_icon.png'),
                   color: Constant.gray,
                 ),
                 onPressed: () async {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: ((context) => NavBar())),
+                    MaterialPageRoute(builder: ((context) => const NavBar())),
                   );
                 },
               )),
 
-          CustomText(text: 'アカウント設定', fontSize: 22, Color: Constant.gray),
-          SizedBox(height: 20),
+          const CustomText(text: 'アカウント設定', fontSize: 22, Color: Constant.gray),
+          const SizedBox(height: 20),
           Container(
             width: 380,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border:
                   Border(bottom: BorderSide(color: Constant.gray, width: 2)),
             ),
           ),
-          SizedBox(height: 10),
-          _ListTileWidget(context, 'ニックネーム' , 'Fuuma', NicknameSetPage()),
-          _ListTileWidget(context, 'メールアドレス' , 'fuuma@masa.hiro', EmailSetPage()),
-          _ListTileWidget(context, 'パスワード' , '●●●●●●', PwdSetPage()),
+          const SizedBox(height: 10),
+          // TODO: ここに今設定しているニックネームの表示
+          _ListTileWidget(context, 'ニックネーム' , 'Fuuma', const NicknameSetPage()),
+          _ListTileWidget(context, 'メールアドレス' , 'fuuma@masa.hiro', const EmailSetPage()),
+          _ListTileWidget(context, 'パスワード' , '●●●●●●', const PwdSetPage()),
         ],
       ),
     );
@@ -60,19 +61,20 @@ class _AccountSetPageState extends State<AccountSetPage> {
 }
 
 // ListTileを表示するウィジェット
+// ignore: non_constant_identifier_names
 Widget _ListTileWidget(context, String title, String currentSetting, Widget nextPage) {
-  return Container(
+  return SizedBox(
     width: 380,
     child: ListTile(
-      contentPadding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+      contentPadding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
       title: Align(
-          alignment: Alignment(-0.9, 0),
+          alignment: const Alignment(-0.9, 0),
           child:
               CustomText(text: title, fontSize: 16, Color: Constant.gray)),
       subtitle: Align(
-          alignment: Alignment(-0.9, 0),
+          alignment: const Alignment(-0.9, 0),
           child: CustomText(text: currentSetting, fontSize: 23, Color: Constant.gray)),
-      trailing: ImageIcon(
+      trailing: const ImageIcon(
         AssetImage('assets/icon/r_arrow_icon.png'),
         color: Constant.gray,
       ),

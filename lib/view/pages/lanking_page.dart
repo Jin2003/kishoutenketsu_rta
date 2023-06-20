@@ -44,13 +44,13 @@ class _LankingPageState extends State<LankingPage> {
       body: Stack(children: [
         Positioned.fill(
           child: Image.asset(
-            "assets/pages/yellow/ranking_page.png",
+            "assets/pages/yellow/dots/ranking_page.png",
             fit: BoxFit.cover,
           ),
         ),
         Column(
           children: [
-            SizedBox(height: 58),
+            const SizedBox(height: 58),
             Align(
                 alignment: Alignment.center,
                 child: Container(
@@ -73,8 +73,8 @@ class _LankingPageState extends State<LankingPage> {
         ),
         // 吹き出し
         Align(
-          alignment: Alignment(-0.5, 0.85),
-          child: Container(
+          alignment: const Alignment(-0.5, 0.85),
+          child: SizedBox(
             width: 250,
             height: 190,
             child: Image.asset(
@@ -83,7 +83,7 @@ class _LankingPageState extends State<LankingPage> {
           ),
         ),
         // TODO: ここにchatGPT
-        Align(
+        const Align(
           alignment: Alignment(-0.40, 0.62),
           child: CustomText(
             text: '今日のラッキーアイテム',
@@ -93,8 +93,8 @@ class _LankingPageState extends State<LankingPage> {
         ),
         // 鶏の画像
         Align(
-          alignment: Alignment(0.8, 0.95),
-          child: Container(
+          alignment: const Alignment(0.8, 0.95),
+          child: SizedBox(
             width: 120,
             height: 120,
             child: Image.asset(
@@ -148,7 +148,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
           // RTAのタイム
           Column(
             children: [
-              CustomText(text: 'りんご', fontSize: 14, Color: Constant.gray),
+              const CustomText(text: 'りんご', fontSize: 14, Color: Constant.gray),
               Text(
                 //timesが秒数で入っているので分と秒に変換し、00:00の形にする
                 '${time['time_record'] ~/ 60}'.padLeft(2, '0') +

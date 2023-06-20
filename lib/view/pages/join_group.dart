@@ -94,10 +94,13 @@ class _JoinGroupState extends State<JoinGroup> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const CustomText(
-                text: 'グループ作成者のQRコードを\n読み取ることで\nグループに参加できます',
-                fontSize: 20,
-                Color: Constant.gray),
+              text: 'グループ作成者のQRコードを\n読み取ることで\nグループに参加できます',
+              fontSize: 20,
+              Color: Constant.gray
+            ),
             const SizedBox(height: 30),
+            // TODO:ここでカメラ起動
+
             Container(
               width: 400,
               height: 400,

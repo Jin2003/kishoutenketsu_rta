@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../constant.dart';
 import 'components/custom_text.dart';
 import 'components/elevate_button.dart';
@@ -57,6 +56,7 @@ class _SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // ユーザーネーム
+
                   const CustomText(
                     text: 'ユーザーネーム',
                     fontSize: 20,
@@ -85,6 +85,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                   // メールアドレス
+
                   const CustomText(
                     text: 'メールアドレス',
                     fontSize: 20,
@@ -114,6 +115,7 @@ class _SignUpState extends State<SignUp> {
                   ),
 
                   // パスワード
+
                   const CustomText(
                     text: 'パスワード',
                     fontSize: 20,
@@ -131,6 +133,7 @@ class _SignUpState extends State<SignUp> {
                       controller: passwordController,
                       obscureText: isDisplay,
                       decoration: InputDecoration(
+
                         filled: true,
                         fillColor: Constant.white,
                         border: const OutlineInputBorder(
@@ -167,6 +170,7 @@ class _SignUpState extends State<SignUp> {
                     fontSize: 20,
                     shape: 16,
                     onPressed: () async {
+
                       try {
                         final User? user = (await FirebaseAuth.instance
                                 .createUserWithEmailAndPassword(
@@ -213,6 +217,7 @@ class _SignUpState extends State<SignUp> {
           Stack(
             children: [
               const Align(
+
                 alignment: Alignment(0, 0.65),
                 child: CustomText(
                     text: 'アカウントをお持ちの方', fontSize: 16, Color: Constant.gray),

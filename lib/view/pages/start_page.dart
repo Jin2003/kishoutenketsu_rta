@@ -3,7 +3,6 @@ import '../../logic/nav_bar.dart';
 import '../constant.dart';
 import 'components/elevate_button.dart';
 import 'log_in.dart';
-import 'nfc_setting_page.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});

@@ -45,7 +45,7 @@ class _GatchaPageState extends State<GatchaPage> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/pages/yellow/gatcha_page.png",
+            "assets/pages/yellow/dots/gatcha_page.png",
             fit: BoxFit.cover,
           ),
           //画像を表示する
@@ -165,6 +165,7 @@ class _GatchaPageState extends State<GatchaPage> {
                                         setState(() {
                                           _point = point[0]['point'] as int;
                                         });
+                                        // ignore: use_build_context_synchronously
                                         Navigator.pop(context);
                                         // まわるポップアップ表示
                                         Future.delayed(

@@ -4,9 +4,10 @@ import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/sign_up.dart';
 import 'package:kishoutenketsu_rta/view/pages/use_select.dart';
-import '../constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'components/custom_text.dart';
 import 'components/elevate_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -22,9 +23,22 @@ class _LogInState extends State<LogIn> {
   // password 表示非表示の切り替え
   bool isDisplay = false;
 
+  late SharedPreferences prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeSharedPreferences();
+  }
+
+  Future<void> initializeSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Constant.subYellow,
       body: Stack(
         children: [
@@ -124,10 +138,25 @@ class _LogInState extends State<LogIn> {
                     shape: 16,
                     onPressed: () async {
                       //　TODO;アカウントがあればmain_page、なければselect_pageに移行
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: ((context) => NavBar()!)),
-                      );
+                      try {
+                        // メール/パスワードでログイン
+                        final User? user = (await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text))
+                            .user;
+                        if (user != null) {
+                          await prefs.setString('userID', user.uid);
+                          if (!mounted) return;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => const NavBar())),
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
                     },
                   ),
 
@@ -150,12 +179,12 @@ class _LogInState extends State<LogIn> {
                     text: 'アカウントをお持ちでない方', fontSize: 16, Color: Constant.gray),
               ),
               Align(
-                alignment: Alignment(0, 0.59),
+                alignment: const Alignment(0, 0.59),
                 child: TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: ((context) => SignUp()!)),
+                      MaterialPageRoute(builder: ((context) => const SignUp())),
                     );
                   },
                   child: Text(
@@ -171,8 +200,15 @@ class _LogInState extends State<LogIn> {
 
               // デバック用
               Align(
-                alignment: Alignment(0,0.8),
-                child: ElevateButton(title: 'select_page', shape: 16, fontSize: 20, width: 200, height: 40, nextPage: UseSelect(),),
+                alignment: Alignment(0, 0.8),
+                child: ElevateButton(
+                  title: 'select_page',
+                  shape: 16,
+                  fontSize: 20,
+                  width: 200,
+                  height: 40,
+                  nextPage: UseSelect(),
+                ),
               ),
             ],
           ),

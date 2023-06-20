@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_scan.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:uuid/uuid.dart';
-import 'package:kishoutenketsu_rta/logic/database_helper.dart';
 
 import '../constant.dart';
 import 'components/outline_button.dart';
@@ -17,12 +18,8 @@ class NfcSettingPage extends StatefulWidget {
 
 class _NfcSettingPageState extends State<NfcSettingPage> {
   final List<String> tagname = ["起", "床", "点", "結", "RTA"];
-
-  //修正箇所
-  //配列の中身のRTAを一つ削除した
-  //完了ダイアログのifの条件式の値を５から４に変えた
-  //ScanFileとWriteFileを結合した
-  //WriteFileは削除してもいい
+  // NFCのIDをkey-valueで格納する辞書
+  Map<String, String> nfcIdMap = {};
 
   int tagCount = 0;
 
@@ -45,10 +42,9 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
         children: [
           Center(
             child: CustomText(
-              text: '[$tagName]のボタンを\n壁に取り付け\nタッチしてください',
-              fontSize: 30,
-              Color: Constant.gray
-            ),
+                text: '[$tagName]のボタンを\n壁に取り付け\nタッチしてください',
+                fontSize: 30,
+                Color: Constant.gray),
           ),
         ],
       ),
@@ -58,25 +54,31 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
   void nfcScanFunc() async {
     String id = uuid.v4(); //uuidを生成
     //NFCScan().nfcScan(id)呼び出し
-    await NFCScan().nfcScan(id, tagCount).then((_) {
+    await NFCScan().nfcScan(id, tagCount).then((_) async {
       //NFCのスキャン処理が終わったらshowDialogFunc()呼び出し
       showDialogFunc(context, tagCount);
 
-      _registerIdInDatabase(id);
+      // nfcIdMapにtagnameに対応するキーとしてidを追加
+      nfcIdMap[tagname[tagCount]] = id;
+
       //tagCountが4以下ならtagCountの値を増やしてnfcScanFunc()呼び出し
       if (tagCount < 4) {
         setState(() {
           tagCount++;
         });
         nfcScanFunc();
+      } else {
+        // firebaseにnfcIdMapを保存
+        FirebaseHelper firebaseHelper = FirebaseHelper();
+        String documentID = await firebaseHelper.createGroup();
+        // nfcIdMapをfirebaseに保存
+        await firebaseHelper.saveNfcIdMap(documentID, nfcIdMap);
+        // shared_preferencesにgroupIDを保存
+        SharedPreferencesLogic sharedPreferencesLogic =
+            SharedPreferencesLogic();
+        sharedPreferencesLogic.setGroupID(documentID);
       }
     });
-  }
-
-  Future<void> _registerIdInDatabase(String id) async {
-    final db = await DatabaseHelper().db;
-
-    await db.insert('nfc', {'nfc_id': id});
   }
 
   void showDialogFunc(BuildContext context, int tagCount) {
@@ -118,7 +120,8 @@ class Dialog extends StatelessWidget {
                 ),
                 const Align(
                   alignment: Alignment.center,
-                  child: CustomText(text: '設定が完了しました！', fontSize: 25, Color: Constant.gray),
+                  child: CustomText(
+                      text: '設定が完了しました！', fontSize: 25, Color: Constant.gray),
                 ),
                 const SizedBox(
                   height: 20,
@@ -155,7 +158,8 @@ class Dialog extends StatelessWidget {
         ),
         const Align(
           alignment: Alignment.center,
-          child: CustomText(text: 'スキャン完了！', fontSize: 25, Color: Constant.gray),
+          child:
+              CustomText(text: 'スキャン完了！', fontSize: 25, Color: Constant.gray),
         ),
         Padding(
           padding:

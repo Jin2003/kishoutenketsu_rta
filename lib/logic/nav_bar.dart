@@ -1,5 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/setting/chara_set_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
@@ -110,8 +112,16 @@ class _NavBarState extends State<NavBar> {
               ),
             ),
             // ログアウトボタン
+
             TextButton(
               onPressed: () async {
+                // firebaseからログアウト
+                await FirebaseAuth.instance.signOut();
+                SharedPreferencesLogic sharedPreferencesLogic =
+                    SharedPreferencesLogic();
+                // sharedPreferenceのデータを全て削除
+                sharedPreferencesLogic.clearAllData();
+                if (!mounted) return;
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: ((context) => const LogIn())),

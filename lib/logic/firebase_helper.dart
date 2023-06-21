@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseHelper {
   // グループを作成するメソッド
@@ -32,6 +33,13 @@ class FirebaseHelper {
   Future<void> addUser(String groupID, String userID) async {
     await FirebaseFirestore.instance.collection('users').doc(userID).update({
       'groupID': groupID,
+    });
+  }
+
+  // ユーザのニックネームを変更するメソッド
+  Future<void> changeName(String name, String userID) async {
+    await FirebaseFirestore.instance.collection('users').doc(userID).update({
+      'name': name,
     });
   }
 }

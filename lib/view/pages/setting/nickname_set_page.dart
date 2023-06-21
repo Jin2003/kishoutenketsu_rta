@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/view/pages/setting/account_set_page.dart';
 import '../../constant.dart';
 import '../components/custom_text.dart';
 import '../components/outline_button.dart';
 
 class NicknameSetPage extends StatefulWidget {
-  const NicknameSetPage({super.key});
+  final String userID; // 引数の追加
+
+  const NicknameSetPage({required this.userID, Key? key}) : super(key: key);
 
   @override
   State<NicknameSetPage> createState() => _NicknameSetPageState();
@@ -14,9 +17,8 @@ class NicknameSetPage extends StatefulWidget {
 class _NicknameSetPageState extends State<NicknameSetPage> {
   @override
   Widget build(BuildContext context) {
-
-  // コントローラーから入力値を取得
-  TextEditingController nicknameController = TextEditingController();
+    // コントローラーから入力値を取得
+    TextEditingController nicknameController = TextEditingController();
 
     return Scaffold(
       backgroundColor: Constant.white,
@@ -37,7 +39,8 @@ class _NicknameSetPageState extends State<NicknameSetPage> {
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: ((context) =>  const AccountSetPage())),
+                  MaterialPageRoute(
+                      builder: ((context) => const AccountSetPage())),
                 );
               },
             ),
@@ -58,7 +61,7 @@ class _NicknameSetPageState extends State<NicknameSetPage> {
               // ニックネーム
               const SizedBox(height: 30),
               const Align(
-                alignment: Alignment(-0.5,0),
+                alignment: Alignment(-0.5, 0),
                 child: CustomText(
                   text: 'ニックネーム',
                   fontSize: 16,
@@ -97,18 +100,23 @@ class _NicknameSetPageState extends State<NicknameSetPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
-              const OutlineButton(
+              const SizedBox(
+                height: 20,
+              ),
+              OutlineButton(
                 title: '保存',
                 width: 170,
                 height: 50,
                 fontsize: 20,
                 shape: 15,
-                nextPage: AccountSetPage(),
+                nextPage: const AccountSetPage(),
+                onPressed: () {
+                  FirebaseHelper()
+                      .changeName(nicknameController.text, widget.userID);
+                },
               ),
             ],
           ),
-          
         ],
       ),
     );

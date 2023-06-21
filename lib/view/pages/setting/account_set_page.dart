@@ -79,10 +79,11 @@ class _AccountSetPageState extends State<AccountSetPage> {
           ),
           const SizedBox(height: 10),
           _ListTileWidget(
-              context,
-              'ニックネーム',
-              userData != null ? userData['name'] : '',
-              const NicknameSetPage()),
+            context,
+            'ニックネーム',
+            userData != null ? userData['name'] : '',
+            NicknameSetPage(userID: userData != null ? userData['userID'] : ''),
+          ),
           _ListTileWidget(
               context, 'メールアドレス', userEmail ?? '', const EmailSetPage()),
           _ListTileWidget(context, 'パスワード', '●●●●●●', const PwdSetPage()),

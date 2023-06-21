@@ -5,8 +5,6 @@ class SharedPreferencesLogic {
   static const keyGroupID = 'groupID';
   // firebaseのユーザーID
   static const keyUserID = 'userID';
-  // 現在のポイント
-  static const keyCurrentPoint = 'currentPoint';
   // 選択の音楽
   static const keySelectedMusic = 'music';
   // 選択テーマ
@@ -30,12 +28,6 @@ class SharedPreferencesLogic {
   Future<void> setUserID(String userID) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString(keyUserID, userID);
-  }
-
-  // 現在のポイントをローカルに保存
-  Future<void> setCurrentPoint(int currentPoint) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setInt(keyCurrentPoint, currentPoint);
   }
 
   // アラームのON/OFFをローカルに保存
@@ -78,12 +70,6 @@ class SharedPreferencesLogic {
   Future<String?> getGroupID() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString(keyGroupID);
-  }
-
-  // 現在のポイントをローカルから取得
-  Future<int?> getCurrentPoint() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getInt(keyCurrentPoint);
   }
 
   // アラームのON/OFFをローカルから取得

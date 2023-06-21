@@ -133,7 +133,6 @@ class _SignUpState extends State<SignUp> {
                       controller: passwordController,
                       obscureText: isDisplay,
                       decoration: InputDecoration(
-
                         filled: true,
                         fillColor: Constant.white,
                         border: const OutlineInputBorder(
@@ -170,7 +169,6 @@ class _SignUpState extends State<SignUp> {
                     fontSize: 20,
                     shape: 16,
                     onPressed: () async {
-
                       try {
                         final User? user = (await FirebaseAuth.instance
                                 .createUserWithEmailAndPassword(
@@ -185,7 +183,8 @@ class _SignUpState extends State<SignUp> {
                               .set({
                             'name': userNameController.text,
                             'userID': user.uid,
-                            'groupID': null
+                            'groupID': null,
+                            'point': 0,
                           });
                           await prefs.setString('userID', user.uid);
                           if (!mounted) return;
@@ -217,7 +216,6 @@ class _SignUpState extends State<SignUp> {
           Stack(
             children: [
               const Align(
-
                 alignment: Alignment(0, 0.65),
                 child: CustomText(
                     text: 'アカウントをお持ちの方', fontSize: 16, Color: Constant.gray),

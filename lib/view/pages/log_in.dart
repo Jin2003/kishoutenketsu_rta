@@ -173,18 +173,6 @@ class _LogInState extends State<LogIn> {
                                   builder: ((context) => const UseSelect())),
                             );
                           }
-
-                          //　TODO;アカウントがあればmain_page、なければselect_pageに移行
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: ((context) => const UseSelect())),
-                          // );
-                          // // Navigator.push(
-                          // //   context,
-                          // //   MaterialPageRoute(
-                          // //       builder: ((context) => const NavBar())),
-                          // // );
                         }
                       } catch (e) {
                         print(e);

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/sign_up.dart';
 import 'package:kishoutenketsu_rta/view/pages/use_select.dart';
@@ -23,18 +24,6 @@ class _LogInState extends State<LogIn> {
   TextEditingController passwordController = TextEditingController();
   // password 表示非表示の切り替え
   bool isDisplay = false;
-
-  late SharedPreferences prefs;
-
-  @override
-  void initState() {
-    super.initState();
-    initializeSharedPreferences();
-  }
-
-  Future<void> initializeSharedPreferences() async {
-    prefs = await SharedPreferences.getInstance();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,27 +135,31 @@ class _LogInState extends State<LogIn> {
                                     password: passwordController.text))
                             .user;
                         if (user != null) {
-                          await prefs.setString('userID', user.uid);
-                          // グループに所属していなければselect_pageに移行
-                          bool isInGroup = false;
+                          SharedPreferencesLogic sharedPreferencesLogic =
+                              SharedPreferencesLogic();
+                          // SharedPreferencesにuserIDを保存
+                          await sharedPreferencesLogic.setUserID(user.uid);
 
-                          await FirebaseFirestore.instance
+                          // firebaseからgroupIDを取得
+                          var documentSnapshot = await FirebaseFirestore
+                              .instance
                               .collection('users')
                               .doc(user.uid)
-                              .get()
-                              .then((docSnapshot) {
-                            // ドキュメントが存在する場合はgroupIDフィールドの値を取得
-                            isInGroup = docSnapshot.data()?['groupID'] != null;
-                          });
+                              .get();
+                          var groupID = documentSnapshot.data()?['groupID'];
 
-                          if (!mounted) return;
-                          if (isInGroup) {
+                          if (groupID != null) {
+                            // sharedPreferencesにgroupIDを保存
+                            await sharedPreferencesLogic.setGroupID(groupID);
+                            if (!mounted) return;
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: ((context) => const NavBar())),
                             );
                           } else {
+                            // groupIDがnullの場合はUseSelectへ移行
+                            if (!mounted) return;
                             Navigator.push(
                               context,
                               MaterialPageRoute(

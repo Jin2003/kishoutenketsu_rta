@@ -42,4 +42,24 @@ class FirebaseHelper {
       'name': name,
     });
   }
+
+  // ユーザのメールアドレスを変更するメソッド
+  Future<void> changeEmail(String newEmail) async {
+    //　なんかログインもう一回しないとエラー出るっぽい
+
+    // User? user = FirebaseAuth.instance.currentUser;
+    // if (user != null && user.email != null) {
+    //   // ユーザがログインしているか確認
+    //   if (!user.emailVerified) {
+    //     throw FirebaseAuthException(
+    //       code: 'requires-recent-login',
+    //       message:
+    //           'This operation requires recent authentication. Please log in again.',
+    //     );
+    //   }
+
+    //   // メールアドレスを変更
+    //   await user.updateEmail(newEmail);
+    // }
+  }
 }

@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -23,6 +26,13 @@ class _JoinGroupState extends State<JoinGroup> {
 
   QRViewController? controller;
 
+  bool canRead = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   // ホットリロードすると呼ばれる処理
   @override
   void reassemble() {
@@ -40,7 +50,7 @@ class _JoinGroupState extends State<JoinGroup> {
   }
 
   // QRカメラの初期化時
-  void _onQRViewCreated(QRViewController controller) {
+  Future<void> _onQRViewCreated(QRViewController controller) async {
     setState(() {
       this.controller = controller;
     });
@@ -49,8 +59,73 @@ class _JoinGroupState extends State<JoinGroup> {
       setState(() {
         result = scanData;
       });
-      // TODO:QRコードのデータを取得したら、グループに参加する処理を書く
+      if (canRead) {
+        canRead = false;
+        joinGroup();
+      }
     });
+  }
+
+  Future<void> joinGroup() async {
+    // Firebaseへの書き込み処理を追加
+    if (result != null) {
+      try {
+        SharedPreferencesLogic sharedPreferencesLogic =
+            SharedPreferencesLogic();
+        final userID = await sharedPreferencesLogic.getUserID();
+        // Firebaseへの書き込み処理を実行
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userID)
+            .update({
+          'groupID': result!.code,
+        });
+        // 書き込みが成功した場合の処理
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('参加成功'),
+              content: const Text('グループへの参加が成功しました。'),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const NavBar())); // NavBarに遷移する
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      } catch (e) {
+        // 書き込みが失敗した場合の処理
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('参加失敗'),
+              content: const Text('グループへの参加に失敗しました。'),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    canRead = true;
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
   }
 
   // カメラのパーミッションがセットされると呼ばれる処理
@@ -94,13 +169,10 @@ class _JoinGroupState extends State<JoinGroup> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const CustomText(
-              text: 'グループ作成者のQRコードを\n読み取ることで\nグループに参加できます',
-              fontSize: 20,
-              Color: Constant.gray
-            ),
+                text: 'グループ作成者のQRコードを\n読み取ることで\nグループに参加できます',
+                fontSize: 20,
+                Color: Constant.gray),
             const SizedBox(height: 30),
-            // TODO:ここでカメラ起動
-
             Container(
               width: 400,
               height: 400,

@@ -5,8 +5,6 @@ class SharedPreferencesLogic {
   static const keyGroupID = 'groupID';
   // firebaseのユーザーID
   static const keyUserID = 'userID';
-  // 現在のポイント
-  static const keyCurrentPoint = 'currentPoint';
   // 選択の音楽
   static const keySelectedMusic = 'music';
   // 選択テーマ
@@ -16,7 +14,7 @@ class SharedPreferencesLogic {
   // アラームのONOFF
   static const keySettedAlarm = 'settedAlarm';
   // NFCを登録しているかどうか
-  static const keyRegisteredNFC = 'registeredNFC';
+  static const keyExistsNFC = 'ExistsNFC';
 
   late SharedPreferences sharedPreferences;
 
@@ -32,12 +30,6 @@ class SharedPreferencesLogic {
     await sharedPreferences.setString(keyUserID, userID);
   }
 
-  // 現在のポイントをローカルに保存
-  Future<void> setCurrentPoint(int currentPoint) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setInt(keyCurrentPoint, currentPoint);
-  }
-
   // アラームのON/OFFをローカルに保存
   Future<void> setSettedAlarm(bool settedAlarm) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -45,9 +37,9 @@ class SharedPreferencesLogic {
   }
 
   // NFCを登録しているかどうかをローカルに保存
-  Future<void> setRegisteredNFC(bool registeredNFC) async {
+  Future<void> setExistsNFC(bool existsNFC) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setBool(keyRegisteredNFC, registeredNFC);
+    await sharedPreferences.setBool(keyExistsNFC, existsNFC);
   }
 
   // 選択の音楽をローカルに保存
@@ -80,12 +72,6 @@ class SharedPreferencesLogic {
     return sharedPreferences.getString(keyGroupID);
   }
 
-  // 現在のポイントをローカルから取得
-  Future<int?> getCurrentPoint() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getInt(keyCurrentPoint);
-  }
-
   // アラームのON/OFFをローカルから取得
   Future<bool?> getSettedAlarm() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -93,9 +79,9 @@ class SharedPreferencesLogic {
   }
 
   // NFCを登録しているかどうかをローカルから取得
-  Future<bool?> getRegisteredNFC() async {
+  Future<bool?> getExistsNFC() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getBool(keyRegisteredNFC);
+    return sharedPreferences.getBool(keyExistsNFC);
   }
 
   // 選択の音楽をローカルから取得

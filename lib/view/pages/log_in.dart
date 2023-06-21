@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/sign_up.dart';
 import 'package:kishoutenketsu_rta/view/pages/use_select.dart';
@@ -22,18 +24,6 @@ class _LogInState extends State<LogIn> {
   TextEditingController passwordController = TextEditingController();
   // password 表示非表示の切り替え
   bool isDisplay = false;
-
-  late SharedPreferences prefs;
-
-  @override
-  void initState() {
-    super.initState();
-    initializeSharedPreferences();
-  }
-
-  Future<void> initializeSharedPreferences() async {
-    prefs = await SharedPreferences.getInstance();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +127,6 @@ class _LogInState extends State<LogIn> {
                     fontSize: 20,
                     shape: 16,
                     onPressed: () async {
-                      //　TODO;アカウントがあればmain_page、なければselect_pageに移行
                       try {
                         // メール/パスワードでログイン
                         final User? user = (await FirebaseAuth.instance
@@ -146,13 +135,37 @@ class _LogInState extends State<LogIn> {
                                     password: passwordController.text))
                             .user;
                         if (user != null) {
-                          await prefs.setString('userID', user.uid);
-                          if (!mounted) return;
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => const NavBar())),
-                          );
+                          SharedPreferencesLogic sharedPreferencesLogic =
+                              SharedPreferencesLogic();
+                          // SharedPreferencesにuserIDを保存
+                          await sharedPreferencesLogic.setUserID(user.uid);
+
+                          // firebaseからgroupIDを取得
+                          var documentSnapshot = await FirebaseFirestore
+                              .instance
+                              .collection('users')
+                              .doc(user.uid)
+                              .get();
+                          var groupID = documentSnapshot.data()?['groupID'];
+
+                          if (groupID != null) {
+                            // sharedPreferencesにgroupIDを保存
+                            await sharedPreferencesLogic.setGroupID(groupID);
+                            if (!mounted) return;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => const NavBar())),
+                            );
+                          } else {
+                            // groupIDがnullの場合はUseSelectへ移行
+                            if (!mounted) return;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => const UseSelect())),
+                            );
+                          }
                         }
                       } catch (e) {
                         print(e);
@@ -208,6 +221,17 @@ class _LogInState extends State<LogIn> {
                   width: 200,
                   height: 40,
                   nextPage: UseSelect(),
+                ),
+              ),
+              Align(
+                alignment: Alignment(0, 0.9),
+                child: ElevateButton(
+                  title: 'navbar',
+                  shape: 16,
+                  fontSize: 20,
+                  width: 200,
+                  height: 40,
+                  nextPage: NavBar(),
                 ),
               ),
             ],

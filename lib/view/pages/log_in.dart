@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
@@ -137,7 +138,6 @@ class _LogInState extends State<LogIn> {
                     fontSize: 20,
                     shape: 16,
                     onPressed: () async {
-                      //　TODO;アカウントがあればmain_page、なければselect_pageに移行
                       try {
                         // メール/パスワードでログイン
                         final User? user = (await FirebaseAuth.instance
@@ -147,12 +147,44 @@ class _LogInState extends State<LogIn> {
                             .user;
                         if (user != null) {
                           await prefs.setString('userID', user.uid);
+                          // グループに所属していなければselect_pageに移行
+                          bool isInGroup = false;
+
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.uid)
+                              .get()
+                              .then((docSnapshot) {
+                            // ドキュメントが存在する場合はgroupIDフィールドの値を取得
+                            isInGroup = docSnapshot.data()?['groupID'] != null;
+                          });
+
                           if (!mounted) return;
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => const NavBar())),
-                          );
+                          if (isInGroup) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => const NavBar())),
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => const UseSelect())),
+                            );
+                          }
+
+                          //　TODO;アカウントがあればmain_page、なければselect_pageに移行
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: ((context) => const UseSelect())),
+                          // );
+                          // // Navigator.push(
+                          // //   context,
+                          // //   MaterialPageRoute(
+                          // //       builder: ((context) => const NavBar())),
+                          // // );
                         }
                       } catch (e) {
                         print(e);
@@ -208,6 +240,17 @@ class _LogInState extends State<LogIn> {
                   width: 200,
                   height: 40,
                   nextPage: UseSelect(),
+                ),
+              ),
+              Align(
+                alignment: Alignment(0, 0.9),
+                child: ElevateButton(
+                  title: 'navbar',
+                  shape: 16,
+                  fontSize: 20,
+                  width: 200,
+                  height: 40,
+                  nextPage: NavBar(),
                 ),
               ),
             ],

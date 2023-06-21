@@ -26,7 +26,7 @@ class _JoinGroupState extends State<JoinGroup> {
 
   QRViewController? controller;
 
-  bool isFirst = true;
+  bool canRead = true;
 
   @override
   void initState() {
@@ -59,8 +59,8 @@ class _JoinGroupState extends State<JoinGroup> {
       setState(() {
         result = scanData;
       });
-      if (isFirst) {
-        isFirst = false;
+      if (canRead) {
+        canRead = false;
         joinGroup();
       }
     });
@@ -92,7 +92,12 @@ class _JoinGroupState extends State<JoinGroup> {
                 ElevatedButton(
                   child: const Text('OK'),
                   onPressed: () {
-                    Navigator.pop(context, const NavBar());
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const NavBar())); // NavBarに遷移する
                   },
                 ),
               ],
@@ -111,7 +116,8 @@ class _JoinGroupState extends State<JoinGroup> {
                 ElevatedButton(
                   child: const Text('OK'),
                   onPressed: () {
-                    Navigator.pop(context, const GroupSelect());
+                    canRead = true;
+                    Navigator.pop(context);
                   },
                 ),
               ],

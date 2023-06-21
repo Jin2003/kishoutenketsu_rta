@@ -5,6 +5,8 @@ import 'package:kishoutenketsu_rta/view/pages/log_in.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:dart_openai/dart_openai.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +14,9 @@ void main() async {
   //スプラッシュ画面の設定
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // .evnから環境変数を読み込む
+  await dotenv.load(fileName: '.env');
+  OpenAI.apiKey = dotenv.get('OPEN_AI_API_KEY');
   // 画面の向きを固定
   // SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp,

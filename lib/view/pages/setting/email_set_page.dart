@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/view/pages/setting/account_set_page.dart';
 import '../../constant.dart';
 import '../components/custom_text.dart';
@@ -35,7 +36,8 @@ class _EmailSetPageState extends State<EmailSetPage> {
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: ((context) => const AccountSetPage())),
+                  MaterialPageRoute(
+                      builder: ((context) => const AccountSetPage())),
                 );
               },
             ),
@@ -56,7 +58,7 @@ class _EmailSetPageState extends State<EmailSetPage> {
               // メールアドレス
               const SizedBox(height: 30),
               const Align(
-                alignment: Alignment(-0.5,0),
+                alignment: Alignment(-0.5, 0),
                 child: CustomText(
                   text: 'メールアドレス',
                   fontSize: 16,
@@ -94,18 +96,24 @@ class _EmailSetPageState extends State<EmailSetPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
-              const OutlineButton(
+              const SizedBox(
+                height: 20,
+              ),
+              OutlineButton(
                 title: '保存',
                 width: 170,
                 height: 50,
                 fontsize: 20,
                 shape: 15,
-                nextPage: AccountSetPage(),
+                nextPage: const AccountSetPage(),
+                onPressed: () {
+                  // TODO: メールアドレス変更処理
+                  // できてないです
+                  FirebaseHelper().changeEmail(emailController.text);
+                },
               ),
             ],
           ),
-          
         ],
       ),
     );

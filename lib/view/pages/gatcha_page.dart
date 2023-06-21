@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 import '../../logic/database_helper.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-
+import 'package:lottie/lottie.dart';
 import '../constant.dart';
 
 class GatchaPage extends StatefulWidget {
@@ -55,7 +54,8 @@ class _GatchaPageState extends State<GatchaPage> {
                 height: 70,
                 width: 1,
               ),
-              const CustomText(text: '現在のポイント', fontSize: 28, Color: Constant.gray),
+              const CustomText(
+                  text: '現在のポイント', fontSize: 28, Color: Constant.gray),
               const SizedBox(
                 height: 10,
                 width: 1,
@@ -124,7 +124,9 @@ class _GatchaPageState extends State<GatchaPage> {
                         builder: (_) {
                           return AlertDialog(
                             title: const CustomText(
-                                text: '10ポイント消費して\nガチャを回しますか？', fontSize: 20, Color: Constant.gray),
+                                text: '10ポイント消費して\nガチャを回しますか？',
+                                fontSize: 20,
+                                Color: Constant.gray),
                             actions: <Widget>[
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -179,8 +181,7 @@ class _GatchaPageState extends State<GatchaPage> {
                                                     text:
                                                         '${items[0]["item_name"]}が当たりました！',
                                                     fontSize: 20,
-                                                    Color: Constant.gray
-                                                    ),
+                                                    Color: Constant.gray),
                                                 actions: <Widget>[
                                                   Container(
                                                     alignment: Alignment.center,
@@ -246,10 +247,7 @@ class _GatchaPageState extends State<GatchaPage> {
                         });
                   },
                   child: const CustomText(
-                    text: 'ガチャをまわす',
-                    fontSize: 21,
-                    Color: Constant.gray
-                  ),
+                      text: 'ガチャをまわす', fontSize: 21, Color: Constant.gray),
                   // child: Text(
                   //   style: TextStyle(
                   //     color: Constant.blue,
@@ -267,25 +265,12 @@ class _GatchaPageState extends State<GatchaPage> {
           //_isPressedがtrueの時に表示する
           if (_isPressed)
             Positioned(
-              top: 250,
-              left: 118,
-              child: SizedBox(
-                  width: 150,
-                  height: 150,
-                  child: Animate(
-                    effects: [
-                      SlideEffect(duration: 1.seconds),
-                      ShakeEffect(delay: 1.seconds, duration: 500.milliseconds),
-                      ShimmerEffect(
-                          delay: 2.seconds, duration: 800.milliseconds),
-                    ],
-                    child: Image.asset(
-                      // TODO:今、水色のまま。そもそもアニメーションになる
-                      "assets/capsule.png",
-                      fit: BoxFit.cover,
-                      height: 500,
-                    ),
-                  )),
+              child: Lottie.asset(
+                // TODO:今、水色のまま。そもそもアニメーションになる
+                "assets/gacha/red/redcapsule.json",
+                fit: BoxFit.cover,
+                repeat: false,
+              ),
             ),
         ],
       ),

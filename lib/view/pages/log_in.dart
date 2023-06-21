@@ -4,9 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
+import 'package:kishoutenketsu_rta/view/pages/have_nfc.dart';
 import 'package:kishoutenketsu_rta/view/pages/sign_up.dart';
-import 'package:kishoutenketsu_rta/view/pages/use_select.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'components/custom_text.dart';
 import 'components/elevate_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -158,12 +157,12 @@ class _LogInState extends State<LogIn> {
                                   builder: ((context) => const NavBar())),
                             );
                           } else {
-                            // groupIDがnullの場合はUseSelectへ移行
+                            // groupIDがnullの場合はHaveNfcへ移行
                             if (!mounted) return;
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => const UseSelect())),
+                                  builder: ((context) => const HaveNfc())),
                             );
                           }
                         }
@@ -215,12 +214,12 @@ class _LogInState extends State<LogIn> {
               Align(
                 alignment: Alignment(0, 0.8),
                 child: ElevateButton(
-                  title: 'select_page',
+                  title: 'HaveNfc',
                   shape: 16,
                   fontSize: 20,
                   width: 200,
                   height: 40,
-                  nextPage: UseSelect(),
+                  nextPage: HaveNfc(),
                 ),
               ),
               Align(

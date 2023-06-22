@@ -266,8 +266,7 @@ class _GatchaPageState extends State<GatchaPage> {
           if (_isPressed)
             Positioned(
               child: Lottie.asset(
-                // TODO:今、水色のまま。そもそもアニメーションになる
-                "assets/gacha/red/redcapsule.json",
+                "assets/gacha/yellow/yellowcapsule.json",
                 fit: BoxFit.cover,
                 repeat: false,
               ),

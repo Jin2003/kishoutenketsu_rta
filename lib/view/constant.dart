@@ -16,5 +16,7 @@ class Constant {
 
   static const Color gray = Color(0xFF9C958F);
 
+  static const Color main = blue;
+  static const Color sub = subBlue;
 
 }

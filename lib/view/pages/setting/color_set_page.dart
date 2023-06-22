@@ -60,7 +60,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                   child: SizedBox(
                     height: 150,
                     width: 350,
-                    child: Image.asset('assets/color/yellow.png'),
+                    child: Image.asset('assets/theme/yellow/color.png'),
                   ),
                 ),
               ),
@@ -73,7 +73,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                   child: SizedBox(
                     height: 150,
                     width: 350,
-                    child: Image.asset('assets/color/red.png'),
+                    child: Image.asset('assets/theme/red/color.png'),
                   ),
                 ),
               ),
@@ -86,7 +86,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                   child: SizedBox(
                     height: 150,
                     width: 350,
-                    child: Image.asset('assets/color/blue.png'),
+                    child: Image.asset('assets/theme/blue/color.png'),
                   ),
                 ),
               ),

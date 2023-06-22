@@ -10,10 +10,9 @@ import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'alarm_page.dart';
 
-
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
-  
+
   @override
   State<MainPage> createState() => _MainPageState();
 }
@@ -38,7 +37,7 @@ class _MainPageState extends State<MainPage> {
     "今日のラッキーアイテムを「明日のラッキーアイテムは...だよ！」で一文で答えて",
     "短く「ラ〜」歌を歌って"
   ];
-  
+
   //０から３までのランダムな数字を保持する変数
   int? _Random;
 
@@ -47,46 +46,47 @@ class _MainPageState extends State<MainPage> {
   // ChatGPTの応答を表示するかどうかのフラグ
   bool _showResponse = false;
 
-@override
-void initState() {
-  _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
-  super.initState();
-  initializeCharacter().then((_) {
+  @override
+  void initState() {
+    _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
+    super.initState();
+    initializeCharacter().then((_) {
       // キャラクターの初期化が完了したら、UIを更新する
       setState(() {});
     });
-  //ウィジェットが描画された後に実行する
-  WidgetsBinding.instance!.addPostFrameCallback((_) {
-    _firstBubbleMessage();
-  });
-}
+    //ウィジェットが描画された後に実行する
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _firstBubbleMessage();
+    });
+  }
 
 // 初回のバブルメッセージを表示する関数
-Future<void> _firstBubbleMessage() async {
-  await _getChatGPTResponse();
-  _toggleBubble();
-}
+  Future<void> _firstBubbleMessage() async {
+    await _getChatGPTResponse();
+    _toggleBubble();
+  }
 
   // バブルの表示を切り替える関数
 
-
   void _toggleBubble() {
-    setState(() {
-      _showBubble = !_showBubble;
-    });
+    if (mounted) {
+      setState(() {
+        _showBubble = !_showBubble;
+      });
+    }
   }
 
   // ChatGPTからの応答を取得する関数
   Future<void> _getChatGPTResponse() async {
     final chatGPT = ChatGPT();
-    final response =
-        await chatGPT.message(_message[3]);
-
-    setState(() {
-      // ChatGPTからの応答を保持する変数に代入
-      _response = response.content;
-      _showResponse = !_showResponse;
-    });
+    final response = await chatGPT.message(_message[3]);
+    if (mounted) {
+      setState(() {
+        // ChatGPTからの応答を保持する変数に代入
+        _response = response.content;
+        _showResponse = !_showResponse;
+      });
+    }
   }
 
   Future<void> initializeCharacter() async {
@@ -357,16 +357,17 @@ class BubbleBorder extends ShapeBorder {
       ..addPath(
         Path()
           ..moveTo(r, 0)
-          ..lineTo(w - r - 2 , 0) // →
-          ..lineTo(w - r - 3 , 0) // →
-          ..arcToPoint(Offset(w - 5 , r), radius: Radius.circular(r + 6))
-          ..arcToPoint(Offset(w - r - 5, h + 1), radius: Radius.circular(r + 10),clockwise: true)
-          ..relativeLineTo(10 , 15)
-          ..arcToPoint(Offset(w - r * 1.5, h + 3), radius: Radius.circular(r * 6),clockwise: true)
+          ..lineTo(w - r - 2, 0) // →
+          ..lineTo(w - r - 3, 0) // →
+          ..arcToPoint(Offset(w - 5, r), radius: Radius.circular(r + 6))
+          ..arcToPoint(Offset(w - r - 5, h + 1),
+              radius: Radius.circular(r + 10), clockwise: true)
+          ..relativeLineTo(10, 15)
+          ..arcToPoint(Offset(w - r * 1.5, h + 3),
+              radius: Radius.circular(r * 6), clockwise: true)
           ..lineTo(r, h + 1) // ←
           ..arcToPoint(Offset(0, h - r), radius: Radius.circular(r + 15))
-          ..arcToPoint(Offset(r, 0), radius: Radius.circular(r+6.5)),
-
+          ..arcToPoint(Offset(r, 0), radius: Radius.circular(r + 6.5)),
         Offset(rect.left, rect.top),
       )
       ..close();
@@ -392,7 +393,6 @@ class BubbleBorder extends ShapeBorder {
       ..strokeWidth = 4
       ..color = Color.fromARGB(255, 255, 255, 255);
     canvas.drawPath(path, paint);
-
   }
 
   @override

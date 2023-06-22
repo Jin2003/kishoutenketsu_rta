@@ -10,10 +10,9 @@ import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'alarm_page.dart';
 
-
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
-  
+
   @override
   State<MainPage> createState() => _MainPageState();
 }
@@ -38,7 +37,7 @@ class _MainPageState extends State<MainPage> {
     "今日のラッキーアイテムを「明日のラッキーアイテムは...だよ！」で一文で答えて",
     "短く「ラ〜」歌を歌って"
   ];
-  
+
   //０から３までのランダムな数字を保持する変数
   int? _Random;
 
@@ -47,11 +46,11 @@ class _MainPageState extends State<MainPage> {
   // ChatGPTの応答を表示するかどうかのフラグ
   bool _showResponse = false;
 
-@override
-void initState() {
-  _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
-  super.initState();
-  initializeCharacter().then((_) {
+  @override
+  void initState() {
+    _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
+    super.initState();
+    initializeCharacter().then((_) {
       // キャラクターの初期化が完了したら、UIを更新する
       setState(() {});
     });

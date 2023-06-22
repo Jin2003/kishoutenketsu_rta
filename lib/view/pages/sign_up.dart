@@ -20,7 +20,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   // password 表示非表示の切り替え
-  bool isDisplay = false;
+  bool isDisplay = true;
 
 // SharedPreferencesを使うための準備
   late SharedPreferences prefs;

@@ -119,6 +119,10 @@ flutter:
     - assets/wallpaper/blue/
     - assets/wallpaper/red/
     - assets/wallpaper/yellow/
+    
+    - assets/theme/blue/
+    - assets/theme/red/
+    - assets/theme/yellow/
 
     - .env
 

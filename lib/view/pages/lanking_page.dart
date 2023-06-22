@@ -91,30 +91,30 @@ class _LankingPageState extends State<LankingPage> {
             fit: BoxFit.cover,
             ), 
           ),
-          Column(
-            children: [
-              const SizedBox(height: 58),
-              Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 55),
-                    width: 310,
-                    height: 420,
-                    child: Scrollbar(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.all(20),
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 9),
-                        //ここでリストの数を決めている
-                        itemCount: _lankingCount,
-                        itemBuilder: (context, index) =>
-                            _buildCard(index + 1, _times[index]),
-                      ),
+        ),
+        Column(
+          children: [
+            const SizedBox(height: 58),
+            Align(
+                alignment: Alignment.center,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 55),
+                  width: 310,
+                  height: 420,
+                  child: Scrollbar(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(20),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 9),
+                      //ここでリストの数を決めている
+                      itemCount: _lankingCount,
+                      itemBuilder: (context, index) =>
+                          _buildCard(index + 1, _times[index]),
                     ),
                   )),
             ],
           ),
-                      // 吹き出し
+             // 吹き出し
             Align(
               alignment: const Alignment(-0.25, 0.7),
               child: SizedBox(
@@ -163,11 +163,11 @@ class _LankingPageState extends State<LankingPage> {
                         "assets/$_character.png",
                       ),
                     ),
-                  )
-                : Container(),
-          ),
-        ],
-      ),
+                  ),
+                )
+              : Container(),
+        ),
+      ]),
     );
   }
 }
@@ -193,7 +193,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             height: 35,
             decoration: BoxDecoration(
               border: Border.all(color: Constant.main //accentYellow
-              ),
+                  ),
               color: Constant.white,
               shape: BoxShape.circle,
             ),
@@ -201,9 +201,9 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
               child: Text(
                 '$index',
                 style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Constant.main  //accentYellow
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Constant.main //accentYellow
                     ),
               ),
             ),
@@ -222,9 +222,9 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
                     ':' +
                     '${time['time_record'] % 60}'.padLeft(2, '0'),
                 style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Constant.main  //accentYellow
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Constant.main //accentYellow
                     ),
               ),
             ],
@@ -246,8 +246,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             child: Text(
               "${time['time_datetime']}",
               style: const TextStyle(
-                  color: Constant.main
-                  , fontWeight: FontWeight.bold),
+                  color: Constant.main, fontWeight: FontWeight.bold),
             ),
           )
         ],

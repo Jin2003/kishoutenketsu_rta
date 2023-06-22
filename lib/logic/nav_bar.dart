@@ -6,6 +6,7 @@ import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/setting/chara_set_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/gatcha_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/color_set_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/setting/help_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/setting/invitation_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/join_page.dart';
@@ -100,7 +101,7 @@ class _NavBarState extends State<NavBar> {
                       const CharaSetPage()),
                   // 時間があれば
                   _DrawerWidget(
-                      context, 'color_icon', 'テーマカラー変更', const NavBar()),
+                      context, 'color_icon', 'テーマカラー変更', const ColorSetPage()),
                   _DrawerWidget(context, 'wallpaper_icon', '壁紙変更',
                       const WallpaperSetPage()),
                   _DrawerWidget(context, 'adduser_icon', 'グループ招待',

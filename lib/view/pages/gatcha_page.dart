@@ -171,7 +171,7 @@ class _GatchaPageState extends State<GatchaPage> {
                                         Navigator.pop(context);
                                         // まわるポップアップ表示
                                         Future.delayed(
-                                            const Duration(milliseconds: 3500),
+                                            const Duration(milliseconds: 2500),
                                             () {
                                           showAnimatedDialog<void>(
                                             context: context,

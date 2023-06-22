@@ -58,7 +58,7 @@ class _RtaPageState extends State<RtaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.subYellow,
+      backgroundColor: Constant.sub,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +69,7 @@ class _RtaPageState extends State<RtaPage> {
               child: Image.asset(iconImage[imageCount]),
             ),
             const SizedBox(width: 100, height: 20),
-            const CustomText(text: '  をタッチしてね！', fontSize: 25, Color: Constant.yellow),
+            const CustomText(text: '  をタッチしてね！', fontSize: 25, Color: Constant.main),
             const SizedBox(width: 100, height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +201,7 @@ void nfcReadFunc(List<Map<String, dynamic>> nfcs, {int nfcIndex = 0}) async {
           context: context,
           builder: (context) {
             return Scaffold(
-              backgroundColor: Constant.subYellow,
+              backgroundColor: Constant.sub,
               body: Stack(
                 children: [
                   SimpleDialog(

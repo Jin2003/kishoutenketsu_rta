@@ -28,7 +28,7 @@ class _LogInState extends State<LogIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Constant.subYellow,
+      backgroundColor: Constant.sub,
       body: Stack(
         children: [
           Positioned.fill(
@@ -213,7 +213,7 @@ class _LogInState extends State<LogIn> {
                     style: GoogleFonts.zenMaruGothic(
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
-                      color: Constant.accentYellow,
+                      color: Constant.main, //accentYellow
                     ),
                   ),
                 ),

@@ -25,38 +25,39 @@ class _LankingPageState extends State<LankingPage> {
 
   //chatGPTへの入力を保持する配列
   List<String> _message = [
-    "「更新おめでとう！\n今日も一日頑張ろう!」だけ言ってくださいそれ以外は言わないでください",
-    "「惜しい！\nあと秒で更新だったね!」だけ言ってくださいそれ以外は言わないでください",
-    "「」"
+    "「更新おめでとう！\n今日も一日頑張ろう!」のみ言ってくださいそれ以外は言わないでください",
+    "「惜しい！\nあと秒で更新だったね!」のみ言ってくださいそれ以外は言わないでください",
   ];
-  //０から３までのランダムな数字を保持する変数
-  int? _Random;
 
   // ChatGPTからの応答を保持する変数
   String? _response;
   // ChatGPTの応答を表示するかどうかのフラグ
-  bool _showResponse = true;
+  bool _showResponse = false;
 
   @override
   void initState() {
     super.initState();
     _loadLank();
-    initializeCharacter().then((_) {
-      // キャラクターの初期化が完了したら、UIを更新する
-      setState(() {});
-    });
+    initializeCharacter().then(
+      (_) {
+        // キャラクターの初期化が完了したら、UIを更新する
+        setState(() {});
+      },
+    );
   }
-
 
   // ChatGPTからの応答を取得する関数
   Future<void> _getChatGPTResponse() async {
     final chatGPT = ChatGPT();
     final response = await chatGPT.message(_message[0]);
     if (mounted) {
-      setState(() {
-        // ChatGPTからの応答を保持する変数に代入
-        _response = response;
-      });
+      setState(
+        () {
+          // ChatGPTからの応答を保持する変数に代入
+          _response = response;
+          _showResponse = !_showResponse;
+        },
+      );
     }
   }
 
@@ -84,18 +85,18 @@ class _LankingPageState extends State<LankingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.sub,
-      body: Stack(children: [
-        Positioned.fill(
-          child: Image.asset(
-            "assets/pages/yellow/dots/ranking_page.png",
-            fit: BoxFit.cover,
-            ), 
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              "assets/pages/yellow/dots/ranking_page.png",
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        Column(
-          children: [
-            const SizedBox(height: 58),
-            Align(
+          Column(
+            children: [
+              const SizedBox(height: 58),
+              Align(
                 alignment: Alignment.center,
                 child: Container(
                   padding: const EdgeInsets.only(top: 55),
@@ -111,40 +112,41 @@ class _LankingPageState extends State<LankingPage> {
                       itemBuilder: (context, index) =>
                           _buildCard(index + 1, _times[index]),
                     ),
-                  )),
-            ],
-          ),
-             // 吹き出し
-            Align(
-              alignment: const Alignment(-0.25, 0.7),
-              child: SizedBox(
-                width: 250,
-                height: 190,
-                child: Image.asset(
-                  "assets/speech_bubble.png",
+                  ),
                 ),
               ),
+            ],
+          ),
+          // 吹き出し
+          Align(
+            alignment: const Alignment(-0.4, 0.8),
+            child: SizedBox(
+              width: 250,
+              height: 190,
+              child: Image.asset(
+                "assets/speech_bubble.png",
+              ),
             ),
+          ),
           // 吹き出しの中身(ChatGPTの応答)
           Visibility(
             visible: _showResponse,
-            child:Align(
-              alignment: const Alignment(-0.09, 0.89),
+            child: Align(
+              alignment: const Alignment(-0.3, 1.05),              
               child: SizedBox(
                 width: 200,
                 height: 190,
                 child: AnimatedTextKit(
                   animatedTexts: [
                     TyperAnimatedText(_response ?? "",
-                      textStyle: GoogleFonts.zenMaruGothic(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Color(0xFF707070),
-                      ),
-                      speed: const Duration(milliseconds: 100)
-                    ),
+                        textStyle: GoogleFonts.zenMaruGothic(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color(0xFF707070),
+                        ),
+                        speed: const Duration(milliseconds: 100)),
                   ],
-                  totalRepeatCount:1,
+                  totalRepeatCount: 1,
                 ),
               ),
             ),
@@ -163,11 +165,11 @@ class _LankingPageState extends State<LankingPage> {
                         "assets/$_character.png",
                       ),
                     ),
-                  ),
-                )
-              : Container(),
-        ),
-      ]),
+                  )
+                : Container(),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -248,85 +250,9 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
               style: const TextStyle(
                   color: Constant.main, fontWeight: FontWeight.bold),
             ),
-          )
+          ),
         ],
       ),
     ),
   );
-}
-
-//吹き出しの形を作るクラス
-class BubbleBorder extends ShapeBorder {
-  BubbleBorder({
-    required this.width,
-    required this.radius,
-  });
-
-  final double width;
-  final double radius;
-
-  @override
-  EdgeInsetsGeometry get dimensions {
-    return EdgeInsets.all(width);
-  }
-
-  @override
-  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
-    return getOuterPath(
-      rect.deflate(width / 2.0),
-      textDirection: textDirection,
-    );
-  }
-
-  @override
-  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    final r = radius;
-    final rs = radius / 2;
-    final w = rect.size.width; // 全体の横幅
-    final h = rect.size.height; // 全体の縦幅
-    final wl = w / 3;
-    return Path()
-      ..addPath(
-        Path()
-          ..moveTo(r, 0)
-          ..lineTo(w - r - 2, 0) // →
-          ..lineTo(w - r - 3, 0) // →
-          ..arcToPoint(Offset(w - 5, r), radius: Radius.circular(r + 6))
-          ..arcToPoint(Offset(w - r - 5, h + 1),
-              radius: Radius.circular(r + 2), clockwise: true)
-          ..relativeLineTo(10, 15)
-          ..arcToPoint(Offset(w - r * 1.8, h + 3),
-              radius: Radius.circular(r * 6), clockwise: true)
-          ..lineTo(wl + r, h) // ←
-          ..lineTo(r, h) // ←
-          ..arcToPoint(Offset(0, h - r), radius: Radius.circular(r))
-          ..arcToPoint(Offset(r, 0), radius: Radius.circular(r)),
-        Offset(rect.left, rect.top),
-      )
-      ..close();
-  }
-
-  @override
-  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
-    final path = getOuterPath(
-      rect.deflate(width / 2.0),
-      textDirection: textDirection,
-    );
-
-    // Add a shadow to the speech bubble
-    final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.2)
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1.5);
-    canvas.drawPath(path.shift(Offset(4.0, 4.0)), shadowPaint);
-
-    // Draw the speech bubble shape
-
-    final paint = Paint()
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 4
-      ..color = Color.fromARGB(255, 255, 255, 255);
-  }
-
-  @override
-  ShapeBorder scale(double t) => this;
 }

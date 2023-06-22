@@ -84,7 +84,7 @@ class _MainPageState extends State<MainPage> {
       setState(() {
         // ChatGPTからの応答を保持する変数に代入
         _response = response;
-        _showResponse = true;
+        _showResponse = !_showResponse;
       });
     }
   }
@@ -211,22 +211,24 @@ class _MainPageState extends State<MainPage> {
               const SizedBox(height: 150),
             ],
           ),
-          // 吹き出し
-          Align(
-            alignment: const Alignment(-0.25, 0.7),
-            child: SizedBox(
-              width: 250,
-              height: 190,
-              child: Image.asset(
-                "assets/speech_bubble.png",
+            // 吹き出し
+            Align(
+              alignment: const Alignment(-0.4, 0.8),
+              child: SizedBox(
+                width: 250,
+                height: 190,
+                child: Image.asset(
+                  "assets/speech_bubble.png",
+                ),
               ),
             ),
           ),
           // 吹き出しの中身(ChatGPTの応答)
           Visibility(
             visible: _showResponse,
-            child: Align(
-              alignment: const Alignment(-0.09, 0.89),
+
+            child:Align(
+              alignment: const Alignment(-0.3, 1.05), 
               child: SizedBox(
                 width: 200,
                 height: 190,

@@ -24,6 +24,9 @@ class _MainPageState extends State<MainPage> {
   // 選択中のキャラクター
   String? _character;
 
+  // 選択中の壁紙
+  String? _wallpaper = "dots";
+
   // アラームオンオフの切り替え
   bool _value = true;
 
@@ -49,19 +52,19 @@ class _MainPageState extends State<MainPage> {
   // ChatGPTの応答を表示するかどうかのフラグ
   bool _showResponse = false;
 
+  String test = "dots";
+
   @override
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
     super.initState();
-    initializeCharacter().then((_) {
-      // キャラクターの初期化が完了したら、UIを更新する
+    try {
+      // initializeCharacter();
+      initializeWallpaper();
+      // initializeTime();
+    } finally {
       setState(() {});
-    });
-
-    initializeTime().then((_) {
-      // アラーム時刻の初期化が完了したら、UIを更新する
-      setState(() {});
-    });
+    }
 
     //ウィジェットが描画された後に実行する
     WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -89,6 +92,12 @@ class _MainPageState extends State<MainPage> {
     _character = (await sharedPreferencesLogic.getSelectedCharacter());
   }
 
+  // 壁紙の初期化
+  Future<void> initializeWallpaper() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    _wallpaper = (await sharedPreferencesLogic.getSelectedWallpaper());
+  }
+
   // アラーム音の初期化
   Future<void> initializeMusic() async {
     SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
@@ -111,11 +120,14 @@ class _MainPageState extends State<MainPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // 背景画像
-          Image.asset(
-            "assets/pages/yellow/dots/main_page.png",
-            fit: BoxFit.cover,
-          ),
+          _character != null
+              ?
+              // 背景画像
+              Image.asset(
+                  "assets/pages/yellow/$_wallpaper/main_page.png",
+                  fit: BoxFit.cover,
+                )
+              : Container(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

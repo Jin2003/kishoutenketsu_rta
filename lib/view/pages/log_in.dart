@@ -148,6 +148,8 @@ class _LogInState extends State<LogIn> {
                           var groupID = documentSnapshot.data()?['groupID'];
                           await sharedPreferencesLogic
                               .setSelectedCharacter('chicken');
+                          await sharedPreferencesLogic
+                              .setSelectedWallpaper("dots");
                           await sharedPreferencesLogic.setSelectedTheme("dots");
                           // TODO:circusをデフォルトにしてるけど、後で考える
                           await sharedPreferencesLogic

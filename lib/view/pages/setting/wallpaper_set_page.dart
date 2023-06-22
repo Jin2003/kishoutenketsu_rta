@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 
 import '../../../logic/nav_bar.dart';
 import '../../constant.dart';
@@ -13,6 +14,32 @@ class WallpaperSetPage extends StatefulWidget {
 }
 
 class _WallpaperSetPageState extends State<WallpaperSetPage> {
+  // 現在保存中の壁紙
+  String? _nowWallpaper;
+  // 選択して変更後に保存する壁紙
+  String? _selectedWallpaper;
+
+  @override
+  void initState() {
+    super.initState();
+    // 現在登録している壁紙を取得
+    initializeWallpaper().then((_) {
+      setState(() {
+        _selectedWallpaper = _nowWallpaper;
+      });
+    });
+  }
+
+  Future<void> initializeWallpaper() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    _nowWallpaper = (await sharedPreferencesLogic.getSelectedWallpaper());
+  }
+
+  Future<void> changeWallpaper() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    await sharedPreferencesLogic.setSelectedWallpaper(_selectedWallpaper!);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,15 +75,17 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                   Border(bottom: BorderSide(color: Constant.gray, width: 2)),
             ),
           ),
-          
+
           Column(
             children: [
               const SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.only(),
                 child: InkWell(
-                  onTap: ()  {
-                    // TODO: 壁紙変更処理
+                  onTap: () {
+                    setState(() {
+                      _selectedWallpaper = 'dots';
+                    });
                   },
                   child: SizedBox(
                     height: 150,
@@ -65,12 +94,13 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: InkWell(
-                  onTap: ()  {
-                    // TODO: 壁紙変更処理
+                  onTap: () {
+                    setState(() {
+                      _selectedWallpaper = 'plaid';
+                    });
                   },
                   child: SizedBox(
                     height: 150,
@@ -79,12 +109,13 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: InkWell(
-                  onTap: ()  {
-                    // TODO: 壁紙変更処理
+                  onTap: () {
+                    setState(() {
+                      _selectedWallpaper = 'stripe';
+                    });
                   },
                   child: SizedBox(
                     height: 150,
@@ -93,20 +124,22 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                   ),
                 ),
               ),
-              
-              const SizedBox(height: 20,),
-              const OutlineButton(
+              const SizedBox(
+                height: 20,
+              ),
+              OutlineButton(
                 title: '保存',
                 width: 170,
                 height: 50,
                 fontsize: 20,
                 shape: 15,
                 nextPage: NavBar(),
+                onPressed: () {
+                  changeWallpaper();
+                },
               ),
             ],
           ),
-          
-          
         ],
       ),
     );

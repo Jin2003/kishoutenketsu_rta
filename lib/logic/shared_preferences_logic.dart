@@ -13,6 +13,8 @@ class SharedPreferencesLogic {
   static const keySelectedColor = 'color';
   // 選択キャラクター
   static const keySelectedCharacter = 'character';
+  // 選択中の壁紙
+  static const keySelectedWallpaper = 'wallpaper';
   // アラームのONOFF
   static const keySettedAlarm = 'settedAlarm';
   // NFCを登録しているかどうか
@@ -70,6 +72,12 @@ class SharedPreferencesLogic {
     await sharedPreferences.setString(keySelectedCharacter, selectedCharacter);
   }
 
+  // 選択中の壁紙をローカルに保存
+  Future<void> setSelectedWallpaper(String selectedWallpaper) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString(keySelectedWallpaper, selectedWallpaper);
+  }
+
   // アラームを鳴らしたい時刻をローカルに保存
   Future<void> setAlarmTime(int alarmTime) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -116,6 +124,12 @@ class SharedPreferencesLogic {
   Future<String?> getSelectedCharacter() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString(keySelectedCharacter);
+  }
+
+  // 選択中の壁紙をローカルから取得
+  Future<String?> getSelectedWallpaper() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString(keySelectedWallpaper);
   }
 
   // 選択の色をローカルから取得

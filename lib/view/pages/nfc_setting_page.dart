@@ -82,7 +82,7 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
         sharedPreferencesLogic.setGroupID(documentID);
         await firebaseHelper.addUser(documentID, userID!);
         // isNfcSettingをtrueに変更
-        sharedPreferencesLogic.setExistsNFC(true);
+        await sharedPreferencesLogic.setExistsNFC(true);
         await sharedPreferencesLogic.setSelectedCharacter('chicken');
         await sharedPreferencesLogic.setSelectedWallpaper("dots");
         await sharedPreferencesLogic.setSelectedTheme("dots");

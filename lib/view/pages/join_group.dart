@@ -69,6 +69,7 @@ class _JoinGroupState extends State<JoinGroup> {
   Future<void> joinGroup() async {
     // Firebaseへの書き込み処理を追加
     if (result != null) {
+      String? groupID = result!.code;
       try {
         SharedPreferencesLogic sharedPreferencesLogic =
             SharedPreferencesLogic();
@@ -78,8 +79,20 @@ class _JoinGroupState extends State<JoinGroup> {
             .collection('users')
             .doc(userID)
             .update({
-          'groupID': result!.code,
+          'groupID': groupID,
         });
+        Constant.updateGroupID(groupID.toString());
+        // isNfcSettingをtrueに変更
+        await sharedPreferencesLogic.setExistsNFC(true);
+        await sharedPreferencesLogic.setSelectedCharacter('chicken');
+        await sharedPreferencesLogic.setSelectedWallpaper("dots");
+        await sharedPreferencesLogic.setSelectedTheme("dots");
+        // TODO:circusをデフォルトにしてるけど、後で考える
+        await sharedPreferencesLogic.setSelectedMusic('circus');
+        await sharedPreferencesLogic.setSelectedColor("yellow");
+        await sharedPreferencesLogic.setSettedAlarm(false);
+        await sharedPreferencesLogic.setAlarmTime(0);
+
         // 書き込みが成功した場合の処理
         if (!mounted) return;
         showDialog(

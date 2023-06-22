@@ -2,21 +2,83 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 
 import '../constant.dart';
 import 'components/elevate_button.dart';
 
 class AlarmPage extends StatefulWidget {
-  const AlarmPage({super.key});
+  final int? argumentAlarmTime;
+  const AlarmPage({required this.argumentAlarmTime, Key? key})
+      : super(key: key);
 
   @override
   State<AlarmPage> createState() => _AlarmPageState();
 }
 
 class _AlarmPageState extends State<AlarmPage> {
-  // 選択中のアラーム音
+  // 保存中のアラーム音
   String? _music;
+
+  // 保存中のアラーム音の表示名
+  String? _musicName;
+
+  // アラームを鳴らす時刻
+  int? _alarmTime;
+
+  // 設定した時刻のhourのみを取得
+  int? _alarmHour;
+
+  // 設定した時刻のminuteのみを取得
+  int? _alarmMinute;
+
+  // アラームネームをkeyvalueで管理
+  // TODO:名前後で考える
+  final Map<String, String> _musicNameMap = {
+    "circus": "サーカス",
+    "domino": "ドミノ",
+    "garandou": "伽藍堂",
+    "hinokuruma": "火の車",
+    "osyogatsu": "お正月",
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    initializeMusic().then((_) {
+      setState(() {});
+    });
+    splitAlarmTime().then((_) {
+      setState(() {});
+    });
+  }
+
+  // 現在保存している音楽を取得
+  Future<void> initializeMusic() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    _music = (await sharedPreferencesLogic.getSelectedMusic());
+    setState(() {
+      _musicName = _musicNameMap[_music!];
+    });
+  }
+
+  // 音楽を変更
+  Future<void> changeMusic() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    await sharedPreferencesLogic.setSelectedMusic(_music!);
+    setState(() {
+      _musicName = _musicNameMap[_music!];
+    });
+  }
+
+  // init時に渡されたalarmTimeをalarmHourとalarmMinuteに分割
+  Future<void> splitAlarmTime() async {
+    setState(() {
+      _alarmHour = widget.argumentAlarmTime! ~/ 60;
+      _alarmMinute = widget.argumentAlarmTime! % 60;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +97,6 @@ class _AlarmPageState extends State<AlarmPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 const SizedBox(
                   height: 60,
                 ),
@@ -65,14 +126,25 @@ class _AlarmPageState extends State<AlarmPage> {
                         showTitleActions: true,
                         //「秒」の表記が不要->showSecondsColumnをfalse
                         showSecondsColumn: false, onChanged: (date) {
-                      //print(date);
+                      // print(date);
                     }, onConfirm: (date) {
-                      //print(date);
+                      // print(date);
+                      // print("コンフィルム起こったよ");
+                      // TODO:アラームを鳴らす時刻を設定
+                      setState(() {
+                        _alarmTime = date.hour * 60 + date.minute;
+                        _alarmHour = date.hour;
+                        _alarmMinute = date.minute;
+                      });
+                      // sharedPreferencesにアラームを鳴らす時刻を保存
+                      SharedPreferencesLogic sharedPreferencesLogic =
+                          SharedPreferencesLogic();
+                      sharedPreferencesLogic.setAlarmTime(_alarmTime!);
                     },
-                    // DatetimePickerの初期値を設定
-                    currentTime: DateTime.now(),
-                    // 日本語設定
-                    locale: LocaleType.jp);
+                        // DatetimePickerの初期値を設定
+                        currentTime: DateTime.now(),
+                        // 日本語設定
+                        locale: LocaleType.jp);
                   },
                   child: SizedBox(
                     width: 270,
@@ -94,10 +166,10 @@ class _AlarmPageState extends State<AlarmPage> {
                                 Color: Constant.gray),
                           ],
                         ),
-                        const Align(
+                        Align(
                           alignment: Alignment(0.9, 0),
                           child: CustomText(
-                              text: '8 : 4 0',
+                              text: '$_alarmHour:$_alarmMinute',
                               fontSize: 25,
                               Color: Constant.gray),
                         ),
@@ -136,6 +208,7 @@ class _AlarmPageState extends State<AlarmPage> {
                         setState(() {
                           _music = selectedAlarm;
                         });
+                        // print(selectedAlarm);
                       }
                     },
                     // アラーム音設定
@@ -160,10 +233,10 @@ class _AlarmPageState extends State<AlarmPage> {
                             ],
                           ),
                           const SizedBox(height: 14),
-                          const Align(
+                          Align(
                             alignment: Alignment(0.9, 0),
                             child: CustomText(
-                                text: '♪ きらきら星',
+                                text: '♪ $_musicName',
                                 fontSize: 19,
                                 Color: Constant.gray),
                           ),
@@ -214,11 +287,10 @@ class _AlarmPageState extends State<AlarmPage> {
   }
 }
 
-
 // アラーム音を選択するダイアログ
 // ignore: camel_case_types
 class _alarmSelectorDialog extends StatelessWidget {
-  const _alarmSelectorDialog({
+  _alarmSelectorDialog({
     Key? key,
     this.music,
   }) : super(key: key);
@@ -226,7 +298,16 @@ class _alarmSelectorDialog extends StatelessWidget {
   // 選択中のアラーム音
   final String? music;
 
-  static const _musics = ['きらきら星', 'せせらぎ', 'たかし〜朝よ〜！', '天国と地獄', '恋愛レボリューション21'];
+  static const _musics = ['サーカス', 'ドミノ', '伽藍堂', '火の車', 'お正月'];
+  //TODO: アラーム音のファイル名を入れる
+  //　これ逆にしたらいけそう
+  final Map<String, String> _musicNameMap = {
+    "circus": "サーカス",
+    "domino": "ドミノ",
+    "garandou": "伽藍堂",
+    "hinokuruma": "火の車",
+    "osyogatsu": "お正月",
+  };
 
   @override
   Widget build(BuildContext context) {

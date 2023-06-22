@@ -30,6 +30,9 @@ class _MainPageState extends State<MainPage> {
   // バブルの表示を切り替えるフラグ
   bool _showBubble = false;
 
+  // shared_preferencesから持ってきたアラーム時刻を保持する変数
+  int? _alarmTime;
+
   //chatGPTへの入力を保持する配列
   List<String> _message = [
     "「りんごって美味しいよね！」だけ言ってくださいそれ以外は言わないでください",
@@ -54,8 +57,12 @@ class _MainPageState extends State<MainPage> {
       // キャラクターの初期化が完了したら、UIを更新する
       setState(() {});
     });
+    initializeTime().then((_) {
+      // 時刻の初期化が完了したら、UIを更新する
+      setState(() {});
+    });
     //ウィジェットが描画された後に実行する
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _firstBubbleMessage();
     });
   }
@@ -83,15 +90,31 @@ class _MainPageState extends State<MainPage> {
     if (mounted) {
       setState(() {
         // ChatGPTからの応答を保持する変数に代入
-        _response = response.content;
+        _response = response;
         _showResponse = !_showResponse;
       });
     }
   }
 
+  // キャラクターの初期化
   Future<void> initializeCharacter() async {
     SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
     _character = (await sharedPreferencesLogic.getSelectedCharacter());
+  }
+
+  // アラーム音の初期化
+  Future<void> initializeMusic() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    _music = (await sharedPreferencesLogic.getSelectedMusic());
+  }
+
+  // アラーム時刻の初期化
+  Future<void> initializeTime() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    _alarmTime = (await sharedPreferencesLogic.getAlarmTime());
+    setState(() {
+      _timeOfDay = TimeOfDay(hour: _alarmTime! ~/ 60, minute: _alarmTime! % 60);
+    });
   }
 
   @override
@@ -130,7 +153,8 @@ class _MainPageState extends State<MainPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: ((context) => const AlarmPage())),
+                          builder: ((context) =>
+                              AlarmPage(argumentAlarmTime: _alarmTime))),
                     );
                   },
                   child: Row(

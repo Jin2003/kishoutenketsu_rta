@@ -17,6 +17,8 @@ class SharedPreferencesLogic {
   static const keySettedAlarm = 'settedAlarm';
   // NFCを登録しているかどうか
   static const keyExistsNFC = 'ExistsNFC';
+  // アラームを鳴らしたい時刻
+  static const keyAlarmTime = 'alarmTime';
 
   late SharedPreferences sharedPreferences;
 
@@ -68,6 +70,12 @@ class SharedPreferencesLogic {
     await sharedPreferences.setString(keySelectedCharacter, selectedCharacter);
   }
 
+  // アラームを鳴らしたい時刻をローカルに保存
+  Future<void> setAlarmTime(int alarmTime) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setInt(keyAlarmTime, alarmTime);
+  }
+
   // userIDをローカルから取得
   Future<String?> getUserID() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -108,6 +116,18 @@ class SharedPreferencesLogic {
   Future<String?> getSelectedCharacter() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString(keySelectedCharacter);
+  }
+
+  // 選択の色をローカルから取得
+  Future<String?> getSelectedColor() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString(keySelectedColor);
+  }
+
+  // アラームを鳴らしたい時刻をローカルから取得
+  Future<int?> getAlarmTime() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getInt(keyAlarmTime);
   }
 
   // ローカルに保存されているデータを全て削除

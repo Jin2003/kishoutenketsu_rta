@@ -9,6 +9,8 @@ class SharedPreferencesLogic {
   static const keySelectedMusic = 'music';
   // 選択テーマ
   static const keySelectedTheme = 'theme';
+  // 選択の色
+  static const keySelectedColor = 'color';
   // 選択キャラクター
   static const keySelectedCharacter = 'character';
   // アラームのONOFF
@@ -52,6 +54,12 @@ class SharedPreferencesLogic {
   Future<void> setSelectedTheme(String selectedTheme) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString(keySelectedTheme, selectedTheme);
+  }
+
+  // 選択の色をローカルに保存
+  Future<void> setSelectedColor(String selectedColor) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString(keySelectedColor, selectedColor);
   }
 
   // 選択キャラクターをローカルに保存

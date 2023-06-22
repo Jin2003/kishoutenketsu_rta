@@ -171,7 +171,7 @@ class _GatchaPageState extends State<GatchaPage> {
                                         Navigator.pop(context);
                                         // まわるポップアップ表示
                                         Future.delayed(
-                                            const Duration(milliseconds: 3500),
+                                            const Duration(milliseconds: 2500),
                                             () {
                                           showAnimatedDialog<void>(
                                             context: context,
@@ -266,8 +266,7 @@ class _GatchaPageState extends State<GatchaPage> {
           if (_isPressed)
             Positioned(
               child: Lottie.asset(
-                // TODO:今、水色のまま。そもそもアニメーションになる
-                "assets/gacha/red/redcapsule.json",
+                "assets/gacha/yellow/yellowcapsule.json",
                 fit: BoxFit.cover,
                 repeat: false,
               ),

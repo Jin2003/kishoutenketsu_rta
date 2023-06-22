@@ -146,7 +146,16 @@ class _LogInState extends State<LogIn> {
                               .doc(user.uid)
                               .get();
                           var groupID = documentSnapshot.data()?['groupID'];
-
+                          await sharedPreferencesLogic
+                              .setSelectedCharacter('chicken');
+                          await sharedPreferencesLogic.setSelectedTheme("dots");
+                          // TODO:circusをデフォルトにしてるけど、後で考える
+                          await sharedPreferencesLogic
+                              .setSelectedMusic('circus');
+                          await sharedPreferencesLogic
+                              .setSelectedColor("yellow");
+                          await sharedPreferencesLogic.setExistsNFC(false);
+                          await sharedPreferencesLogic.setSettedAlarm(false);
                           if (groupID != null) {
                             // sharedPreferencesにgroupIDを保存
                             await sharedPreferencesLogic.setGroupID(groupID);

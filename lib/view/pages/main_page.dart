@@ -57,13 +57,18 @@ class _MainPageState extends State<MainPage> {
       // キャラクターの初期化が完了したら、UIを更新する
       setState(() {});
     });
-    
-  //ウィジェットが描画された後に実行する
-  WidgetsBinding.instance!.addPostFrameCallback((_) {
-    _getChatGPTResponse();
-  });
-}
-  
+
+    initializeTime().then((_) {
+      // アラーム時刻の初期化が完了したら、UIを更新する
+      setState(() {});
+    });
+
+    //ウィジェットが描画された後に実行する
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _getChatGPTResponse();
+    });
+  }
+
   // ChatGPTからの応答を取得する関数
   Future<void> _getChatGPTResponse() async {
     final chatGPT = ChatGPT();
@@ -189,21 +194,21 @@ class _MainPageState extends State<MainPage> {
               const SizedBox(height: 150),
             ],
           ),
-            // 吹き出し
-            Align(
-              alignment: const Alignment(-0.25, 0.7),
-              child: SizedBox(
-                width: 250,
-                height: 190,
-                child: Image.asset(
-                  "assets/speech_bubble.png",
-                ),
+          // 吹き出し
+          Align(
+            alignment: const Alignment(-0.25, 0.7),
+            child: SizedBox(
+              width: 250,
+              height: 190,
+              child: Image.asset(
+                "assets/speech_bubble.png",
               ),
             ),
+          ),
           // 吹き出しの中身(ChatGPTの応答)
           Visibility(
             visible: _showResponse,
-            child:Align(
+            child: Align(
               alignment: const Alignment(-0.09, 0.89),
               child: SizedBox(
                 width: 200,
@@ -211,15 +216,14 @@ class _MainPageState extends State<MainPage> {
                 child: AnimatedTextKit(
                   animatedTexts: [
                     TyperAnimatedText(_response ?? "",
-                      textStyle: GoogleFonts.zenMaruGothic(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Color(0xFF707070),
-                      ),
-                      speed: const Duration(milliseconds: 100)
-                    ),
+                        textStyle: GoogleFonts.zenMaruGothic(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color(0xFF707070),
+                        ),
+                        speed: const Duration(milliseconds: 100)),
                   ],
-                  totalRepeatCount:1,
+                  totalRepeatCount: 1,
                 ),
               ),
             ),
@@ -248,6 +252,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+
 // アラーム音を選択するダイアログ
 class _alarmSelectorDialog extends StatelessWidget {
   const _alarmSelectorDialog({

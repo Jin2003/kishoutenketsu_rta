@@ -318,7 +318,7 @@ class _alarmSelectorDialog extends StatelessWidget {
             (p) => ListTile(
               leading: Visibility(
                 visible: p == music,
-                child: const Icon(
+                child: Icon(
                   Icons.circle,
                   color: Constant.main, //accentYellow
                 ),

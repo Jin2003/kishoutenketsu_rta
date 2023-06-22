@@ -9,7 +9,8 @@ class Constant {
 
   // yellow
   static const Color yellow = Color(0xFFFFE475);
-  static const Color accentYellow = Color(0xFFFFDC4F); // yellowが薄くて文字が見えない時に使うyellowのちょっと濃いver.
+  static const Color accentYellow =
+      Color(0xFFFFDC4F); // yellowが薄くて文字が見えない時に使うyellowのちょっと濃いver.
   static const Color subYellow = Color(0xFFFFF9DD);
 
   // blue
@@ -20,6 +21,11 @@ class Constant {
   static const Color red = Color(0xFFFFB6A6);
   static const Color subRed = Color(0xFFFFEAE5);
 
-  static const Color main = yellow;
-  static const Color sub = subYellow;
+  static Color main = yellow;
+  static Color sub = subYellow;
+
+  static void updateColors(Color newMain, Color newSub) {
+    main = newMain;
+    sub = newSub;
+  }
 }

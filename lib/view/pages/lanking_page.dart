@@ -132,7 +132,7 @@ class _LankingPageState extends State<LankingPage> {
           Visibility(
             visible: _showResponse,
             child: Align(
-              alignment: const Alignment(-0.3, 1.05),              
+              alignment: const Alignment(-0.3, 1.05),
               child: SizedBox(
                 width: 200,
                 height: 190,
@@ -202,7 +202,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             child: Center(
               child: Text(
                 '$index',
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Constant.main //accentYellow
@@ -223,7 +223,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
                 '${time['time_record'] ~/ 60}'.padLeft(2, '0') +
                     ':' +
                     '${time['time_record'] % 60}'.padLeft(2, '0'),
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Constant.main //accentYellow
@@ -247,8 +247,8 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             ),
             child: Text(
               "${time['time_datetime']}",
-              style: const TextStyle(
-                  color: Constant.main, fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: Constant.main, fontWeight: FontWeight.bold),
             ),
           ),
         ],

@@ -67,7 +67,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 padding: const EdgeInsets.only(),
                 child: InkWell(
                   onTap: () {
-                    // TODO: テーマカラー変更処理
+                    Constant.updateColors(Constant.yellow, Constant.subYellow);
                   },
                   child: SizedBox(
                     height: 100,
@@ -80,7 +80,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 padding: const EdgeInsets.all(3.0),
                 child: InkWell(
                   onTap: () {
-                    // TODO: テーマカラー変更処理
+                    Constant.updateColors(Constant.red, Constant.subRed);
                   },
                   child: SizedBox(
                     height: 100,
@@ -93,7 +93,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 padding: const EdgeInsets.all(3.0),
                 child: InkWell(
                   onTap: () {
-                    // TODO: テーマカラー変更処理
+                    Constant.updateColors(Constant.blue, Constant.subBlue);
                   },
                   child: SizedBox(
                     height: 100,

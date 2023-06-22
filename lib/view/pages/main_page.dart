@@ -144,7 +144,7 @@ class _MainPageState extends State<MainPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    side: const BorderSide(
+                    side: BorderSide(
                       color: Constant.main, //枠線の色
                       width: 4, //太さ
                     ),
@@ -211,7 +211,7 @@ class _MainPageState extends State<MainPage> {
               const SizedBox(height: 150),
             ],
           ),
-            // 吹き出し
+          // 吹き出し
           Align(
             alignment: const Alignment(-0.4, 0.8),
             child: SizedBox(
@@ -225,9 +225,8 @@ class _MainPageState extends State<MainPage> {
           // 吹き出しの中身(ChatGPTの応答)
           Visibility(
             visible: _showResponse,
-
-            child:Align(
-              alignment: const Alignment(-0.3, 1.05), 
+            child: Align(
+              alignment: const Alignment(-0.3, 1.05),
               child: SizedBox(
                 width: 200,
                 height: 190,

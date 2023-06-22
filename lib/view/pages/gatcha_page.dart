@@ -76,7 +76,7 @@ class _GatchaPageState extends State<GatchaPage> {
                     Text(
                       textAlign: TextAlign.center,
                       _point.toString(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                         color: Constant.main, //accentYellow
@@ -86,7 +86,7 @@ class _GatchaPageState extends State<GatchaPage> {
                       width: 10,
                       height: 1,
                     ),
-                    const Text(
+                    Text(
                       'pt',
                       style: TextStyle(
                         fontSize: 40,

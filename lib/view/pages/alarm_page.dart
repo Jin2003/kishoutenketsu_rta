@@ -74,10 +74,12 @@ class _AlarmPageState extends State<AlarmPage> {
 
   // init時に渡されたalarmTimeをalarmHourとalarmMinuteに分割
   Future<void> splitAlarmTime() async {
-    setState(() {
-      _alarmHour = widget.argumentAlarmTime! ~/ 60;
-      _alarmMinute = widget.argumentAlarmTime! % 60;
-    });
+    if (widget.argumentAlarmTime != null) {
+      setState(() {
+        _alarmHour = widget.argumentAlarmTime! ~/ 60;
+        _alarmMinute = widget.argumentAlarmTime! % 60;
+      });
+    }
   }
 
   @override

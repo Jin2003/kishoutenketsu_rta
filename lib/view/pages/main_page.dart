@@ -8,7 +8,6 @@ import '../constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-
 import 'alarm_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -28,12 +27,17 @@ class _MainPageState extends State<MainPage> {
   // アラームオンオフの切り替え
   bool _value = true;
 
+  // バブルの表示を切り替えるフラグ
   bool _showBubble = false;
 
   //chatGPTへの入力を保持する配列
   List<String> _message = [
     "「りんごって美味しいよね！」だけ言ってくださいそれ以外は言わないでください",
+    "「りんごって食べたいなぁ〜」だけ言ってくださいそれ以外は言わないでください",
+    "今日のラッキーアイテムを「明日のラッキーアイテムは...だよ！」で一文で答えて",
+    "短く「ラ〜」歌を歌って"
   ];
+
   //０から３までのランダムな数字を保持する変数
   int? _Random;
 
@@ -50,22 +54,39 @@ class _MainPageState extends State<MainPage> {
       // キャラクターの初期化が完了したら、UIを更新する
       setState(() {});
     });
+    //ウィジェットが描画された後に実行する
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _firstBubbleMessage();
+    });
   }
 
+// 初回のバブルメッセージを表示する関数
+  Future<void> _firstBubbleMessage() async {
+    await _getChatGPTResponse();
+    _toggleBubble();
+  }
+
+  // バブルの表示を切り替える関数
+
   void _toggleBubble() {
-    setState(() {
-      _showBubble = !_showBubble;
-    });
+    if (mounted) {
+      setState(() {
+        _showBubble = !_showBubble;
+      });
+    }
   }
 
   // ChatGPTからの応答を取得する関数
   Future<void> _getChatGPTResponse() async {
     final chatGPT = ChatGPT();
-    final response = await chatGPT.message(_message[0]);
-    setState(() {
-      _response = response.content;
-      _showResponse = !_showResponse;
-    });
+    final response = await chatGPT.message(_message[3]);
+    if (mounted) {
+      setState(() {
+        // ChatGPTからの応答を保持する変数に代入
+        _response = response.content;
+        _showResponse = !_showResponse;
+      });
+    }
   }
 
   Future<void> initializeCharacter() async {
@@ -76,7 +97,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.subYellow,
+      backgroundColor: Constant.sub,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -99,7 +120,7 @@ class _MainPageState extends State<MainPage> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     side: const BorderSide(
-                      color: Constant.yellow, //枠線の色
+                      color: Constant.main, //枠線の色
                       width: 4, //太さ
                     ),
                     backgroundColor: Constant.white,
@@ -130,7 +151,7 @@ class _MainPageState extends State<MainPage> {
                                 style: GoogleFonts.zenMaruGothic(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 65,
-                                  color: Constant.yellow,
+                                  color: Constant.main,
                                 ),
                               ),
                             ),
@@ -189,7 +210,7 @@ class _MainPageState extends State<MainPage> {
                   horizontal: 10.0,
                 ),
                 child: Align(
-                  alignment: const Alignment(-0.4, 0.65),
+                  alignment: const Alignment(-0.1, 0.65),
                   child: Container(
                     margin: const EdgeInsets.only(left: 15.0),
                     padding: const EdgeInsets.symmetric(
@@ -199,7 +220,7 @@ class _MainPageState extends State<MainPage> {
                     decoration: ShapeDecoration(
                       shape: BubbleBorder(
                         width: 30,
-                        radius: 29,
+                        radius: 25,
                       ),
                     ),
                     child: AnimatedTextKit(
@@ -208,7 +229,7 @@ class _MainPageState extends State<MainPage> {
                           _response ?? "",
                           textStyle: GoogleFonts.zenMaruGothic(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: 18,
                             color: const Color(0xFF707070),
                           ),
                           speed: const Duration(milliseconds: 100),
@@ -340,14 +361,13 @@ class BubbleBorder extends ShapeBorder {
           ..lineTo(w - r - 3, 0) // →
           ..arcToPoint(Offset(w - 5, r), radius: Radius.circular(r + 6))
           ..arcToPoint(Offset(w - r - 5, h + 1),
-              radius: Radius.circular(r + 2), clockwise: true)
+              radius: Radius.circular(r + 10), clockwise: true)
           ..relativeLineTo(10, 15)
-          ..arcToPoint(Offset(w - r * 1.8, h + 3),
+          ..arcToPoint(Offset(w - r * 1.5, h + 3),
               radius: Radius.circular(r * 6), clockwise: true)
-          ..lineTo(wl + r, h) // ←
-          ..lineTo(r, h) // ←
-          ..arcToPoint(Offset(0, h - r), radius: Radius.circular(r))
-          ..arcToPoint(Offset(r, 0), radius: Radius.circular(r)),
+          ..lineTo(r, h + 1) // ←
+          ..arcToPoint(Offset(0, h - r), radius: Radius.circular(r + 15))
+          ..arcToPoint(Offset(r, 0), radius: Radius.circular(r + 6.5)),
         Offset(rect.left, rect.top),
       )
       ..close();
@@ -355,17 +375,24 @@ class BubbleBorder extends ShapeBorder {
 
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
+    final path = getOuterPath(
+      rect.deflate(width / 2.0),
+      textDirection: textDirection,
+    );
+
+    // Add a shadow to the speech bubble
+    final shadowPaint = Paint()
+      ..color = Colors.black.withOpacity(0.2)
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1.5);
+    canvas.drawPath(path.shift(Offset(4.0, 4.0)), shadowPaint);
+
+    // Draw the speech bubble shape
+
     final paint = Paint()
       ..style = PaintingStyle.fill
       ..strokeWidth = 4
       ..color = Color.fromARGB(255, 255, 255, 255);
-    canvas.drawPath(
-      getOuterPath(
-        rect.deflate(width / 2.0),
-        textDirection: textDirection,
-      ),
-      paint,
-    );
+    canvas.drawPath(path, paint);
   }
 
   @override

@@ -238,7 +238,7 @@ class _alarmSelectorDialog extends StatelessWidget {
                 visible: p == music,
                 child: const Icon(
                   Icons.circle,
-                  color: Constant.accentYellow,
+                  color: Constant.main, //accentYellow
                 ),
               ),
               title: Text(

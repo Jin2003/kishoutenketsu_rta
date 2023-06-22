@@ -20,7 +20,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   // password 表示非表示の切り替え
-  bool isDisplay = false;
+  bool isDisplay = true;
 
 // SharedPreferencesを使うための準備
   late SharedPreferences prefs;
@@ -39,7 +39,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Constant.subYellow,
+      backgroundColor: Constant.sub,
       body: Stack(
         children: [
           //　背景画像
@@ -234,7 +234,7 @@ class _SignUpState extends State<SignUp> {
                     style: GoogleFonts.zenMaruGothic(
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
-                      color: Constant.accentYellow,
+                      color: Constant.main, //accentYellow
                     ),
                   ),
                 ),

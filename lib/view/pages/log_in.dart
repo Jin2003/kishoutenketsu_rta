@@ -22,13 +22,13 @@ class _LogInState extends State<LogIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   // password 表示非表示の切り替え
-  bool isDisplay = false;
+  bool isDisplay = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Constant.subYellow,
+      backgroundColor: Constant.sub,
       body: Stack(
         children: [
           Positioned.fill(
@@ -213,7 +213,7 @@ class _LogInState extends State<LogIn> {
                     style: GoogleFonts.zenMaruGothic(
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
-                      color: Constant.accentYellow,
+                      color: Constant.main, //accentYellow
                     ),
                   ),
                 ),

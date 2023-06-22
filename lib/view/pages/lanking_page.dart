@@ -27,8 +27,9 @@ class _LankingPageState extends State<LankingPage> {
 
   //chatGPTへの入力を保持する配列
   List<String> _message = [
-    "「ランキング更新！」だけ言ってくださいそれ以外は言わないでください",
-    "「今日のラッキーアイテム」だけ言ってくださいそれ以外は言わないでください",
+    "「更新おめでとう！\n今日も一日頑張ろう！」だけ言ってくださいそれ以外は言わないでください",
+    "「惜しい！\nあと秒で更新だったね！」だけ言ってくださいそれ以外は言わないでください",
+    "「」"
   ];
   //０から３までのランダムな数字を保持する変数
   int? _Random;
@@ -87,134 +88,132 @@ class _LankingPageState extends State<LankingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.subYellow,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              "assets/pages/yellow/dots/ranking_page.png",
-              fit: BoxFit.cover,
-            ),
+      backgroundColor: Constant.sub,
+      body: Stack(children: [
+        Positioned.fill(
+          child: Image.asset(
+            "assets/pages/yellow/dots/ranking_page.png",
+            fit: BoxFit.cover,
           ),
-          Column(
-            children: [
-              const SizedBox(height: 58),
-              Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 55),
-                    width: 310,
-                    height: 420,
-                    child: Scrollbar(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.all(20),
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 9),
-                        //ここでリストの数を決めている
-                        itemCount: _lankingCount,
-                        itemBuilder: (context, index) =>
-                            _buildCard(index + 1, _times[index]),
-                      ),
+        ),
+        Column(
+          children: [
+            const SizedBox(height: 58),
+            Align(
+                alignment: Alignment.center,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 55),
+                  width: 310,
+                  height: 420,
+                  child: Scrollbar(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(20),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 9),
+                      //ここでリストの数を決めている
+                      itemCount: _lankingCount,
+                      itemBuilder: (context, index) =>
+                          _buildCard(index + 1, _times[index]),
                     ),
-                  )),
-            ],
-          ),
-          // 吹き出し
-          // Visibility(
-          //   visible: _showBubble,
-          //   child: Align(
-          //     alignment: const Alignment(-0.5, 0.85),
-          //     child: SizedBox(
-          //       width: 250,
-          //       height: 190,
-          //       child: Image.asset(
-          //         "assets/speech_bubble.png",
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // 吹き出しの中身(ChatGPTの応答)
-          Visibility(
-            visible: _showResponse,
-            child: Align(
-              alignment: const Alignment(-0.4, 0.65),
-              // alignment: const Alignment(-0.25, 1.14),
-              child: Container(
-                margin: const EdgeInsets.only(left: 15.0),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 7.0,
-                  horizontal: 10.0,
-                ),
-                child: Align(
-                  alignment: const Alignment(-0.4, 0.65),
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 15.0),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 7.0,
-                      horizontal: 10.0,
+                  ),
+                )),
+          ],
+        ),
+        // 吹き出し
+        // Visibility(
+        //   visible: _showBubble,
+        //   child: Align(
+        //     alignment: const Alignment(-0.5, 0.85),
+        //     child: SizedBox(
+        //       width: 250,
+        //       height: 190,
+        //       child: Image.asset(
+        //         "assets/speech_bubble.png",
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // 吹き出しの中身(ChatGPTの応答)
+        Visibility(
+          visible: _showResponse,
+          child: Align(
+            alignment: const Alignment(-0.4, 0.65),
+            // alignment: const Alignment(-0.25, 1.14),
+            child: Container(
+              margin: const EdgeInsets.only(left: 15.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 7.0,
+                horizontal: 10.0,
+              ),
+              child: Align(
+                alignment: const Alignment(-0.4, 0.65),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 15.0),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 7.0,
+                    horizontal: 10.0,
+                  ),
+                  decoration: ShapeDecoration(
+                    shape: BubbleBorder(
+                      width: 30,
+                      radius: 29,
                     ),
-                    decoration: ShapeDecoration(
-                      shape: BubbleBorder(
-                        width: 30,
-                        radius: 29,
-                      ),
-                    ),
-                    child: AnimatedTextKit(
-                      animatedTexts: [
-                        TyperAnimatedText(
-                          _response ?? "",
-                          textStyle: GoogleFonts.zenMaruGothic(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: const Color(0xFF707070),
-                          ),
-                          speed: const Duration(milliseconds: 100),
+                  ),
+                  child: AnimatedTextKit(
+                    animatedTexts: [
+                      TyperAnimatedText(
+                        _response ?? "",
+                        textStyle: GoogleFonts.zenMaruGothic(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: const Color(0xFF707070),
                         ),
-                      ],
-                      totalRepeatCount: 1,
-                    ),
+                        speed: const Duration(milliseconds: 100),
+                      ),
+                    ],
+                    totalRepeatCount: 1,
                   ),
                 ),
               ),
-              // child: SizedBox(
-              //   width: 200,
-              //   height: 190,
-              //   child: AnimatedTextKit(
-              //     animatedTexts: [
-              //       TyperAnimatedText(_response ?? "",
-              //           textStyle: GoogleFonts.zenMaruGothic(
-              //             fontWeight: FontWeight.bold,
-              //             fontSize: 15,
-              //             color: Color(0xFF707070),
-              //           ),
-              //           speed: const Duration(milliseconds: 100)
-              //           ),
-              //     ],
-              //     totalRepeatCount:1,
-              //   ),
-              // ),
             ),
+            // child: SizedBox(
+            //   width: 200,
+            //   height: 190,
+            //   child: AnimatedTextKit(
+            //     animatedTexts: [
+            //       TyperAnimatedText(_response ?? "",
+            //           textStyle: GoogleFonts.zenMaruGothic(
+            //             fontWeight: FontWeight.bold,
+            //             fontSize: 15,
+            //             color: Color(0xFF707070),
+            //           ),
+            //           speed: const Duration(milliseconds: 100)
+            //           ),
+            //     ],
+            //     totalRepeatCount:1,
+            //   ),
+            // ),
           ),
-          GestureDetector(
-            onTap: () async {
-              await _getChatGPTResponse();
-              _toggleBubble();
-            },
-            child: _character != null
-                ? Align(
-                    alignment: const Alignment(0.8, 0.95),
-                    child: SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: Image.asset(
-                        "assets/$_character.png",
-                      ),
+        ),
+        GestureDetector(
+          onTap: () async {
+            await _getChatGPTResponse();
+            _toggleBubble();
+          },
+          child: _character != null
+              ? Align(
+                  alignment: const Alignment(0.8, 0.95),
+                  child: SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: Image.asset(
+                      "assets/$_character.png",
                     ),
-                  )
-                : Container(),
-          ),
-        ],
-      ),
+                  ),
+                )
+              : Container(),
+        ),
+      ]),
     );
   }
 }
@@ -239,7 +238,8 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             width: 35,
             height: 35,
             decoration: BoxDecoration(
-              border: Border.all(color: Constant.accentYellow),
+              border: Border.all(color: Constant.main //accentYellow
+                  ),
               color: Constant.white,
               shape: BoxShape.circle,
             ),
@@ -249,7 +249,8 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
                 style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Constant.accentYellow),
+                    color: Constant.main //accentYellow
+                    ),
               ),
             ),
           ),
@@ -269,7 +270,8 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
                 style: const TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Constant.accentYellow),
+                    color: Constant.main //accentYellow
+                    ),
               ),
             ],
           ),
@@ -284,13 +286,13 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             width: 75,
             height: 20,
             decoration: BoxDecoration(
-              color: Constant.subYellow,
+              color: Constant.sub,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               "${time['time_datetime']}",
               style: const TextStyle(
-                  color: Constant.accentYellow, fontWeight: FontWeight.bold),
+                  color: Constant.main, fontWeight: FontWeight.bold),
             ),
           )
         ],
@@ -352,17 +354,23 @@ class BubbleBorder extends ShapeBorder {
 
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
+    final path = getOuterPath(
+      rect.deflate(width / 2.0),
+      textDirection: textDirection,
+    );
+
+    // Add a shadow to the speech bubble
+    final shadowPaint = Paint()
+      ..color = Colors.black.withOpacity(0.2)
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1.5);
+    canvas.drawPath(path.shift(Offset(4.0, 4.0)), shadowPaint);
+
+    // Draw the speech bubble shape
+
     final paint = Paint()
       ..style = PaintingStyle.fill
       ..strokeWidth = 4
       ..color = Color.fromARGB(255, 255, 255, 255);
-    canvas.drawPath(
-      getOuterPath(
-        rect.deflate(width / 2.0),
-        textDirection: textDirection,
-      ),
-      paint,
-    );
   }
 
   @override

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import '../constant.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +22,9 @@ class _MainPageState extends State<MainPage> {
   late TimeOfDay _timeOfDay;
   // 選択中のアラーム音
   String? _music;
+  // 選択中のキャラクター
+  String? _character;
+
   // アラームオンオフの切り替え
   bool _value = true;
 
@@ -42,9 +46,13 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
     super.initState();
+    initializeCharacter().then((_) {
+      // キャラクターの初期化が完了したら、UIを更新する
+      setState(() {});
+    });
   }
 
-    void _toggleBubble() {
+  void _toggleBubble() {
     setState(() {
       _showBubble = !_showBubble;
     });
@@ -53,12 +61,16 @@ class _MainPageState extends State<MainPage> {
   // ChatGPTからの応答を取得する関数
   Future<void> _getChatGPTResponse() async {
     final chatGPT = ChatGPT();
-    final response =
-        await chatGPT.message(_message[0]);
+    final response = await chatGPT.message(_message[0]);
     setState(() {
       _response = response.content;
       _showResponse = !_showResponse;
     });
+  }
+
+  Future<void> initializeCharacter() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    _character = (await sharedPreferencesLogic.getSelectedCharacter());
   }
 
   @override
@@ -74,7 +86,7 @@ class _MainPageState extends State<MainPage> {
             fit: BoxFit.cover,
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center, 
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // 時刻とか表示させてる箱
               Container(
@@ -96,7 +108,8 @@ class _MainPageState extends State<MainPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: ((context) => const AlarmPage())),
+                      MaterialPageRoute(
+                          builder: ((context) => const AlarmPage())),
                     );
                   },
                   child: Row(
@@ -106,9 +119,11 @@ class _MainPageState extends State<MainPage> {
                         width: 200,
                         child: Column(
                           children: [
-                            const SizedBox(height: 5,),
+                            const SizedBox(
+                              height: 5,
+                            ),
                             Container(
-                              alignment: const Alignment(-0.65,0),
+                              alignment: const Alignment(-0.65, 0),
                               // アラームが鳴る時刻
                               child: Text(
                                 '${_timeOfDay.hour.toString().padLeft(2, '0')}:${_timeOfDay.minute.toString().padLeft(2, '0')}',
@@ -121,10 +136,13 @@ class _MainPageState extends State<MainPage> {
                             ),
                             //　アラーム音の表示
                             Container(
-                              alignment: const Alignment(-0.68,-0.8),
+                              alignment: const Alignment(-0.68, -0.8),
                               width: 300,
                               height: 30,
-                              child: const CustomText(text: '♪きらきら星', fontSize: 19, Color: Constant.gray),
+                              child: const CustomText(
+                                  text: '♪きらきら星',
+                                  fontSize: 19,
+                                  Color: Constant.gray),
                             ),
                           ],
                         ),
@@ -169,7 +187,7 @@ class _MainPageState extends State<MainPage> {
                 padding: const EdgeInsets.symmetric(
                   vertical: 7.0,
                   horizontal: 10.0,
-                ),            
+                ),
                 child: Align(
                   alignment: const Alignment(-0.4, 0.65),
                   child: Container(
@@ -218,25 +236,25 @@ class _MainPageState extends State<MainPage> {
               //     totalRepeatCount:1,
               //   ),
               // ),
-              
             ),
           ),
           GestureDetector(
-            onTap: () async{
+            onTap: () async {
               await _getChatGPTResponse();
               _toggleBubble();
-              
             },
-            child: Align(
-              alignment: const Alignment(0.8, 0.95),
-              child: SizedBox(
-                width: 120,
-                height: 120,
-                child: Image.asset(
-                  "assets/chicken.png",
-                ),
-              ),
-            ),
+            child: _character != null
+                ? Align(
+                    alignment: const Alignment(0.8, 0.95),
+                    child: SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: Image.asset(
+                        "assets/$_character.png",
+                      ),
+                    ),
+                  )
+                : Container(),
           ),
         ],
       ),
@@ -284,10 +302,8 @@ class _alarmSelectorDialog extends StatelessWidget {
   }
 }
 
-
 //吹き出しの形を作るクラス
 class BubbleBorder extends ShapeBorder {
-
   BubbleBorder({
     required this.width,
     required this.radius,
@@ -296,20 +312,16 @@ class BubbleBorder extends ShapeBorder {
   final double width;
   final double radius;
 
-
   @override
   EdgeInsetsGeometry get dimensions {
-
     return EdgeInsets.all(width);
   }
 
   @override
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
-
     return getOuterPath(
       rect.deflate(width / 2.0),
       textDirection: textDirection,
-      
     );
   }
 
@@ -319,17 +331,19 @@ class BubbleBorder extends ShapeBorder {
     final rs = radius / 2;
     final w = rect.size.width; // 全体の横幅
     final h = rect.size.height; // 全体の縦幅
-    final wl = w / 3; 
+    final wl = w / 3;
     return Path()
       ..addPath(
         Path()
           ..moveTo(r, 0)
-          ..lineTo(w - r - 2 , 0) // →
-          ..lineTo(w - r - 3 , 0) // →
-          ..arcToPoint(Offset(w - 5 , r), radius: Radius.circular(r + 6))
-          ..arcToPoint(Offset(w - r - 5, h + 1), radius: Radius.circular(r + 2),clockwise: true)
-          ..relativeLineTo(10 , 15)
-          ..arcToPoint(Offset(w - r * 1.8, h + 3), radius: Radius.circular(r * 6),clockwise: true)
+          ..lineTo(w - r - 2, 0) // →
+          ..lineTo(w - r - 3, 0) // →
+          ..arcToPoint(Offset(w - 5, r), radius: Radius.circular(r + 6))
+          ..arcToPoint(Offset(w - r - 5, h + 1),
+              radius: Radius.circular(r + 2), clockwise: true)
+          ..relativeLineTo(10, 15)
+          ..arcToPoint(Offset(w - r * 1.8, h + 3),
+              radius: Radius.circular(r * 6), clockwise: true)
           ..lineTo(wl + r, h) // ←
           ..lineTo(r, h) // ←
           ..arcToPoint(Offset(0, h - r), radius: Radius.circular(r))
@@ -339,14 +353,12 @@ class BubbleBorder extends ShapeBorder {
       ..close();
   }
 
-
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
-
     final paint = Paint()
       ..style = PaintingStyle.fill
       ..strokeWidth = 4
-      ..color = Color.fromARGB(255, 255, 255, 255);      
+      ..color = Color.fromARGB(255, 255, 255, 255);
     canvas.drawPath(
       getOuterPath(
         rect.deflate(width / 2.0),
@@ -359,4 +371,3 @@ class BubbleBorder extends ShapeBorder {
   @override
   ShapeBorder scale(double t) => this;
 }
-

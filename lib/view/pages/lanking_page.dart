@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import '../../logic/database_helper.dart';
 import 'components/custom_text.dart';
 import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
 
 class LankingPage extends StatefulWidget {
   const LankingPage({super.key});
@@ -21,7 +20,10 @@ class _LankingPageState extends State<LankingPage> {
   //Lankingを何個表示するか
   int _lankingCount = 0;
 
-    bool _showBubble = false;
+  bool _showBubble = false;
+
+  // 選択中のキャラクター
+  String? _character;
 
   //chatGPTへの入力を保持する配列
   List<String> _message = [
@@ -36,14 +38,17 @@ class _LankingPageState extends State<LankingPage> {
   // ChatGPTの応答を表示するかどうかのフラグ
   bool _showResponse = false;
 
-
   @override
   void initState() {
     super.initState();
     _loadLank();
+    initializeCharacter().then((_) {
+      // キャラクターの初期化が完了したら、UIを更新する
+      setState(() {});
+    });
   }
 
-    void _toggleBubble() {
+  void _toggleBubble() {
     setState(() {
       _showBubble = !_showBubble;
     });
@@ -52,8 +57,7 @@ class _LankingPageState extends State<LankingPage> {
   // ChatGPTからの応答を取得する関数
   Future<void> _getChatGPTResponse() async {
     final chatGPT = ChatGPT();
-    final response =
-        await chatGPT.message(_message[0]);
+    final response = await chatGPT.message(_message[0]);
     setState(() {
       _response = response.content;
       _showResponse = !_showResponse;
@@ -75,41 +79,47 @@ class _LankingPageState extends State<LankingPage> {
     });
   }
 
+  Future<void> initializeCharacter() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    _character = (await sharedPreferencesLogic.getSelectedCharacter());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constant.subYellow,
-      body: Stack(children: [
-        Positioned.fill(
-          child: Image.asset(
-            "assets/pages/yellow/dots/ranking_page.png",
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              "assets/pages/yellow/dots/ranking_page.png",
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        Column(
-          children: [
-            const SizedBox(height: 58),
-            Align(
-                alignment: Alignment.center,
-                child: Container(
-                  padding: const EdgeInsets.only(top: 55),
-                  width: 310,
-                  height: 420,
-                  child: Scrollbar(
-                    child: ListView.separated(
-                      padding: const EdgeInsets.all(20),
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 9),
-                      //ここでリストの数を決めている
-                      itemCount: _lankingCount,
-                      itemBuilder: (context, index) =>
-                          _buildCard(index + 1, _times[index]),
+          Column(
+            children: [
+              const SizedBox(height: 58),
+              Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 55),
+                    width: 310,
+                    height: 420,
+                    child: Scrollbar(
+                      child: ListView.separated(
+                        padding: const EdgeInsets.all(20),
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 9),
+                        //ここでリストの数を決めている
+                        itemCount: _lankingCount,
+                        itemBuilder: (context, index) =>
+                            _buildCard(index + 1, _times[index]),
+                      ),
                     ),
-                  ),
-                )),
-          ],
-        ),
-                 // 吹き出し
+                  )),
+            ],
+          ),
+          // 吹き出し
           // Visibility(
           //   visible: _showBubble,
           //   child: Align(
@@ -134,7 +144,7 @@ class _LankingPageState extends State<LankingPage> {
                 padding: const EdgeInsets.symmetric(
                   vertical: 7.0,
                   horizontal: 10.0,
-                ),            
+                ),
                 child: Align(
                   alignment: const Alignment(-0.4, 0.65),
                   child: Container(
@@ -183,25 +193,25 @@ class _LankingPageState extends State<LankingPage> {
               //     totalRepeatCount:1,
               //   ),
               // ),
-              
             ),
           ),
           GestureDetector(
-            onTap: () async{
+            onTap: () async {
               await _getChatGPTResponse();
               _toggleBubble();
-              
             },
-            child: Align(
-              alignment: const Alignment(0.8, 0.95),
-              child: SizedBox(
-                width: 120,
-                height: 120,
-                child: Image.asset(
-                  "assets/chicken.png",
-                ),
-              ),
-            ),
+            child: _character != null
+                ? Align(
+                    alignment: const Alignment(0.8, 0.95),
+                    child: SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: Image.asset(
+                        "assets/$_character.png",
+                      ),
+                    ),
+                  )
+                : Container(),
           ),
         ],
       ),
@@ -291,7 +301,6 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
 
 //吹き出しの形を作るクラス
 class BubbleBorder extends ShapeBorder {
-
   BubbleBorder({
     required this.width,
     required this.radius,
@@ -300,20 +309,16 @@ class BubbleBorder extends ShapeBorder {
   final double width;
   final double radius;
 
-
   @override
   EdgeInsetsGeometry get dimensions {
-
     return EdgeInsets.all(width);
   }
 
   @override
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
-
     return getOuterPath(
       rect.deflate(width / 2.0),
       textDirection: textDirection,
-      
     );
   }
 
@@ -323,17 +328,19 @@ class BubbleBorder extends ShapeBorder {
     final rs = radius / 2;
     final w = rect.size.width; // 全体の横幅
     final h = rect.size.height; // 全体の縦幅
-    final wl = w / 3; 
+    final wl = w / 3;
     return Path()
       ..addPath(
         Path()
           ..moveTo(r, 0)
-          ..lineTo(w - r - 2 , 0) // →
-          ..lineTo(w - r - 3 , 0) // →
-          ..arcToPoint(Offset(w - 5 , r), radius: Radius.circular(r + 6))
-          ..arcToPoint(Offset(w - r - 5, h + 1), radius: Radius.circular(r + 2),clockwise: true)
-          ..relativeLineTo(10 , 15)
-          ..arcToPoint(Offset(w - r * 1.8, h + 3), radius: Radius.circular(r * 6),clockwise: true)
+          ..lineTo(w - r - 2, 0) // →
+          ..lineTo(w - r - 3, 0) // →
+          ..arcToPoint(Offset(w - 5, r), radius: Radius.circular(r + 6))
+          ..arcToPoint(Offset(w - r - 5, h + 1),
+              radius: Radius.circular(r + 2), clockwise: true)
+          ..relativeLineTo(10, 15)
+          ..arcToPoint(Offset(w - r * 1.8, h + 3),
+              radius: Radius.circular(r * 6), clockwise: true)
           ..lineTo(wl + r, h) // ←
           ..lineTo(r, h) // ←
           ..arcToPoint(Offset(0, h - r), radius: Radius.circular(r))
@@ -343,14 +350,12 @@ class BubbleBorder extends ShapeBorder {
       ..close();
   }
 
-
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
-
     final paint = Paint()
       ..style = PaintingStyle.fill
       ..strokeWidth = 4
-      ..color = Color.fromARGB(255, 255, 255, 255);      
+      ..color = Color.fromARGB(255, 255, 255, 255);
     canvas.drawPath(
       getOuterPath(
         rect.deflate(width / 2.0),

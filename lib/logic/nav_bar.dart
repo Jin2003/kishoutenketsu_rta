@@ -130,7 +130,7 @@ class _NavBarState extends State<NavBar> {
               },
               child: const CustomText(
                 text: 'ログアウト',
-                Color: Constant.main, //accentYellow
+                Color: Constant.red, 
                 fontSize: 20,
               ),
             ),

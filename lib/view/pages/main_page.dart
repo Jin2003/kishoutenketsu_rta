@@ -212,14 +212,13 @@ class _MainPageState extends State<MainPage> {
             ],
           ),
             // 吹き出し
-            Align(
-              alignment: const Alignment(-0.4, 0.8),
-              child: SizedBox(
-                width: 250,
-                height: 190,
-                child: Image.asset(
-                  "assets/speech_bubble.png",
-                ),
+          Align(
+            alignment: const Alignment(-0.4, 0.8),
+            child: SizedBox(
+              width: 250,
+              height: 190,
+              child: Image.asset(
+                "assets/speech_bubble.png",
               ),
             ),
           ),

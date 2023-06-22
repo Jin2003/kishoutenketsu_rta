@@ -33,16 +33,21 @@ class ChatGPT{
   //     ]
   //   );
 
-    //アシスタントメッセージ
-    final response = await OpenAI.instance.chat.create(
-      model: "gpt-3.5-turbo",
-      messages: [
-        OpenAIChatCompletionChoiceMessageModel(
-          content: message,
-          role: OpenAIChatMessageRole.assistant,
-        )
-      ]
-    );
-    return response.choices.first.message;
+try {
+      final response = await OpenAI.instance.chat.create(
+        model: "gpt-3.5-turbo",
+        messages: [
+          OpenAIChatCompletionChoiceMessageModel(
+            content: message,
+            role: OpenAIChatMessageRole.assistant,
+          )
+        ],
+      );
+      return response.choices.first.message.content;
+    } catch (e) {
+      // エラーメッセージを表示するなどの適切な処理を行う
+      print("An error occurred: $e");
+      return "An error occurred: $e";
+    }
   }
 }

@@ -44,7 +44,7 @@ class _GatchaPageState extends State<GatchaPage> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/pages/yellow/dots/gatcha_page.png",
+            "assets/pages/${Constant.themeName}/dots/gatcha_page.png",
             fit: BoxFit.cover,
           ),
           //画像を表示する
@@ -76,7 +76,7 @@ class _GatchaPageState extends State<GatchaPage> {
                     Text(
                       textAlign: TextAlign.center,
                       _point.toString(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                         color: Constant.main, //accentYellow
@@ -86,7 +86,7 @@ class _GatchaPageState extends State<GatchaPage> {
                       width: 10,
                       height: 1,
                     ),
-                    const Text(
+                    Text(
                       'pt',
                       style: TextStyle(
                         fontSize: 40,
@@ -266,7 +266,7 @@ class _GatchaPageState extends State<GatchaPage> {
           if (_isPressed)
             Positioned(
               child: Lottie.asset(
-                "assets/gacha/yellow/yellowcapsule.json",
+                "assets/gacha/${Constant.themeName}/yellowcapsule.json",
                 fit: BoxFit.cover,
                 repeat: false,
               ),

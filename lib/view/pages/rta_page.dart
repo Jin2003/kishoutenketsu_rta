@@ -17,12 +17,12 @@ class RtaPage extends StatefulWidget {
 class _RtaPageState extends State<RtaPage> {
   // アイコン画像
   final List<String> iconImage = [
-    'assets/rta/yellow/起.png',
-    'assets/rta/yellow/床.png',
-    'assets/rta/yellow/点.png',
-    'assets/rta/yellow/結.png',
-    'assets/rta/yellow/RTA.png',
-    'assets/rta/yellow/RTA.png',
+    'assets/rta/${Constant.themeName}/起.png',
+    'assets/rta/${Constant.themeName}/床.png',
+    'assets/rta/${Constant.themeName}/点.png',
+    'assets/rta/${Constant.themeName}/結.png',
+    'assets/rta/${Constant.themeName}/RTA.png',
+    'assets/rta/${Constant.themeName}/RTA.png',
   ];
 
   // タッチしたかしてないか判定
@@ -37,9 +37,9 @@ class _RtaPageState extends State<RtaPage> {
 
   // running_bar 画像
   final List<String> rtaImage = [
-    'assets/rta/yellow/rta_circle.png',
-    'assets/rta/yellow/rta_circle_on.png',
-    'assets/rta/yellow/rta_bar.png',
+    'assets/rta/${Constant.themeName}/rta_circle.png',
+    'assets/rta/${Constant.themeName}/rta_circle_on.png',
+    'assets/rta/${Constant.themeName}/rta_bar.png',
   ];
 
   Future<void> _getNfcID() async {
@@ -47,9 +47,8 @@ class _RtaPageState extends State<RtaPage> {
     final db = await DatabaseHelper().db;
     final List<Map<String, dynamic>> nfcs =
         await db.rawQuery("SELECT nfc_id FROM nfc ORDER BY RANDOM()");
-    //nfcReadFunc（）呼び出し読み取り開始     
+    //nfcReadFunc（）呼び出し読み取り開始
     nfcReadFunc(nfcs);
-
   }
 
   // 画像番号
@@ -69,7 +68,7 @@ class _RtaPageState extends State<RtaPage> {
               child: Image.asset(iconImage[imageCount]),
             ),
             const SizedBox(width: 100, height: 20),
-            const CustomText(text: '  をタッチしてね！', fontSize: 25, Color: Constant.main),
+            CustomText(text: '  をタッチしてね！', fontSize: 25, Color: Constant.main),
             const SizedBox(width: 100, height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -165,35 +164,34 @@ class _RtaPageState extends State<RtaPage> {
     _getNfcID();
   }
 
-void nfcReadFunc(List<Map<String, dynamic>> nfcs, {int nfcIndex = 0}) async {
-  // NFC読み取り
-  bool success = await NFCRead().nfcRead(imageCount, nfcs[nfcIndex]);
-  debugPrint('$success');
-  // データベースに登録しているIDと読み取ったIDが異なるので再度読み取り
-  if (success == false) {
-    nfcReadFunc(nfcs, nfcIndex: nfcIndex); 
-    return;
-  } else {
-    setState(() {
-      // タッチしたかしてないか判定
-      onOff[imageCount] = true;
-      // imageCountをインクリメント
-      imageCount++;
-      //nfcIndexをインクリメント
-      if (nfcIndex <= nfcs.length - 1) {
-        nfcIndex++;
-
-      }
-    });
-    // 5回正しく読み取ったら終了
-    if (imageCount == 5) {
-      endDialog();
+  void nfcReadFunc(List<Map<String, dynamic>> nfcs, {int nfcIndex = 0}) async {
+    // NFC読み取り
+    bool success = await NFCRead().nfcRead(imageCount, nfcs[nfcIndex]);
+    debugPrint('$success');
+    // データベースに登録しているIDと読み取ったIDが異なるので再度読み取り
+    if (success == false) {
+      nfcReadFunc(nfcs, nfcIndex: nfcIndex);
+      return;
     } else {
-      // 再度読み取り
-      nfcReadFunc(nfcs, nfcIndex: nfcIndex); 
+      setState(() {
+        // タッチしたかしてないか判定
+        onOff[imageCount] = true;
+        // imageCountをインクリメント
+        imageCount++;
+        //nfcIndexをインクリメント
+        if (nfcIndex <= nfcs.length - 1) {
+          nfcIndex++;
+        }
+      });
+      // 5回正しく読み取ったら終了
+      if (imageCount == 5) {
+        endDialog();
+      } else {
+        // 再度読み取り
+        nfcReadFunc(nfcs, nfcIndex: nfcIndex);
+      }
     }
   }
-}
 
   void endDialog() {
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -211,7 +209,10 @@ void nfcReadFunc(List<Map<String, dynamic>> nfcs, {int nfcIndex = 0}) async {
                       ),
                       const Align(
                         alignment: Alignment.center,
-                        child: CustomText(text: '設定が完了しました！', fontSize: 25, Color: Constant.gray),
+                        child: CustomText(
+                            text: '設定が完了しました！',
+                            fontSize: 25,
+                            Color: Constant.gray),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(

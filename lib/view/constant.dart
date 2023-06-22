@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 
 // 定数を管理するクラス
 class Constant {
@@ -9,7 +10,8 @@ class Constant {
 
   // yellow
   static const Color yellow = Color(0xFFFFE475);
-  static const Color accentYellow = Color(0xFFFFDC4F); // yellowが薄くて文字が見えない時に使うyellowのちょっと濃いver.
+  static const Color accentYellow =
+      Color(0xFFFFDC4F); // yellowが薄くて文字が見えない時に使うyellowのちょっと濃いver.
   static const Color subYellow = Color(0xFFFFF9DD);
 
   // blue
@@ -20,6 +22,18 @@ class Constant {
   static const Color red = Color(0xFFFFB6A6);
   static const Color subRed = Color(0xFFFFEAE5);
 
-  static const Color main = yellow;
-  static const Color sub = subYellow;
+  static Color main = yellow;
+  static Color sub = subYellow;
+  static String themeName = "yellow";
+
+  static void updateColors(
+      Color newMain, Color newSub, String argumentThemeName) {
+    main = newMain;
+    sub = newSub;
+    themeName = argumentThemeName;
+    sharedPreferencesLogic.setSelectedColor(argumentThemeName);
+  }
+
+  static SharedPreferencesLogic sharedPreferencesLogic =
+      SharedPreferencesLogic();
 }

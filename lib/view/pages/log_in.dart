@@ -148,6 +148,8 @@ class _LogInState extends State<LogIn> {
                           var groupID = documentSnapshot.data()?['groupID'];
                           await sharedPreferencesLogic
                               .setSelectedCharacter('chicken');
+                          await sharedPreferencesLogic
+                              .setSelectedWallpaper("dots");
                           await sharedPreferencesLogic.setSelectedTheme("dots");
                           // TODO:circusをデフォルトにしてるけど、後で考える
                           await sharedPreferencesLogic
@@ -240,7 +242,61 @@ class _LogInState extends State<LogIn> {
                   fontSize: 20,
                   width: 200,
                   height: 40,
-                  nextPage: NavBar(),
+                  // nextPage: NavBar(),
+                  onPressed: () async {
+                    try {
+                      // メール/パスワードでログイン
+                      final User? user = (await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: "adjadj@gmail.com",
+                                  password: "adjadj"))
+                          .user;
+                      if (user != null) {
+                        SharedPreferencesLogic sharedPreferencesLogic =
+                            SharedPreferencesLogic();
+                        // SharedPreferencesにuserIDを保存
+                        await sharedPreferencesLogic.setUserID(user.uid);
+
+                        // firebaseからgroupIDを取得
+                        var documentSnapshot = await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .get();
+                        var groupID = documentSnapshot.data()?['groupID'];
+                        await sharedPreferencesLogic
+                            .setSelectedCharacter('chicken');
+                        await sharedPreferencesLogic
+                            .setSelectedWallpaper("dots");
+                        await sharedPreferencesLogic.setSelectedTheme("dots");
+                        // TODO:circusをデフォルトにしてるけど、後で考える
+                        await sharedPreferencesLogic.setSelectedMusic('circus');
+                        await sharedPreferencesLogic.setSelectedColor("yellow");
+                        await sharedPreferencesLogic.setExistsNFC(false);
+                        await sharedPreferencesLogic.setSettedAlarm(false);
+                        await sharedPreferencesLogic.setAlarmTime(0);
+                        if (groupID != null) {
+                          // sharedPreferencesにgroupIDを保存
+                          await sharedPreferencesLogic.setGroupID(groupID);
+                          if (!mounted) return;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => const NavBar())),
+                          );
+                        } else {
+                          // groupIDがnullの場合はHaveNfcへ移行
+                          if (!mounted) return;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => const HaveNfc())),
+                          );
+                        }
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
                 ),
               ),
             ],

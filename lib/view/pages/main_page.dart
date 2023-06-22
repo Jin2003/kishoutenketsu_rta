@@ -18,14 +18,15 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  late TimeOfDay _timeOfDay;
+  TimeOfDay? _timeOfDay;
   // 選択中のアラーム音
+  // TODO:音楽を選択できるようにする
   String? _music;
   // 選択中のキャラクター
   String? _character;
 
   // 選択中の壁紙
-  String? _wallpaper = "dots";
+  String? _wallpaper;
 
   // アラームオンオフの切り替え
   bool _value = true;
@@ -58,13 +59,15 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
     super.initState();
-    try {
-      // initializeCharacter();
-      initializeWallpaper();
-      // initializeTime();
-    } finally {
+    initializeCharacter().then((_) {
       setState(() {});
-    }
+    });
+    initializeWallpaper().then((_) {
+      setState(() {});
+    });
+    initializeTime().then((_) {
+      setState(() {});
+    });
 
     //ウィジェットが描画された後に実行する
     WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -108,9 +111,9 @@ class _MainPageState extends State<MainPage> {
   Future<void> initializeTime() async {
     SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
     _alarmTime = (await sharedPreferencesLogic.getAlarmTime());
-    setState(() {
+    if (_alarmTime != null) {
       _timeOfDay = TimeOfDay(hour: _alarmTime! ~/ 60, minute: _alarmTime! % 60);
-    });
+    }
   }
 
   @override
@@ -120,7 +123,7 @@ class _MainPageState extends State<MainPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          _character != null
+          _wallpaper != null
               ?
               // 背景画像
               Image.asset(
@@ -169,14 +172,16 @@ class _MainPageState extends State<MainPage> {
                             Container(
                               alignment: const Alignment(-0.65, 0),
                               // アラームが鳴る時刻
-                              child: Text(
-                                '${_timeOfDay.hour.toString().padLeft(2, '0')}:${_timeOfDay.minute.toString().padLeft(2, '0')}',
-                                style: GoogleFonts.zenMaruGothic(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 65,
-                                  color: Constant.main,
-                                ),
-                              ),
+                              child: _timeOfDay != null
+                                  ? Text(
+                                      '${_timeOfDay?.hour.toString().padLeft(2, '0')}:${_timeOfDay?.minute.toString().padLeft(2, '0')}',
+                                      style: GoogleFonts.zenMaruGothic(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 65,
+                                        color: Constant.main,
+                                      ),
+                                    )
+                                  : Container(),
                             ),
                             //　アラーム音の表示
                             Container(

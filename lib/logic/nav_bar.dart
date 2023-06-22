@@ -49,7 +49,7 @@ class _NavBarState extends State<NavBar> {
           width: 130,
         ),
 
-        backgroundColor: Constant.yellow,
+        backgroundColor: Constant.main,
 
         actions: <Widget>[
           // ハンバーガーボタンをカスタム
@@ -129,7 +129,7 @@ class _NavBarState extends State<NavBar> {
               },
               child: const CustomText(
                 text: 'ログアウト',
-                Color: Constant.accentYellow,
+                Color: Constant.main, //accentYellow
                 fontSize: 20,
               ),
             ),
@@ -155,9 +155,9 @@ class _NavBarState extends State<NavBar> {
       bottomNavigationBar: CurvedNavigationBar(
         index: _selectedIndex,
         height: 75,
-        color: Constant.yellow,
+        color: Constant.main,
         //背景色と同色
-        backgroundColor: Constant.subYellow,
+        backgroundColor: Constant.sub,
         items: const <Widget>[
           ImageIcon(
             AssetImage(

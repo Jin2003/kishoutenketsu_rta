@@ -21,12 +21,13 @@ class _LankingPageState extends State<LankingPage> {
   //Lankingを何個表示するか
   int _lankingCount = 0;
 
-    bool _showBubble = false;
+  bool _showBubble = false;
 
   //chatGPTへの入力を保持する配列
   List<String> _message = [
-    "「ランキング更新！」だけ言ってくださいそれ以外は言わないでください",
-    "「今日のラッキーアイテム」だけ言ってくださいそれ以外は言わないでください",
+    "「更新おめでとう！\n今日も一日頑張ろう！」だけ言ってくださいそれ以外は言わないでください",
+    "「惜しい！\nあと秒で更新だったね！」だけ言ってくださいそれ以外は言わないでください",
+    "「」"
   ];
   //０から３までのランダムな数字を保持する変数
   int? _Random;
@@ -78,7 +79,7 @@ class _LankingPageState extends State<LankingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.subYellow,
+      backgroundColor: Constant.sub,
       body: Stack(children: [
         Positioned.fill(
           child: Image.asset(
@@ -229,7 +230,8 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             width: 35,
             height: 35,
             decoration: BoxDecoration(
-              border: Border.all(color: Constant.accentYellow),
+              border: Border.all(color: Constant.main //accentYellow
+              ),
               color: Constant.white,
               shape: BoxShape.circle,
             ),
@@ -237,9 +239,10 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
               child: Text(
                 '$index',
                 style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Constant.accentYellow),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Constant.main  //accentYellow
+                    ),
               ),
             ),
           ),
@@ -257,9 +260,10 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
                     ':' +
                     '${time['time_record'] % 60}'.padLeft(2, '0'),
                 style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Constant.accentYellow),
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Constant.main  //accentYellow
+                    ),
               ),
             ],
           ),
@@ -274,13 +278,14 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             width: 75,
             height: 20,
             decoration: BoxDecoration(
-              color: Constant.subYellow,
+              color: Constant.sub,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               "${time['time_datetime']}",
               style: const TextStyle(
-                  color: Constant.accentYellow, fontWeight: FontWeight.bold),
+                  color: Constant.main
+                  , fontWeight: FontWeight.bold),
             ),
           )
         ],
@@ -346,18 +351,23 @@ class BubbleBorder extends ShapeBorder {
 
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
+    final path = getOuterPath(
+      rect.deflate(width / 2.0),
+      textDirection: textDirection,
+    );
 
+    // Add a shadow to the speech bubble
+    final shadowPaint = Paint()
+      ..color = Colors.black.withOpacity(0.2)
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1.5);
+    canvas.drawPath(path.shift(Offset(4.0, 4.0)), shadowPaint);
+
+    // Draw the speech bubble shape
     final paint = Paint()
       ..style = PaintingStyle.fill
       ..strokeWidth = 4
-      ..color = Color.fromARGB(255, 255, 255, 255);      
-    canvas.drawPath(
-      getOuterPath(
-        rect.deflate(width / 2.0),
-        textDirection: textDirection,
-      ),
-      paint,
-    );
+      ..color = Color.fromARGB(255, 255, 255, 255);
+    canvas.drawPath(path, paint);
   }
 
   @override

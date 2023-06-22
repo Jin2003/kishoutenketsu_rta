@@ -39,7 +39,7 @@ class _GatchaPageState extends State<GatchaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.subYellow,
+      backgroundColor: Constant.sub,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -65,7 +65,7 @@ class _GatchaPageState extends State<GatchaPage> {
                 width: 260,
                 height: 90,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Constant.yellow, width: 5),
+                  border: Border.all(color: Constant.main, width: 5),
                   borderRadius: BorderRadius.circular(60),
                   // color と boxdecorationの共存はNG
                   color: Constant.white,
@@ -79,7 +79,7 @@ class _GatchaPageState extends State<GatchaPage> {
                       style: const TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
-                        color: Constant.accentYellow,
+                        color: Constant.main, //accentYellow
                       ),
                     ),
                     const SizedBox(
@@ -91,7 +91,7 @@ class _GatchaPageState extends State<GatchaPage> {
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        color: Constant.accentYellow,
+                        color: Constant.main, //accentYellow
                       ),
                     ),
                   ],

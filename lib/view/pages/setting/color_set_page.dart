@@ -51,6 +51,18 @@ class _ColorSetPageState extends State<ColorSetPage> {
               const SizedBox(
                 height: 30,
               ),
+              const CustomText(
+                  text: '選択中のカラー', fontSize: 22, Color: Constant.gray),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(),
+                child: SizedBox(
+                  height: 125,
+                  width: 125,
+                  // TODO: 押したカラーによって色が変わる処理
+                  child: Image.asset('assets/theme/yellow/chicken_on.png'),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(),
                 child: InkWell(
@@ -58,7 +70,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                     // TODO: テーマカラー変更処理
                   },
                   child: SizedBox(
-                    height: 150,
+                    height: 100,
                     width: 350,
                     child: Image.asset('assets/theme/yellow/color.png'),
                   ),
@@ -71,7 +83,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                     // TODO: テーマカラー変更処理
                   },
                   child: SizedBox(
-                    height: 150,
+                    height: 100,
                     width: 350,
                     child: Image.asset('assets/theme/red/color.png'),
                   ),
@@ -84,7 +96,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                     // TODO: テーマカラー変更処理
                   },
                   child: SizedBox(
-                    height: 150,
+                    height: 100,
                     width: 350,
                     child: Image.asset('assets/theme/blue/color.png'),
                   ),

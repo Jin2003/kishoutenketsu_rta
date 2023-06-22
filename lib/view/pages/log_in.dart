@@ -242,7 +242,7 @@ class _LogInState extends State<LogIn> {
                   fontSize: 20,
                   width: 200,
                   height: 40,
-                  nextPage: NavBar(),
+                  // nextPage: NavBar(),
                   onPressed: () async {
                     try {
                       // メール/パスワードでログイン

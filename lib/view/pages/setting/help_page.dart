@@ -46,6 +46,51 @@ class _HelpPageState extends State<HelpPage> {
                   Border(bottom: BorderSide(color: Constant.gray, width: 2)),
             ),
           ),
+          Column(
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              Container(
+                width: 300,
+                child: RichText(
+                  text: const TextSpan(children: [
+                    TextSpan(
+                      text: 'こちらのリンクから\nNFCタグを購入してください',
+                      style: TextStyle(color: Constant.gray, fontSize: 20),
+                    ),
+                    TextSpan(
+                      text:
+                          // TODO:NFCのリンク貼る
+                          'https://qiita.com/megumu-u/items/73b728ad1d381717d731',
+                      style: TextStyle(color: Colors.blue, fontSize: 20),
+                    )
+                  ]),
+                ),
+              ),
+              const SizedBox(
+                height: 200,
+              ),
+              Container(
+                width: 300,
+                child: const Column(
+                  children: [
+                    CustomText(
+                        text: 'お問い合わせはこちらから',
+                        fontSize: 20,
+                        Color: Constant.gray),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CustomText(
+                        text: '000-0000-0000',
+                        fontSize: 20,
+                        Color: Constant.gray),
+                  ],
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

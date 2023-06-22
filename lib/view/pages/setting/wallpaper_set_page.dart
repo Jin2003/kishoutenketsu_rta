@@ -90,7 +90,8 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                   child: SizedBox(
                     height: 150,
                     width: 350,
-                    child: Image.asset('assets/wallpaper/yellow/dots.png'),
+                    child: Image.asset(
+                        'assets/wallpaper/${Constant.themeName}/dots.png'),
                   ),
                 ),
               ),
@@ -105,7 +106,8 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                   child: SizedBox(
                     height: 150,
                     width: 350,
-                    child: Image.asset('assets/wallpaper/yellow/plaid.png'),
+                    child: Image.asset(
+                        'assets/wallpaper/${Constant.themeName}/plaid.png'),
                   ),
                 ),
               ),
@@ -120,7 +122,8 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                   child: SizedBox(
                     height: 150,
                     width: 350,
-                    child: Image.asset('assets/wallpaper/yellow/stripe.png'),
+                    child: Image.asset(
+                        'assets/wallpaper/${Constant.themeName}/stripe.png'),
                   ),
                 ),
               ),

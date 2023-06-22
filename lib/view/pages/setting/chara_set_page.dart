@@ -96,8 +96,8 @@ class _CharaSetPageState extends State<CharaSetPage> {
                           margin: const EdgeInsets.all(8),
                           child: Image.asset(
                             _selectedCharacter == 'chicken'
-                                ? 'assets/characters/yellow/chicken_on.png'
-                                : 'assets/characters/yellow/chicken_off.png',
+                                ? 'assets/characters/${Constant.themeName}/chicken_on.png'
+                                : 'assets/characters/${Constant.themeName}/chicken_off.png',
                           ),
                         ),
                       ),
@@ -118,8 +118,8 @@ class _CharaSetPageState extends State<CharaSetPage> {
                           margin: const EdgeInsets.all(8),
                           child: Image.asset(
                             _selectedCharacter == 'medamayaki'
-                                ? 'assets/characters/yellow/medamayaki_on.png'
-                                : 'assets/characters/yellow/medamayaki_off.png',
+                                ? 'assets/characters/${Constant.themeName}/medamayaki_on.png'
+                                : 'assets/characters/${Constant.themeName}/medamayaki_off.png',
                           ),
                         ),
                       ),
@@ -145,8 +145,8 @@ class _CharaSetPageState extends State<CharaSetPage> {
                             margin: const EdgeInsets.all(8),
                             child: Image.asset(
                               _selectedCharacter == 'mezamashi'
-                                  ? 'assets/characters/yellow/mezamashi_on.png'
-                                  : 'assets/characters/yellow/mezamashi_off.png',
+                                  ? 'assets/characters/${Constant.themeName}/mezamashi_on.png'
+                                  : 'assets/characters/${Constant.themeName}/mezamashi_off.png',
                             ),
                           )),
                     ),
@@ -166,8 +166,8 @@ class _CharaSetPageState extends State<CharaSetPage> {
                             margin: const EdgeInsets.all(8),
                             child: Image.asset(
                               _selectedCharacter == 'toast'
-                                  ? 'assets/characters/yellow/toast_on.png'
-                                  : 'assets/characters/yellow/toast_off.png',
+                                  ? 'assets/characters/${Constant.themeName}/toast_on.png'
+                                  : 'assets/characters/${Constant.themeName}/toast_off.png',
                             ),
                           )),
                     ),

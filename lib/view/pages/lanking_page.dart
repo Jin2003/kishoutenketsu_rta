@@ -89,7 +89,7 @@ class _LankingPageState extends State<LankingPage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              "assets/pages/yellow/dots/ranking_page.png",
+              "assets/pages/${Constant.themeName}/dots/ranking_page.png",
               fit: BoxFit.cover,
             ),
           ),

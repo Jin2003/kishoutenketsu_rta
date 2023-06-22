@@ -44,7 +44,7 @@ class _GatchaPageState extends State<GatchaPage> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/pages/yellow/dots/gatcha_page.png",
+            "assets/pages/${Constant.themeName}/dots/gatcha_page.png",
             fit: BoxFit.cover,
           ),
           //画像を表示する
@@ -266,7 +266,7 @@ class _GatchaPageState extends State<GatchaPage> {
           if (_isPressed)
             Positioned(
               child: Lottie.asset(
-                "assets/gacha/yellow/yellowcapsule.json",
+                "assets/gacha/${Constant.themeName}/yellowcapsule.json",
                 fit: BoxFit.cover,
                 repeat: false,
               ),

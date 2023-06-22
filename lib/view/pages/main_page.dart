@@ -127,7 +127,7 @@ class _MainPageState extends State<MainPage> {
               ?
               // 背景画像
               Image.asset(
-                  "assets/pages/yellow/$_wallpaper/main_page.png",
+                  "assets/pages/${Constant.themeName}/$_wallpaper/main_page.png",
                   fit: BoxFit.cover,
                 )
               : Container(),

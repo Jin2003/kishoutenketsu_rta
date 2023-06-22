@@ -91,7 +91,7 @@ class _AlarmPageState extends State<AlarmPage> {
         children: [
           // 背景画像
           Image.asset(
-            "assets/pages/yellow/dots/alarm_page.png",
+            "assets/pages/${Constant.themeName}/dots/alarm_page.png",
             fit: BoxFit.cover,
           ),
 

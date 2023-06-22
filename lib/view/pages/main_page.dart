@@ -5,6 +5,7 @@ import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
 import '../constant.dart';
 import 'components/outline_button.dart';
+import '../../SeSound.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -14,11 +15,34 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  SeSound se = SeSound();
   late TimeOfDay _timeOfDay;
   // 洗濯中のアラーム音
   String? _music;
 
-  //List<String> alarmMusic = ['きらきら星', 'せせらぎ', 'アンパンマンマーチ', 'りんご'];
+  //アラームを鳴らすまでの時間を残す変数
+  dynamic _alarmTime;
+
+  //現在の時間を取得する変数
+  dynamic _currentTime;
+
+  //アラームセットしてるかどうかのフラグ
+  dynamic _alarmSetFlag = false;
+
+  //アラームを鳴らすまでの時間を計算する関数
+  void _alarmTimeCalc() {
+    //アラームを鳴らすまでの時間を計算
+    dynamic _alarmTimeCalc = _alarmTime - _currentTime;
+    //アラームを鳴らすまでの時間を表示
+    print(_alarmTimeCalc);
+    //アラームを鳴らすまでの時間が0になったらアラームを鳴らす
+    if (_alarmTimeCalc == 0) {
+      //アラームを鳴らす処理
+      se.playSe(SeSoundIds.button1);
+      //アラームを鳴らす処理が終わったら、アラームをセットしているかどうかのフラグをfalseにする
+      _alarmSetFlag = false;
+    }
+  }
 
   @override
   void initState() {
@@ -74,6 +98,12 @@ class _MainPageState extends State<MainPage> {
               final TimeOfDay? timeOfDay = await showTimePicker(
                   context: context, initialTime: _timeOfDay);
               if (timeOfDay != null) setState(() => {_timeOfDay = timeOfDay});
+              //_timeOfDayを分に変換
+              _alarmTime = _timeOfDay.hour * 60 + _timeOfDay.minute;
+              //翌日の時間なので、24時間を足す
+              _alarmTime = _alarmTime + 24 * 60;
+              //現在の時間を取得し、分に変換
+              _currentTime = DateTime.now().hour * 60 + DateTime.now().minute;
             },
           ),
           SizedBox(
@@ -90,7 +120,7 @@ class _MainPageState extends State<MainPage> {
               // アラーム音のダイアログを表示して、選択したアラーム音を受け取る
               final selectedAlarm = await showDialog<String>(
                 context: context,
-                builder:(context) => _alarmSelectorDialog(
+                builder: (context) => _alarmSelectorDialog(
                   music: _music,
                 ),
               );
@@ -113,7 +143,13 @@ class _MainPageState extends State<MainPage> {
             fontSize: 20,
             shape: 30,
             nextPage: RtaPage(),
-          )
+          ),
+          ElevatedButton(
+              onPressed: () {
+                // ボタン押下のタイミングで効果音を再生
+                se.playSe(SeSoundIds.button1);
+              },
+              child: Text("Button1の効果音")),
         ]),
       ),
     );
@@ -123,7 +159,7 @@ class _MainPageState extends State<MainPage> {
 /// 都道府県を選択するダイアログ
 /// 選択されたら都道府県の文字列を返す
 /// キャンセルされたら null を返す
-class _alarmSelectorDialog extends StatelessWidget{
+class _alarmSelectorDialog extends StatelessWidget {
   const _alarmSelectorDialog({
     Key? key,
     this.music,

@@ -32,7 +32,7 @@ dependencies:
   flutter:
     sdk: flutter
   curved_navigation_bar: ^1.0.3 #latest version
-  sqflite: ^2.2.7 
+  sqflite: ^2.2.7
   nfc_manager: ^3.2.0
 
   google_fonts: ^2.1.0
@@ -42,6 +42,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   path: ^1.8.2
   path_provider: ^2.0.14
+  soundpool: ^2.3.0
+  flutter_animate: ^4.1.1+1
+  flutter_animated_dialog: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +72,7 @@ flutter:
     - assets/
     - assets/icon/
     - assets/rta/
+    - assets/se/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

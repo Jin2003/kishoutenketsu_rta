@@ -3,7 +3,7 @@ import 'package:nfc_manager/nfc_manager.dart';
 
 // 書き込みクラス
 class NFCWrite {
-  nfcwrite(String id) {
+  nfcWrite(String id) {
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       debugPrint(id);
       var ndef = Ndef.from(tag);
@@ -23,6 +23,8 @@ class NFCWrite {
         //NFCに書き込み
         await ndef.write(message);
         debugPrint('書き込みました!"');
+        NfcManager.instance.stopSession();
+        return;
       } catch (e) {
         print(e);
         NfcManager.instance.stopSession();

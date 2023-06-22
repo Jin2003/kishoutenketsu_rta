@@ -161,7 +161,7 @@ class _LogInState extends State<LogIn> {
                           await sharedPreferencesLogic.setAlarmTime(0);
                           if (groupID != null) {
                             // sharedPreferencesにgroupIDを保存
-                            await sharedPreferencesLogic.setGroupID(groupID);
+                            Constant.updateGroupID(groupID);
                             if (!mounted) return;
                             Navigator.push(
                               context,
@@ -271,7 +271,7 @@ class _LogInState extends State<LogIn> {
                         // TODO:circusをデフォルトにしてるけど、後で考える
                         await sharedPreferencesLogic.setSelectedMusic('circus');
                         await sharedPreferencesLogic.setSelectedColor("yellow");
-                        await sharedPreferencesLogic.setExistsNFC(false);
+                        await sharedPreferencesLogic.setExistsNFC(true);
                         await sharedPreferencesLogic.setSettedAlarm(false);
                         await sharedPreferencesLogic.setAlarmTime(0);
                         if (groupID != null) {

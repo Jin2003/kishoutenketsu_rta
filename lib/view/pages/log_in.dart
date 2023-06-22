@@ -22,7 +22,7 @@ class _LogInState extends State<LogIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   // password 表示非表示の切り替え
-  bool isDisplay = false;
+  bool isDisplay = true;
 
   @override
   Widget build(BuildContext context) {

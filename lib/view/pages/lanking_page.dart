@@ -95,124 +95,124 @@ class _LankingPageState extends State<LankingPage> {
             "assets/pages/yellow/dots/ranking_page.png",
             fit: BoxFit.cover,
           ),
-          Column(
-            children: [
-              const SizedBox(height: 58),
-              Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 55),
-                    width: 310,
-                    height: 420,
-                    child: Scrollbar(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.all(20),
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 9),
-                        //ここでリストの数を決めている
-                        itemCount: _lankingCount,
-                        itemBuilder: (context, index) =>
-                            _buildCard(index + 1, _times[index]),
-                      ),
+        ),
+        Column(
+          children: [
+            const SizedBox(height: 58),
+            Align(
+                alignment: Alignment.center,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 55),
+                  width: 310,
+                  height: 420,
+                  child: Scrollbar(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(20),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 9),
+                      //ここでリストの数を決めている
+                      itemCount: _lankingCount,
+                      itemBuilder: (context, index) =>
+                          _buildCard(index + 1, _times[index]),
                     ),
-                  )),
-            ],
-          ),
-          // 吹き出し
-          // Visibility(
-          //   visible: _showBubble,
-          //   child: Align(
-          //     alignment: const Alignment(-0.5, 0.85),
-          //     child: SizedBox(
-          //       width: 250,
-          //       height: 190,
-          //       child: Image.asset(
-          //         "assets/speech_bubble.png",
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // 吹き出しの中身(ChatGPTの応答)
-          Visibility(
-            visible: _showResponse,
-            child: Align(
-              alignment: const Alignment(-0.4, 0.65),
-              // alignment: const Alignment(-0.25, 1.14),
-              child: Container(
-                margin: const EdgeInsets.only(left: 15.0),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 7.0,
-                  horizontal: 10.0,
-                ),
-                child: Align(
-                  alignment: const Alignment(-0.4, 0.65),
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 15.0),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 7.0,
-                      horizontal: 10.0,
+                  ),
+                )),
+          ],
+        ),
+        // 吹き出し
+        // Visibility(
+        //   visible: _showBubble,
+        //   child: Align(
+        //     alignment: const Alignment(-0.5, 0.85),
+        //     child: SizedBox(
+        //       width: 250,
+        //       height: 190,
+        //       child: Image.asset(
+        //         "assets/speech_bubble.png",
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // 吹き出しの中身(ChatGPTの応答)
+        Visibility(
+          visible: _showResponse,
+          child: Align(
+            alignment: const Alignment(-0.4, 0.65),
+            // alignment: const Alignment(-0.25, 1.14),
+            child: Container(
+              margin: const EdgeInsets.only(left: 15.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 7.0,
+                horizontal: 10.0,
+              ),
+              child: Align(
+                alignment: const Alignment(-0.4, 0.65),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 15.0),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 7.0,
+                    horizontal: 10.0,
+                  ),
+                  decoration: ShapeDecoration(
+                    shape: BubbleBorder(
+                      width: 30,
+                      radius: 29,
                     ),
-                    decoration: ShapeDecoration(
-                      shape: BubbleBorder(
-                        width: 30,
-                        radius: 29,
-                      ),
-                    ),
-                    child: AnimatedTextKit(
-                      animatedTexts: [
-                        TyperAnimatedText(
-                          _response ?? "",
-                          textStyle: GoogleFonts.zenMaruGothic(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: const Color(0xFF707070),
-                          ),
-                          speed: const Duration(milliseconds: 100),
+                  ),
+                  child: AnimatedTextKit(
+                    animatedTexts: [
+                      TyperAnimatedText(
+                        _response ?? "",
+                        textStyle: GoogleFonts.zenMaruGothic(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: const Color(0xFF707070),
                         ),
-                      ],
-                      totalRepeatCount: 1,
-                    ),
+                        speed: const Duration(milliseconds: 100),
+                      ),
+                    ],
+                    totalRepeatCount: 1,
                   ),
                 ),
               ),
-              // child: SizedBox(
-              //   width: 200,
-              //   height: 190,
-              //   child: AnimatedTextKit(
-              //     animatedTexts: [
-              //       TyperAnimatedText(_response ?? "",
-              //           textStyle: GoogleFonts.zenMaruGothic(
-              //             fontWeight: FontWeight.bold,
-              //             fontSize: 15,
-              //             color: Color(0xFF707070),
-              //           ),
-              //           speed: const Duration(milliseconds: 100)
-              //           ),
-              //     ],
-              //     totalRepeatCount:1,
-              //   ),
-              // ),
             ),
+            // child: SizedBox(
+            //   width: 200,
+            //   height: 190,
+            //   child: AnimatedTextKit(
+            //     animatedTexts: [
+            //       TyperAnimatedText(_response ?? "",
+            //           textStyle: GoogleFonts.zenMaruGothic(
+            //             fontWeight: FontWeight.bold,
+            //             fontSize: 15,
+            //             color: Color(0xFF707070),
+            //           ),
+            //           speed: const Duration(milliseconds: 100)
+            //           ),
+            //     ],
+            //     totalRepeatCount:1,
+            //   ),
+            // ),
           ),
-          GestureDetector(
-            onTap: () async {
-              await _getChatGPTResponse();
-              _toggleBubble();
-            },
-            child: _character != null
-                ? Align(
-                    alignment: const Alignment(0.8, 0.95),
-                    child: SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: Image.asset(
-                        "assets/$_character.png",
-                      ),
+        ),
+        GestureDetector(
+          onTap: () async {
+            await _getChatGPTResponse();
+            _toggleBubble();
+          },
+          child: _character != null
+              ? Align(
+                  alignment: const Alignment(0.8, 0.95),
+                  child: SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: Image.asset(
+                      "assets/$_character.png",
                     ),
-                  )
-                : Container(),
-          ),
-        )
+                  ),
+                )
+              : Container(),
+        ),
       ]),
     );
   }

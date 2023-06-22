@@ -12,6 +12,10 @@ class ColorSetPage extends StatefulWidget {
 }
 
 class _ColorSetPageState extends State<ColorSetPage> {
+  Color selectedMainColor = Constant.main;
+  Color selectedSubColor = Constant.sub;
+  String selectedThemeName = Constant.themeName;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,16 +63,18 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 child: SizedBox(
                   height: 125,
                   width: 125,
-                  // TODO: 押したカラーによって色が変わる処理
-                  child: Image.asset('assets/theme/yellow/chicken_on.png'),
+                  child: Image.asset(
+                      'assets/theme/${selectedThemeName}/chicken_on.png'),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(),
                 child: InkWell(
                   onTap: () {
-                    Constant.updateColors(
-                        Constant.yellow, Constant.subYellow, "yellow");
+                    selectedThemeName = "yellow";
+                    selectedMainColor = Constant.yellow;
+                    selectedSubColor = Constant.subYellow;
+                    setState(() {});
                   },
                   child: SizedBox(
                     height: 100,
@@ -81,7 +87,10 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 padding: const EdgeInsets.all(3.0),
                 child: InkWell(
                   onTap: () {
-                    Constant.updateColors(Constant.red, Constant.subRed, "red");
+                    selectedThemeName = "red";
+                    selectedMainColor = Constant.red;
+                    selectedSubColor = Constant.subRed;
+                    setState(() {});
                   },
                   child: SizedBox(
                     height: 100,
@@ -94,8 +103,10 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 padding: const EdgeInsets.all(3.0),
                 child: InkWell(
                   onTap: () {
-                    Constant.updateColors(
-                        Constant.blue, Constant.subBlue, "blue");
+                    selectedThemeName = "blue";
+                    selectedMainColor = Constant.blue;
+                    selectedSubColor = Constant.subBlue;
+                    setState(() {});
                   },
                   child: SizedBox(
                     height: 100,
@@ -114,9 +125,10 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 fontsize: 20,
                 shape: 15,
                 nextPage: NavBar(),
-                // onPressed: () {
-                // TODO:保存処理
-                // },
+                onPressed: () {
+                  Constant.updateColors(
+                      selectedMainColor, selectedSubColor, selectedThemeName);
+                },
               ),
             ],
           ),

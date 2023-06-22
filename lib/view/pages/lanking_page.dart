@@ -20,15 +20,13 @@ class _LankingPageState extends State<LankingPage> {
   //Lankingを何個表示するか
   int _lankingCount = 0;
 
-  bool _showBubble = false;
-
   // 選択中のキャラクター
   String? _character;
 
   //chatGPTへの入力を保持する配列
   List<String> _message = [
-    "「更新おめでとう！\n今日も一日頑張ろう！」だけ言ってくださいそれ以外は言わないでください",
-    "「惜しい！\nあと秒で更新だったね！」だけ言ってくださいそれ以外は言わないでください",
+    "「更新おめでとう！\n今日も一日頑張ろう!」だけ言ってくださいそれ以外は言わないでください",
+    "「惜しい！\nあと秒で更新だったね!」だけ言ってくださいそれ以外は言わないでください",
     "「」"
   ];
   //０から３までのランダムな数字を保持する変数
@@ -37,7 +35,7 @@ class _LankingPageState extends State<LankingPage> {
   // ChatGPTからの応答を保持する変数
   String? _response;
   // ChatGPTの応答を表示するかどうかのフラグ
-  bool _showResponse = false;
+  bool _showResponse = true;
 
   @override
   void initState() {
@@ -49,20 +47,17 @@ class _LankingPageState extends State<LankingPage> {
     });
   }
 
-  void _toggleBubble() {
-    setState(() {
-      _showBubble = !_showBubble;
-    });
-  }
 
   // ChatGPTからの応答を取得する関数
   Future<void> _getChatGPTResponse() async {
     final chatGPT = ChatGPT();
     final response = await chatGPT.message(_message[0]);
-    setState(() {
-      _response = response.content;
-      _showResponse = !_showResponse;
-    });
+    if (mounted) {
+      setState(() {
+        // ChatGPTからの応答を保持する変数に代入
+        _response = response;
+      });
+    }
   }
 
   //_timeを取得する関数
@@ -94,6 +89,7 @@ class _LankingPageState extends State<LankingPage> {
           child: Image.asset(
             "assets/pages/yellow/dots/ranking_page.png",
             fit: BoxFit.cover,
+            ), 
           ),
         ),
         Column(
@@ -115,99 +111,57 @@ class _LankingPageState extends State<LankingPage> {
                       itemBuilder: (context, index) =>
                           _buildCard(index + 1, _times[index]),
                     ),
-                  ),
-                )),
-          ],
-        ),
-        // 吹き出し
-        // Visibility(
-        //   visible: _showBubble,
-        //   child: Align(
-        //     alignment: const Alignment(-0.5, 0.85),
-        //     child: SizedBox(
-        //       width: 250,
-        //       height: 190,
-        //       child: Image.asset(
-        //         "assets/speech_bubble.png",
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        // 吹き出しの中身(ChatGPTの応答)
-        Visibility(
-          visible: _showResponse,
-          child: Align(
-            alignment: const Alignment(-0.4, 0.65),
-            // alignment: const Alignment(-0.25, 1.14),
-            child: Container(
-              margin: const EdgeInsets.only(left: 15.0),
-              padding: const EdgeInsets.symmetric(
-                vertical: 7.0,
-                horizontal: 10.0,
-              ),
-              child: Align(
-                alignment: const Alignment(-0.4, 0.65),
-                child: Container(
-                  margin: const EdgeInsets.only(left: 15.0),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 7.0,
-                    horizontal: 10.0,
-                  ),
-                  decoration: ShapeDecoration(
-                    shape: BubbleBorder(
-                      width: 30,
-                      radius: 29,
-                    ),
-                  ),
-                  child: AnimatedTextKit(
-                    animatedTexts: [
-                      TyperAnimatedText(
-                        _response ?? "",
-                        textStyle: GoogleFonts.zenMaruGothic(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: const Color(0xFF707070),
-                        ),
-                        speed: const Duration(milliseconds: 100),
-                      ),
-                    ],
-                    totalRepeatCount: 1,
-                  ),
+                  )),
+            ],
+          ),
+             // 吹き出し
+            Align(
+              alignment: const Alignment(-0.25, 0.7),
+              child: SizedBox(
+                width: 250,
+                height: 190,
+                child: Image.asset(
+                  "assets/speech_bubble.png",
                 ),
               ),
             ),
-            // child: SizedBox(
-            //   width: 200,
-            //   height: 190,
-            //   child: AnimatedTextKit(
-            //     animatedTexts: [
-            //       TyperAnimatedText(_response ?? "",
-            //           textStyle: GoogleFonts.zenMaruGothic(
-            //             fontWeight: FontWeight.bold,
-            //             fontSize: 15,
-            //             color: Color(0xFF707070),
-            //           ),
-            //           speed: const Duration(milliseconds: 100)
-            //           ),
-            //     ],
-            //     totalRepeatCount:1,
-            //   ),
-            // ),
+          // 吹き出しの中身(ChatGPTの応答)
+          Visibility(
+            visible: _showResponse,
+            child:Align(
+              alignment: const Alignment(-0.09, 0.89),
+              child: SizedBox(
+                width: 200,
+                height: 190,
+                child: AnimatedTextKit(
+                  animatedTexts: [
+                    TyperAnimatedText(_response ?? "",
+                      textStyle: GoogleFonts.zenMaruGothic(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Color(0xFF707070),
+                      ),
+                      speed: const Duration(milliseconds: 100)
+                    ),
+                  ],
+                  totalRepeatCount:1,
+                ),
+              ),
+            ),
           ),
-        ),
-        GestureDetector(
-          onTap: () async {
-            await _getChatGPTResponse();
-            _toggleBubble();
-          },
-          child: _character != null
-              ? Align(
-                  alignment: const Alignment(0.8, 0.95),
-                  child: SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: Image.asset(
-                      "assets/$_character.png",
+          GestureDetector(
+            onTap: () async {
+              await _getChatGPTResponse();
+            },
+            child: _character != null
+                ? Align(
+                    alignment: const Alignment(0.8, 0.95),
+                    child: SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: Image.asset(
+                        "assets/$_character.png",
+                      ),
                     ),
                   ),
                 )

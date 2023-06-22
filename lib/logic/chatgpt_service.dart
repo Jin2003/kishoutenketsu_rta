@@ -47,7 +47,7 @@ try {
     } catch (e) {
       // エラーメッセージを表示するなどの適切な処理を行う
       print("An error occurred: $e");
-      return "An error occurred: $e";
+      return "やっほー";
     }
   }
 }

@@ -57,36 +57,21 @@ void initState() {
     });
   //ウィジェットが描画された後に実行する
   WidgetsBinding.instance!.addPostFrameCallback((_) {
-    _firstBubbleMessage();
+    _getChatGPTResponse();
   });
 }
-
-// 初回のバブルメッセージを表示する関数
-Future<void> _firstBubbleMessage() async {
-  await _getChatGPTResponse();
-  _toggleBubble();
-}
-
-  // バブルの表示を切り替える関数
-
-
-  void _toggleBubble() {
-    setState(() {
-      _showBubble = !_showBubble;
-    });
-  }
-
   // ChatGPTからの応答を取得する関数
   Future<void> _getChatGPTResponse() async {
     final chatGPT = ChatGPT();
     final response =
-        await chatGPT.message(_message[3]);
-
-    setState(() {
-      // ChatGPTからの応答を保持する変数に代入
-      _response = response.content;
-      _showResponse = !_showResponse;
-    });
+        await chatGPT.message(_message[Random().nextInt(_message.length)]);
+    if (mounted) {
+      setState(() {
+        // ChatGPTからの応答を保持する変数に代入
+        _response = response;
+        _showResponse = true;
+      });
+    }
   }
 
   Future<void> initializeCharacter() async {
@@ -183,86 +168,46 @@ Future<void> _firstBubbleMessage() async {
               const SizedBox(height: 150),
             ],
           ),
-          // 吹き出し
-          // Visibility(
-          //   visible: _showBubble,
-          //   child: Align(
-          //     alignment: const Alignment(-0.5, 0.85),
-          //     child: SizedBox(
-          //       width: 250,
-          //       height: 190,
-          //       child: Image.asset(
-          //         "assets/speech_bubble.png",
-          //       ),
-          //     ),
-          //   ),
-          // ),
+            // 吹き出し
+            Align(
+              alignment: const Alignment(-0.25, 0.7),
+              child: SizedBox(
+                width: 250,
+                height: 190,
+                child: Image.asset(
+                  "assets/speech_bubble.png",
+                ),
+              ),
+            ),
           // 吹き出しの中身(ChatGPTの応答)
           Visibility(
             visible: _showResponse,
-            child: Align(
-              alignment: const Alignment(-0.4, 0.65),
-              // alignment: const Alignment(-0.25, 1.14),
-              child: Container(
-                margin: const EdgeInsets.only(left: 15.0),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 7.0,
-                  horizontal: 10.0,
-                ),
-                child: Align(
-                  alignment: const Alignment(-0.1, 0.65),
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 15.0),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 7.0,
-                      horizontal: 10.0,
-                    ),
-                    decoration: ShapeDecoration(
-                      shape: BubbleBorder(
-                        width: 30,
-                        radius: 25,
+            child:Align(
+              alignment: const Alignment(-0.09, 0.89),
+              child: SizedBox(
+                width: 200,
+                height: 190,
+                child: AnimatedTextKit(
+                  animatedTexts: [
+                    TyperAnimatedText(_response ?? "",
+                      textStyle: GoogleFonts.zenMaruGothic(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Color(0xFF707070),
                       ),
+                      speed: const Duration(milliseconds: 100)
                     ),
-                    child: AnimatedTextKit(
-                      animatedTexts: [
-                        TyperAnimatedText(
-                          _response ?? "",
-                          textStyle: GoogleFonts.zenMaruGothic(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: const Color(0xFF707070),
-                          ),
-                          speed: const Duration(milliseconds: 100),
-                        ),
-                      ],
-                      totalRepeatCount: 1,
-                    ),
-                  ),
+                  ],
+                  totalRepeatCount:1,
                 ),
               ),
-              // child: SizedBox(
-              //   width: 200,
-              //   height: 190,
-              //   child: AnimatedTextKit(
-              //     animatedTexts: [
-              //       TyperAnimatedText(_response ?? "",
-              //           textStyle: GoogleFonts.zenMaruGothic(
-              //             fontWeight: FontWeight.bold,
-              //             fontSize: 15,
-              //             color: Color(0xFF707070),
-              //           ),
-              //           speed: const Duration(milliseconds: 100)
-              //           ),
-              //     ],
-              //     totalRepeatCount:1,
-              //   ),
-              // ),
             ),
           ),
           GestureDetector(
             onTap: () async {
-              await _getChatGPTResponse();
-              _toggleBubble();
+              if (_character != null) {
+                await _getChatGPTResponse();
+              }
             },
             child: _character != null
                 ? Align(
@@ -282,7 +227,6 @@ Future<void> _firstBubbleMessage() async {
     );
   }
 }
-
 // アラーム音を選択するダイアログ
 class _alarmSelectorDialog extends StatelessWidget {
   const _alarmSelectorDialog({
@@ -321,80 +265,4 @@ class _alarmSelectorDialog extends StatelessWidget {
           .toList(),
     );
   }
-}
-
-//吹き出しの形を作るクラス
-class BubbleBorder extends ShapeBorder {
-  BubbleBorder({
-    required this.width,
-    required this.radius,
-  });
-
-  final double width;
-  final double radius;
-
-  @override
-  EdgeInsetsGeometry get dimensions {
-    return EdgeInsets.all(width);
-  }
-
-  @override
-  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
-    return getOuterPath(
-      rect.deflate(width / 2.0),
-      textDirection: textDirection,
-    );
-  }
-
-  @override
-  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    final r = radius;
-    final rs = radius / 2;
-    final w = rect.size.width; // 全体の横幅
-    final h = rect.size.height; // 全体の縦幅
-    final wl = w / 3;
-    return Path()
-      ..addPath(
-        Path()
-          ..moveTo(r, 0)
-          ..lineTo(w - r - 2 , 0) // →
-          ..lineTo(w - r - 3 , 0) // →
-          ..arcToPoint(Offset(w - 5 , r), radius: Radius.circular(r + 6))
-          ..arcToPoint(Offset(w - r - 5, h + 1), radius: Radius.circular(r + 10),clockwise: true)
-          ..relativeLineTo(10 , 15)
-          ..arcToPoint(Offset(w - r * 1.5, h + 3), radius: Radius.circular(r * 6),clockwise: true)
-          ..lineTo(r, h + 1) // ←
-          ..arcToPoint(Offset(0, h - r), radius: Radius.circular(r + 15))
-          ..arcToPoint(Offset(r, 0), radius: Radius.circular(r+6.5)),
-
-        Offset(rect.left, rect.top),
-      )
-      ..close();
-  }
-
-  @override
-  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
-    final path = getOuterPath(
-      rect.deflate(width / 2.0),
-      textDirection: textDirection,
-    );
-
-    // Add a shadow to the speech bubble
-    final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.2)
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1.5);
-    canvas.drawPath(path.shift(Offset(4.0, 4.0)), shadowPaint);
-
-    // Draw the speech bubble shape
-
-    final paint = Paint()
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 4
-      ..color = Color.fromARGB(255, 255, 255, 255);
-    canvas.drawPath(path, paint);
-
-  }
-
-  @override
-  ShapeBorder scale(double t) => this;
 }

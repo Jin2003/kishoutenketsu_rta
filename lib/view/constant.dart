@@ -24,11 +24,14 @@ class Constant {
 
   static Color main = yellow;
   static Color sub = subYellow;
+  static String themeName = "yellow";
 
-  static void updateColors(Color newMain, Color newSub, String themeName) {
+  static void updateColors(
+      Color newMain, Color newSub, String argumentThemeName) {
     main = newMain;
     sub = newSub;
-    sharedPreferencesLogic.setSelectedColor(themeName);
+    themeName = argumentThemeName;
+    sharedPreferencesLogic.setSelectedColor(argumentThemeName);
   }
 
   static SharedPreferencesLogic sharedPreferencesLogic =

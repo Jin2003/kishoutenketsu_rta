@@ -156,6 +156,7 @@ class _LogInState extends State<LogIn> {
                               .setSelectedColor("yellow");
                           await sharedPreferencesLogic.setExistsNFC(false);
                           await sharedPreferencesLogic.setSettedAlarm(false);
+                          await sharedPreferencesLogic.setAlarmTime(0);
                           if (groupID != null) {
                             // sharedPreferencesにgroupIDを保存
                             await sharedPreferencesLogic.setGroupID(groupID);

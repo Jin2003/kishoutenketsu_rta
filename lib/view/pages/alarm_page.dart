@@ -74,10 +74,12 @@ class _AlarmPageState extends State<AlarmPage> {
 
   // init時に渡されたalarmTimeをalarmHourとalarmMinuteに分割
   Future<void> splitAlarmTime() async {
-    setState(() {
-      _alarmHour = widget.argumentAlarmTime! ~/ 60;
-      _alarmMinute = widget.argumentAlarmTime! % 60;
-    });
+    if (widget.argumentAlarmTime != null) {
+      setState(() {
+        _alarmHour = widget.argumentAlarmTime! ~/ 60;
+        _alarmMinute = widget.argumentAlarmTime! % 60;
+      });
+    }
   }
 
   @override
@@ -130,16 +132,11 @@ class _AlarmPageState extends State<AlarmPage> {
                     }, onConfirm: (date) {
                       // print(date);
                       // print("コンフィルム起こったよ");
-                      // TODO:アラームを鳴らす時刻を設定
                       setState(() {
                         _alarmTime = date.hour * 60 + date.minute;
                         _alarmHour = date.hour;
                         _alarmMinute = date.minute;
                       });
-                      // sharedPreferencesにアラームを鳴らす時刻を保存
-                      SharedPreferencesLogic sharedPreferencesLogic =
-                          SharedPreferencesLogic();
-                      sharedPreferencesLogic.setAlarmTime(_alarmTime!);
                     },
                         // DatetimePickerの初期値を設定
                         currentTime: DateTime.now(),
@@ -167,12 +164,13 @@ class _AlarmPageState extends State<AlarmPage> {
                           ],
                         ),
                         Align(
-                          alignment: Alignment(0.9, 0),
-                          child: CustomText(
-                              text: '$_alarmHour:$_alarmMinute',
+                            alignment: Alignment(0.9, 0),
+                            child: CustomText(
+                              text:
+                                  '${_alarmHour.toString().padLeft(2, '0')}:${_alarmMinute.toString().padLeft(2, '0')}',
                               fontSize: 25,
-                              Color: Constant.gray),
-                        ),
+                              Color: Constant.gray,
+                            )),
                       ],
                     ),
                   ),
@@ -256,7 +254,10 @@ class _AlarmPageState extends State<AlarmPage> {
                   fontSize: 20,
                   shape: 16,
                   onPressed: () async {
-                    // TODO: 変更内容保存
+                    // sharedPreferencesにアラームを鳴らす時刻を保存
+                    SharedPreferencesLogic sharedPreferencesLogic =
+                        SharedPreferencesLogic();
+                    sharedPreferencesLogic.setAlarmTime(_alarmTime!);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: ((context) => const NavBar())),

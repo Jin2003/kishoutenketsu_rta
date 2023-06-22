@@ -57,13 +57,18 @@ class _MainPageState extends State<MainPage> {
       // キャラクターの初期化が完了したら、UIを更新する
       setState(() {});
     });
-    
-  //ウィジェットが描画された後に実行する
-  WidgetsBinding.instance!.addPostFrameCallback((_) {
-    _getChatGPTResponse();
-  });
-}
-  
+
+    initializeTime().then((_) {
+      // アラーム時刻の初期化が完了したら、UIを更新する
+      setState(() {});
+    });
+
+    //ウィジェットが描画された後に実行する
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _getChatGPTResponse();
+    });
+  }
+
   // ChatGPTからの応答を取得する関数
   Future<void> _getChatGPTResponse() async {
     final chatGPT = ChatGPT();
@@ -200,9 +205,11 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
             ),
+          ),
           // 吹き出しの中身(ChatGPTの応答)
           Visibility(
             visible: _showResponse,
+
             child:Align(
               alignment: const Alignment(-0.3, 1.05), 
               child: SizedBox(
@@ -211,15 +218,14 @@ class _MainPageState extends State<MainPage> {
                 child: AnimatedTextKit(
                   animatedTexts: [
                     TyperAnimatedText(_response ?? "",
-                      textStyle: GoogleFonts.zenMaruGothic(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Color(0xFF707070),
-                      ),
-                      speed: const Duration(milliseconds: 100)
-                    ),
+                        textStyle: GoogleFonts.zenMaruGothic(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color(0xFF707070),
+                        ),
+                        speed: const Duration(milliseconds: 100)),
                   ],
-                  totalRepeatCount:1,
+                  totalRepeatCount: 1,
                 ),
               ),
             ),
@@ -248,6 +254,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+
 // アラーム音を選択するダイアログ
 class _alarmSelectorDialog extends StatelessWidget {
   const _alarmSelectorDialog({

@@ -94,7 +94,6 @@ class _LankingPageState extends State<LankingPage> {
           child: Image.asset(
             "assets/pages/yellow/dots/ranking_page.png",
             fit: BoxFit.cover,
-
           ),
           Column(
             children: [
@@ -213,8 +212,8 @@ class _LankingPageState extends State<LankingPage> {
                   )
                 : Container(),
           ),
-        ],
-      ),
+        )
+      ]),
     );
   }
 }
@@ -240,7 +239,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             height: 35,
             decoration: BoxDecoration(
               border: Border.all(color: Constant.main //accentYellow
-              ),
+                  ),
               color: Constant.white,
               shape: BoxShape.circle,
             ),
@@ -248,9 +247,9 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
               child: Text(
                 '$index',
                 style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Constant.main  //accentYellow
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Constant.main //accentYellow
                     ),
               ),
             ),
@@ -269,9 +268,9 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
                     ':' +
                     '${time['time_record'] % 60}'.padLeft(2, '0'),
                 style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Constant.main  //accentYellow
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Constant.main //accentYellow
                     ),
               ),
             ],
@@ -293,8 +292,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
             child: Text(
               "${time['time_datetime']}",
               style: const TextStyle(
-                  color: Constant.main
-                  , fontWeight: FontWeight.bold),
+                  color: Constant.main, fontWeight: FontWeight.bold),
             ),
           )
         ],

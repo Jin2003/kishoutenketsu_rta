@@ -70,19 +70,21 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  Future<void> _firstMessage() async{
-  final chatGPT = ChatGPT();  
-  
-  // 天気情報を含めたメッセージを作成
-  String messageWithWeather = await getWeather().then((value) => value!.toString());
-  final response = await chatGPT.message("$messageWithWeatherの情報から「今日の...の天気は...だよ！」だけ一文で言ってくださいそれ以外は言わないでください");
-  if (mounted) {
-    setState(() {
-      // ChatGPTからの応答を保持する変数に代入
-      _response = response;
-      _showResponse = !_showResponse;
-    });
-  }
+  Future<void> _firstMessage() async {
+    final chatGPT = ChatGPT();
+
+    // 天気情報を含めたメッセージを作成
+    String messageWithWeather =
+        await getWeather().then((value) => value!.toString());
+    final response = await chatGPT.message(
+        "$messageWithWeatherの情報から「今日の...の天気は...だよ！」だけ一文で言ってくださいそれ以外は言わないでください");
+    if (mounted) {
+      setState(() {
+        // ChatGPTからの応答を保持する変数に代入
+        _response = response;
+        _showResponse = !_showResponse;
+      });
+    }
   }
 
   // ChatGPTからの応答を取得する関数
@@ -101,13 +103,12 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-
   Future<Weather?> getWeather() async {
     String key = "dcb167452a27389332613cf37eca0217";
     double lat = 35.69; //latitude(緯度)
     double lon = 139.69; //longitude(経度)
     WeatherFactory wf = new WeatherFactory(key);
-    
+
     Weather weather = await wf.currentWeatherByLocation(lat, lon);
     return weather;
   }
@@ -134,15 +135,14 @@ class _MainPageState extends State<MainPage> {
   Future<void> initializeTime() async {
     SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
     _alarmTime = (await sharedPreferencesLogic.getAlarmTime());
-    
+
     setState(() {
-      if(_alarmTime != null){
-        _timeOfDay = TimeOfDay(hour: _alarmTime! ~/ 60, minute: _alarmTime! % 60);
+      if (_alarmTime != null) {
+        _timeOfDay =
+            TimeOfDay(hour: _alarmTime! ~/ 60, minute: _alarmTime! % 60);
       }
     });
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -249,11 +249,12 @@ class _MainPageState extends State<MainPage> {
                 "assets/speech_bubble.png",
               ),
             ),
+          ),
           // 吹き出しの中身(ChatGPTの応答)
           Visibility(
             visible: _showResponse,
-            child:Align(
-              alignment: const Alignment(-0.3, 1.05), 
+            child: Align(
+              alignment: const Alignment(-0.3, 1.05),
               child: SizedBox(
                 width: 200,
                 height: 190,

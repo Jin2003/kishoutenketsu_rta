@@ -76,13 +76,21 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
         // shared_preferencesにgroupIDを保存
         SharedPreferencesLogic sharedPreferencesLogic =
             SharedPreferencesLogic();
-        sharedPreferencesLogic.setGroupID(documentID);
+        Constant.updateGroupID(documentID);
         // groupIDをusersコレクションに登録
-        String? userID =
-            await sharedPreferencesLogic.getUserID(); // 非同期で実行し、結果を取得
+        String? userID = await sharedPreferencesLogic.getUserID();
+        sharedPreferencesLogic.setGroupID(documentID);
         await firebaseHelper.addUser(documentID, userID!);
         // isNfcSettingをtrueに変更
         sharedPreferencesLogic.setExistsNFC(true);
+        await sharedPreferencesLogic.setSelectedCharacter('chicken');
+        await sharedPreferencesLogic.setSelectedWallpaper("dots");
+        await sharedPreferencesLogic.setSelectedTheme("dots");
+        // TODO:circusをデフォルトにしてるけど、後で考える
+        await sharedPreferencesLogic.setSelectedMusic('circus');
+        await sharedPreferencesLogic.setSelectedColor("yellow");
+        await sharedPreferencesLogic.setSettedAlarm(false);
+        await sharedPreferencesLogic.setAlarmTime(0);
       }
     });
   }

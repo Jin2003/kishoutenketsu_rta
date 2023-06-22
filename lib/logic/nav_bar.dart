@@ -1,8 +1,10 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
+import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/setting/chara_set_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/gatcha_page.dart';
@@ -113,10 +115,24 @@ class _NavBarState extends State<NavBar> {
               ),
             ),
             // ログアウトボタン
-
+            TextButton(
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: ((context) => const RtaPage())),
+                );
+              },
+              child: const CustomText(
+                text: 'RTAテスト',
+                Color: Constant.red,
+                fontSize: 20,
+              ),
+            ),
             TextButton(
               onPressed: () async {
                 // firebaseからログアウト
+                // print(Constant.groupID);
+                // FirebaseHelper().getNfcIdMap();
                 await FirebaseAuth.instance.signOut();
                 SharedPreferencesLogic sharedPreferencesLogic =
                     SharedPreferencesLogic();
@@ -130,7 +146,7 @@ class _NavBarState extends State<NavBar> {
               },
               child: const CustomText(
                 text: 'ログアウト',
-                Color: Constant.red, 
+                Color: Constant.red,
                 fontSize: 20,
               ),
             ),

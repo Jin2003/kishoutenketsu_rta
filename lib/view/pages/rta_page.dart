@@ -4,7 +4,6 @@ import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
-import 'package:kishoutenketsu_rta/logic/database_helper.dart';
 
 import '../../logic/nav_bar.dart';
 
@@ -55,7 +54,6 @@ class _RtaPageState extends State<RtaPage> {
   // 画像番号
   int imageCount = 0;
   // ランダムにしてMap側のキーにする
-  // TODO:RTAを最後にするの忘れてた
   List nfcKey = ["起", "床", "点", "結"];
 
   String rta = "RTA";
@@ -177,19 +175,10 @@ class _RtaPageState extends State<RtaPage> {
     // _getNfcTable()呼び出し
     _getNfcID();
     nfcKey.shuffle();
-    print("シャッフルしました");
   }
 
   void nfcReadFunc({int nfcIndex = 0}) async {
     dynamic nfcs = Constant.nfcs;
-
-    // print(nfcKey);
-    // print(imageCount);
-    // print(nfcs);
-    // print(nfcIndex);
-    // NFC読み取り
-    // print(nfcKey[nfcIndex]);
-    // print(nfcs[nfcKey[nfcIndex]]);
     bool success = await NFCRead()
         .nfcRead(imageCount, nfcs[nfcIndex == 4 ? rta : nfcKey[nfcIndex]]);
     debugPrint('$success');

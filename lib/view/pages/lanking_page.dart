@@ -21,7 +21,7 @@ class _LankingPageState extends State<LankingPage> {
   int _lankingCount = 0;
 
   // 選択中のキャラクター
-  String? _character;
+  String _character = Constant.characterName;
 
   //chatGPTへの入力を保持する配列
   List<String> _message = [
@@ -38,12 +38,6 @@ class _LankingPageState extends State<LankingPage> {
   void initState() {
     super.initState();
     _loadLank();
-    initializeCharacter().then(
-      (_) {
-        // キャラクターの初期化が完了したら、UIを更新する
-        setState(() {});
-      },
-    );
   }
 
   // ChatGPTからの応答を取得する関数
@@ -74,11 +68,6 @@ class _LankingPageState extends State<LankingPage> {
       _times = times;
       _lankingCount = lankingCount;
     });
-  }
-
-  Future<void> initializeCharacter() async {
-    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
-    _character = (await sharedPreferencesLogic.getSelectedCharacter());
   }
 
   @override

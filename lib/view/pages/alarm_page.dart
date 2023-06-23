@@ -25,7 +25,7 @@ class _AlarmPageState extends State<AlarmPage> {
   String? _musicName;
 
   // アラームを鳴らす時刻
-  int? _alarmTime;
+  int _alarmTime = Constant.alarmTime;
 
   // 設定した時刻のhourのみを取得
   int? _alarmHour;

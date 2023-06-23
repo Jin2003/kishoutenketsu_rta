@@ -37,6 +37,7 @@ class Constant {
   static SharedPreferencesLogic sharedPreferencesLogic =
       SharedPreferencesLogic();
 
+  // グループID
   static String groupID = "groupID";
 
   static void updateGroupID(String newGroupID) {
@@ -44,15 +45,33 @@ class Constant {
     sharedPreferencesLogic.setGroupID(newGroupID);
   }
 
+  // NFCのID
   static Map<String, String> nfcs = {};
   static void updateNfcs(Map<String, String> newNfcs) {
     nfcs = newNfcs;
   }
 
+  // アラームON/OFF
   static bool alarmONOFF = false;
 
   static void updateAlarmONOFF(bool newAlarmONOFF) {
     alarmONOFF = newAlarmONOFF;
     sharedPreferencesLogic.setSettedAlarm(newAlarmONOFF);
+  }
+
+  // キャラクタ-名
+  static String characterName = "chicken";
+
+  static void updateCharacterName(String newCharacterName) {
+    characterName = newCharacterName;
+    sharedPreferencesLogic.setSelectedCharacter(newCharacterName);
+  }
+
+  // 設定したアラーム時刻
+  static int alarmTime = 0;
+
+  static void updateAlarmTime(int newAlarmTime) {
+    alarmTime = newAlarmTime;
+    sharedPreferencesLogic.setAlarmTime(newAlarmTime);
   }
 }

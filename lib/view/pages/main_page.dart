@@ -29,7 +29,7 @@ class _MainPageState extends State<MainPage> {
   String? _wallpaper;
 
   // アラームオンオフの切り替え
-  bool _value = true;
+  bool _value = Constant.alarmONOFF;
 
   // バブルの表示を切り替えるフラグ
   bool _showBubble = false;
@@ -52,8 +52,6 @@ class _MainPageState extends State<MainPage> {
   String? _response;
   // ChatGPTの応答を表示するかどうかのフラグ
   bool _showResponse = false;
-
-  String test = "dots";
 
   @override
   void initState() {
@@ -202,7 +200,12 @@ class _MainPageState extends State<MainPage> {
                         activeColor: const Color(0xFFFFA08A),
                         trackColor: Colors.grey,
                         value: _value,
-                        onChanged: (value) => setState(() => _value = value),
+                        onChanged: (value) {
+                          Constant.updateAlarmONOFF(value);
+                          setState(() {
+                            _value = value;
+                          });
+                        },
                       ),
                     ],
                   ),

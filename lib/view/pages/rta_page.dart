@@ -186,6 +186,7 @@ class _RtaPageState extends State<RtaPage> {
     // データベースに登録しているIDと読み取ったIDが異なるので再度読み取り
     if (success == false) {
       nfcReadFunc(nfcIndex: nfcIndex);
+      falseDialog();
       return;
     } else {
       setState(() {
@@ -250,6 +251,52 @@ class _RtaPageState extends State<RtaPage> {
                               MaterialPageRoute(
                                   builder: ((context) => const NavBar())),
                             );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          });
+    });
+  }
+
+  //タグが違う時のダイアログ
+  void falseDialog(){
+    Future.delayed(const Duration(milliseconds: 500), () {
+    showDialog(
+          context: context,
+          builder: (context) {
+            return Scaffold(
+              backgroundColor: Constant.sub,
+              body: Stack(
+                children: [
+                  SimpleDialog(
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      const Align(
+                        alignment: Alignment.center,
+                        child: CustomText(
+                            text:
+                                "そのタグじゃないよ！\n他のタグをタッチしてみよう！",
+                            fontSize: 25,
+                            Color: Constant.gray),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20, left: 50, right: 50, bottom: 40),
+                        child: OutlineButton(
+                          title: 'とじる',
+                          width: 50,
+                          height: 50,
+                          shape: 10,
+                          fontsize: 17,
+                          onPressed: () {
+                            Navigator.pop(context);
                           },
                         ),
                       ),

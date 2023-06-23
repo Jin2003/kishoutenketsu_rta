@@ -55,7 +55,13 @@ class _RtaPageState extends State<RtaPage> {
   // 画像番号
   int imageCount = 0;
   // ランダムにしてMap側のキーにする
-  List nfcKey = ["起", "床", "点", "結", "RTA"];
+  // TODO:RTAを最後にするの忘れてた
+  List nfcKey = ["起", "床", "点", "結"];
+
+  String rta = "RTA";
+
+  // この画面が表示された時の時間を取得
+  DateTime startTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +76,7 @@ class _RtaPageState extends State<RtaPage> {
               height: 230,
               child: imageCount < 5
                   ? Image.asset(
-                      "assets/rta/${Constant.themeName}/${nfcKey[imageCount]}.png",
+                      "assets/rta/${Constant.themeName}/${imageCount == 4 ? 'RTA' : nfcKey[imageCount]}.png",
                     )
                   : Container(),
             ),
@@ -182,9 +188,10 @@ class _RtaPageState extends State<RtaPage> {
     // print(nfcs);
     // print(nfcIndex);
     // NFC読み取り
-    print(nfcKey[nfcIndex]);
-    print(nfcs[nfcKey[nfcIndex]]);
-    bool success = await NFCRead().nfcRead(imageCount, nfcs[nfcKey[nfcIndex]]);
+    // print(nfcKey[nfcIndex]);
+    // print(nfcs[nfcKey[nfcIndex]]);
+    bool success = await NFCRead()
+        .nfcRead(imageCount, nfcs[nfcIndex == 4 ? rta : nfcKey[nfcIndex]]);
     debugPrint('$success');
     // データベースに登録しているIDと読み取ったIDが異なるので再度読み取り
     if (success == false) {
@@ -212,6 +219,8 @@ class _RtaPageState extends State<RtaPage> {
   }
 
   void endDialog() {
+    // RTA終了時の時間を取得
+    DateTime finish = DateTime.now();
     Future.delayed(const Duration(milliseconds: 500), () {
       showDialog(
           context: context,
@@ -225,10 +234,11 @@ class _RtaPageState extends State<RtaPage> {
                       const SizedBox(
                         height: 40,
                       ),
-                      const Align(
+                      Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                            text: '設定が完了しました！',
+                            text:
+                                '今日のタイムは\n${finish.difference(startTime).inSeconds}秒!!!',
                             fontSize: 25,
                             Color: Constant.gray),
                       ),

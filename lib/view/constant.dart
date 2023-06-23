@@ -48,4 +48,11 @@ class Constant {
   static void updateNfcs(Map<String, String> newNfcs) {
     nfcs = newNfcs;
   }
+
+  static bool alarmONOFF = false;
+
+  static void updateAlarmONOFF(bool newAlarmONOFF) {
+    alarmONOFF = newAlarmONOFF;
+    sharedPreferencesLogic.setSettedAlarm(newAlarmONOFF);
+  }
 }

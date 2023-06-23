@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 
 import '../../../logic/nav_bar.dart';
 import '../../constant.dart';
@@ -14,31 +13,8 @@ class WallpaperSetPage extends StatefulWidget {
 }
 
 class _WallpaperSetPageState extends State<WallpaperSetPage> {
-  // 現在保存中の壁紙
-  String? _nowWallpaper;
   // 選択して変更後に保存する壁紙
-  String? _selectedWallpaper;
-
-  @override
-  void initState() {
-    super.initState();
-    // 現在登録している壁紙を取得
-    initializeWallpaper().then((_) {
-      setState(() {
-        _selectedWallpaper = _nowWallpaper;
-      });
-    });
-  }
-
-  Future<void> initializeWallpaper() async {
-    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
-    _nowWallpaper = (await sharedPreferencesLogic.getSelectedWallpaper());
-  }
-
-  Future<void> changeWallpaper() async {
-    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
-    await sharedPreferencesLogic.setSelectedWallpaper(_selectedWallpaper!);
-  }
+  String _selectedWallpaper = Constant.wallpaper;
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +114,8 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                 shape: 15,
                 nextPage: NavBar(),
                 onPressed: () {
-                  changeWallpaper();
+                  // changeWallpaper();
+                  Constant.updateWallpaper(_selectedWallpaper);
                 },
               ),
             ],

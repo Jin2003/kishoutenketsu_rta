@@ -24,10 +24,7 @@ class _MainPageState extends State<MainPage> {
   // TODO:音楽を選択できるようにする
   String? _music;
   // 選択中のキャラクター
-  String? _character = Constant.characterName;
-
-  // 選択中の壁紙
-  String? _wallpaper;
+  final String _character = Constant.characterName;
 
   // アラームオンオフの切り替え
   bool _value = Constant.alarmONOFF;
@@ -52,9 +49,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
     super.initState();
-    initializeWallpaper().then((_) {
-      setState(() {});
-    });
+    
     initializeTime().then((_) {
       setState(() {});
     });
@@ -97,7 +92,6 @@ class _MainPageState extends State<MainPage> {
       });
     }
   }
-
 
   Future<Weather?> getWeather() async {
     String key = "dcb167452a27389332613cf37eca0217";
@@ -142,14 +136,11 @@ class _MainPageState extends State<MainPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          _wallpaper != null
-              ?
-              // 背景画像
-              Image.asset(
-                  "assets/pages/${Constant.themeName}/$_wallpaper/main_page.png",
-                  fit: BoxFit.cover,
-                )
-              : Container(),
+          // 背景画像
+          Image.asset(
+            "assets/pages/${Constant.themeName}/${Constant.wallpaper}/main_page.png",
+            fit: BoxFit.cover,
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -270,24 +261,19 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           GestureDetector(
-            onTap: () async {
-              if (_character != null) {
+              onTap: () async {
                 await _getChatGPTResponse();
-              }
-            },
-            child: _character != null
-                ? Align(
-                    alignment: const Alignment(0.8, 0.95),
-                    child: SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: Image.asset(
-                        "assets/$_character.png",
-                      ),
-                    ),
-                  )
-                : Container(),
-          ),
+              },
+              child: Align(
+                alignment: const Alignment(0.8, 0.95),
+                child: SizedBox(
+                  width: 120,
+                  height: 120,
+                  child: Image.asset(
+                    "assets/$_character.png",
+                  ),
+                ),
+              )),
         ],
       ),
     );

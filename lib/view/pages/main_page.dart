@@ -85,7 +85,7 @@ class _MainPageState extends State<MainPage> {
   // ChatGPTからの応答を取得する関数
   Future<void> _getChatGPTResponse() async {
     final chatGPT = ChatGPT();
-    _response = "";
+    _response = null;
     final response =
         await chatGPT.message(_message[Random().nextInt(_message.length)]);
 
@@ -247,25 +247,25 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           // 吹き出しの中身(ChatGPTの応答)
-          Visibility(
-            visible: _showResponse,
-            child: Align(
-              alignment: const Alignment(-0.3, 1.05),
-              child: SizedBox(
-                width: 200,
-                height: 190,
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    TyperAnimatedText(_response ?? "",
-                        textStyle: GoogleFonts.zenMaruGothic(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Color(0xFF707070),
-                        ),
-                        speed: const Duration(milliseconds: 100)),
-                  ],
-                  totalRepeatCount: 1,
-                ),
+          Align(
+            alignment: const Alignment(-0.3, 1.05),
+            child: SizedBox(
+              width: 200,
+              height: 190,
+              child:AnimatedTextKit(
+                key: ValueKey<String>(_response ?? ""),  // ValueKeyを追加
+                animatedTexts: [
+                  TyperAnimatedText(
+                    _response ?? "",
+                    textStyle: GoogleFonts.zenMaruGothic(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color(0xFF707070),
+                    ),
+                    speed: const Duration(milliseconds: 100),
+                  ),
+                ],
+                totalRepeatCount: 1,
               ),
             ),
           ),

@@ -60,6 +60,7 @@ dependencies:
   dart_openai: ^3.0.0
   flutter_dotenv: ^5.1.0
   animated_text_kit: ^4.2.2
+  weather: ^2.0.1
 
 flutter_native_splash:
   # 画面全体

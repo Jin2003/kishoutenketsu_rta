@@ -266,7 +266,7 @@ class _GatchaPageState extends State<GatchaPage> {
           if (_isPressed)
             Positioned(
               child: Lottie.asset(
-                "assets/gacha/${Constant.themeName}/yellowcapsule.json",
+                "assets/gacha/${Constant.themeName}/capsule.json",
                 fit: BoxFit.cover,
                 repeat: false,
               ),

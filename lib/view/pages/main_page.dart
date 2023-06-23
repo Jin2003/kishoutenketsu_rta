@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'alarm_page.dart';
+import 'package:weather/weather.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -28,22 +29,16 @@ class _MainPageState extends State<MainPage> {
   // アラームオンオフの切り替え
   bool _value = Constant.alarmONOFF;
 
-  // バブルの表示を切り替えるフラグ
-  bool _showBubble = false;
-
   // shared_preferencesから持ってきたアラーム時刻を保持する変数
   int? _alarmTime;
 
   //chatGPTへの入力を保持する配列
   List<String> _message = [
     "「りんごって美味しいよね！」だけ言ってくださいそれ以外は言わないでください",
-    "「りんごって食べたいなぁ〜」だけ言ってくださいそれ以外は言わないでください",
+    "「りんご食べたいなぁ〜」だけ言ってくださいそれ以外は言わないでください",
     "今日のラッキーアイテムを「明日のラッキーアイテムは...だよ！」で一文で答えて",
-    "短く「ラ〜」歌を歌って"
+    "「ラ〜」で歌を短く歌って"
   ];
-
-  //０から３までのランダムな数字を保持する変数
-  int? _Random;
 
   // ChatGPTからの応答を保持する変数
   String? _response;
@@ -54,21 +49,25 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
     super.initState();
+    
     initializeTime().then((_) {
       setState(() {});
     });
 
     //ウィジェットが描画された後に実行する
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _getChatGPTResponse();
+      _firstMessage();
     });
   }
 
-  // ChatGPTからの応答を取得する関数
-  Future<void> _getChatGPTResponse() async {
+  Future<void> _firstMessage() async {
     final chatGPT = ChatGPT();
-    final response =
-        await chatGPT.message(_message[Random().nextInt(_message.length)]);
+
+    // 天気情報を含めたメッセージを作成
+    String messageWithWeather =
+        await getWeather().then((value) => value!.toString());
+    final response = await chatGPT.message(
+        "$messageWithWeatherの情報から「今日の...の天気は...だよ！」だけ一文で言ってくださいそれ以外は言わないでください");
     if (mounted) {
       setState(() {
         // ChatGPTからの応答を保持する変数に代入
@@ -76,6 +75,39 @@ class _MainPageState extends State<MainPage> {
         _showResponse = !_showResponse;
       });
     }
+  }
+
+  // ChatGPTからの応答を取得する関数
+  Future<void> _getChatGPTResponse() async {
+    final chatGPT = ChatGPT();
+    _response = "";
+    final response =
+        await chatGPT.message(_message[Random().nextInt(_message.length)]);
+
+    if (mounted) {
+      setState(() {
+        // ChatGPTからの応答を保持する変数に代入
+        _response = response;
+        _showResponse = !_showResponse;
+      });
+    }
+  }
+
+  Future<Weather?> getWeather() async {
+    String key = "dcb167452a27389332613cf37eca0217";
+    double lat = 35.69; //latitude(緯度)
+    double lon = 139.69; //longitude(経度)
+    WeatherFactory wf = new WeatherFactory(key);
+
+    Weather weather = await wf.currentWeatherByLocation(lat, lon);
+    return weather;
+  }
+
+
+  // 壁紙の初期化
+  Future<void> initializeWallpaper() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    _wallpaper = (await sharedPreferencesLogic.getSelectedWallpaper());
   }
 
   // アラーム音の初期化
@@ -88,9 +120,13 @@ class _MainPageState extends State<MainPage> {
   Future<void> initializeTime() async {
     SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
     _alarmTime = (await sharedPreferencesLogic.getAlarmTime());
-    if (_alarmTime != null) {
-      _timeOfDay = TimeOfDay(hour: _alarmTime! ~/ 60, minute: _alarmTime! % 60);
-    }
+
+    setState(() {
+      if (_alarmTime != null) {
+        _timeOfDay =
+            TimeOfDay(hour: _alarmTime! ~/ 60, minute: _alarmTime! % 60);
+      }
+    });
   }
 
   @override

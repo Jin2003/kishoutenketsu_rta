@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import '../../logic/database_helper.dart';
 import 'components/custom_text.dart';
@@ -19,9 +18,6 @@ class _LankingPageState extends State<LankingPage> {
   List<Map<String, dynamic>> _times = [];
   //Lankingを何個表示するか
   int _lankingCount = 0;
-
-  // 選択中のキャラクター
-  String _character = Constant.characterName;
 
   //chatGPTへの入力を保持する配列
   List<String> _message = [
@@ -78,7 +74,7 @@ class _LankingPageState extends State<LankingPage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              "assets/pages/${Constant.themeName}/dots/ranking_page.png",
+              "assets/pages/${Constant.themeName}/${Constant.wallpaper}/ranking_page.png",
               fit: BoxFit.cover,
             ),
           ),
@@ -141,22 +137,19 @@ class _LankingPageState extends State<LankingPage> {
             ),
           ),
           GestureDetector(
-            onTap: () async {
-              await _getChatGPTResponse();
-            },
-            child: _character != null
-                ? Align(
-                    alignment: const Alignment(0.8, 0.95),
-                    child: SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: Image.asset(
-                        "assets/$_character.png",
-                      ),
-                    ),
-                  )
-                : Container(),
-          ),
+              onTap: () async {
+                await _getChatGPTResponse();
+              },
+              child: Align(
+                alignment: const Alignment(0.8, 0.95),
+                child: SizedBox(
+                  width: 120,
+                  height: 120,
+                  child: Image.asset(
+                    "assets/${Constant.characterName}.png",
+                  ),
+                ),
+              )),
         ],
       ),
     );

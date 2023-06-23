@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
     super.initState();
-    
+
     initializeTime().then((_) {
       setState(() {});
     });
@@ -101,13 +101,6 @@ class _MainPageState extends State<MainPage> {
 
     Weather weather = await wf.currentWeatherByLocation(lat, lon);
     return weather;
-  }
-
-
-  // 壁紙の初期化
-  Future<void> initializeWallpaper() async {
-    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
-    _wallpaper = (await sharedPreferencesLogic.getSelectedWallpaper());
   }
 
   // アラーム音の初期化

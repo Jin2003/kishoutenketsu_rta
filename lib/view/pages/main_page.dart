@@ -23,7 +23,7 @@ class _MainPageState extends State<MainPage> {
   // TODO:音楽を選択できるようにする
   String? _music;
   // 選択中のキャラクター
-  String? _character;
+  String? _character = Constant.characterName;
 
   // 選択中の壁紙
   String? _wallpaper;
@@ -57,9 +57,9 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
     super.initState();
-    initializeCharacter().then((_) {
-      setState(() {});
-    });
+    // initializeCharacter().then((_) {
+    //   setState(() {});
+    // });
     initializeWallpaper().then((_) {
       setState(() {});
     });
@@ -87,11 +87,11 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  // キャラクターの初期化
-  Future<void> initializeCharacter() async {
-    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
-    _character = (await sharedPreferencesLogic.getSelectedCharacter());
-  }
+  // // キャラクターの初期化
+  // Future<void> initializeCharacter() async {
+  //   SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+  //   _character = (await sharedPreferencesLogic.getSelectedCharacter());
+  // }
 
   // 壁紙の初期化
   Future<void> initializeWallpaper() async {

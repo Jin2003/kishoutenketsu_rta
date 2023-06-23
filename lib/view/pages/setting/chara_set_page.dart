@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
-import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import '../../constant.dart';
 import '../components/custom_text.dart';
 import '../components/outline_button.dart';
@@ -13,30 +12,12 @@ class CharaSetPage extends StatefulWidget {
 }
 
 class _CharaSetPageState extends State<CharaSetPage> {
-  // 現在保存中のキャラクター
-  String? _nowCharacter;
   // 選択して変更後に保存するキャラクター
-  String? _selectedCharacter;
+  String? _selectedCharacter = Constant.characterName;
 
   @override
   void initState() {
     super.initState();
-    // 現在登録しているキャラクターを取得
-    initializeCharacter().then((_) {
-      setState(() {
-        _selectedCharacter = _nowCharacter;
-      });
-    });
-  }
-
-  Future<void> initializeCharacter() async {
-    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
-    _nowCharacter = (await sharedPreferencesLogic.getSelectedCharacter());
-  }
-
-  Future<void> changeCharacter() async {
-    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
-    await sharedPreferencesLogic.setSelectedCharacter(_selectedCharacter!);
   }
 
   @override
@@ -185,7 +166,7 @@ class _CharaSetPageState extends State<CharaSetPage> {
                 shape: 15,
                 nextPage: NavBar(),
                 onPressed: () {
-                  changeCharacter();
+                  Constant.updateCharacterName(_selectedCharacter!);
                 },
               ),
             ],

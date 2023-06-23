@@ -24,13 +24,13 @@ class _MainPageState extends State<MainPage> {
   // TODO:音楽を選択できるようにする
   String? _music;
   // 選択中のキャラクター
-  String? _character;
+  String? _character = Constant.characterName;
 
   // 選択中の壁紙
   String? _wallpaper;
 
   // アラームオンオフの切り替え
-  bool _value = true;
+  bool _value = Constant.alarmONOFF;
 
   // shared_preferencesから持ってきたアラーム時刻を保持する変数
   int? _alarmTime;
@@ -48,15 +48,10 @@ class _MainPageState extends State<MainPage> {
   // ChatGPTの応答を表示するかどうかのフラグ
   bool _showResponse = false;
 
-  String test = "dots";
-
   @override
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
     super.initState();
-    initializeCharacter().then((_) {
-      setState(() {});
-    });
     initializeWallpaper().then((_) {
       setState(() {});
     });
@@ -70,19 +65,21 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  Future<void> _firstMessage() async{
-  final chatGPT = ChatGPT();  
-  
-  // 天気情報を含めたメッセージを作成
-  String messageWithWeather = await getWeather().then((value) => value!.toString());
-  final response = await chatGPT.message("$messageWithWeatherの情報から「今日の...の天気は...だよ！」だけ一文で言ってくださいそれ以外は言わないでください");
-  if (mounted) {
-    setState(() {
-      // ChatGPTからの応答を保持する変数に代入
-      _response = response;
-      _showResponse = !_showResponse;
-    });
-  }
+  Future<void> _firstMessage() async {
+    final chatGPT = ChatGPT();
+
+    // 天気情報を含めたメッセージを作成
+    String messageWithWeather =
+        await getWeather().then((value) => value!.toString());
+    final response = await chatGPT.message(
+        "$messageWithWeatherの情報から「今日の...の天気は...だよ！」だけ一文で言ってくださいそれ以外は言わないでください");
+    if (mounted) {
+      setState(() {
+        // ChatGPTからの応答を保持する変数に代入
+        _response = response;
+        _showResponse = !_showResponse;
+      });
+    }
   }
 
   // ChatGPTからの応答を取得する関数
@@ -107,16 +104,11 @@ class _MainPageState extends State<MainPage> {
     double lat = 35.69; //latitude(緯度)
     double lon = 139.69; //longitude(経度)
     WeatherFactory wf = new WeatherFactory(key);
-    
+
     Weather weather = await wf.currentWeatherByLocation(lat, lon);
     return weather;
   }
 
-  // キャラクターの初期化
-  Future<void> initializeCharacter() async {
-    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
-    _character = (await sharedPreferencesLogic.getSelectedCharacter());
-  }
 
   // 壁紙の初期化
   Future<void> initializeWallpaper() async {
@@ -134,14 +126,15 @@ class _MainPageState extends State<MainPage> {
   Future<void> initializeTime() async {
     SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
     _alarmTime = (await sharedPreferencesLogic.getAlarmTime());
-    
+
     setState(() {
-      if(_alarmTime != null){
-        _timeOfDay = TimeOfDay(hour: _alarmTime! ~/ 60, minute: _alarmTime! % 60);
+      if (_alarmTime != null) {
+        _timeOfDay =
+            TimeOfDay(hour: _alarmTime! ~/ 60, minute: _alarmTime! % 60);
       }
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -228,7 +221,12 @@ class _MainPageState extends State<MainPage> {
                         activeColor: const Color(0xFFFFA08A),
                         trackColor: Colors.grey,
                         value: _value,
-                        onChanged: (value) => setState(() => _value = value),
+                        onChanged: (value) {
+                          Constant.updateAlarmONOFF(value);
+                          setState(() {
+                            _value = value;
+                          });
+                        },
                       ),
                     ],
                   ),

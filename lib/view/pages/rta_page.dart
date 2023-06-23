@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
@@ -44,11 +45,11 @@ class _RtaPageState extends State<RtaPage> {
 
   Future<void> _getNfcID() async {
     // データベースからnfc_idをランダムに取得
-    final db = await DatabaseHelper().db;
-    final List<Map<String, dynamic>> nfcs =
-        await db.rawQuery("SELECT nfc_id FROM nfc ORDER BY RANDOM()");
+    Map<String, String> nfcs = await FirebaseHelper().getNfcIdMap();
+    Constant.updateNfcs(nfcs);
+
     //nfcReadFunc（）呼び出し読み取り開始
-    nfcReadFunc(nfcs);
+    nfcReadFunc();
   }
 
   // 画像番号
@@ -164,13 +165,16 @@ class _RtaPageState extends State<RtaPage> {
     _getNfcID();
   }
 
-  void nfcReadFunc(List<Map<String, dynamic>> nfcs, {int nfcIndex = 0}) async {
+  void nfcReadFunc({int nfcIndex = 0}) async {
+    List nfcKey = ["起", "床", "点", "結", "RTA"];
+    dynamic nfcs = Constant.nfcs;
     // NFC読み取り
-    bool success = await NFCRead().nfcRead(imageCount, nfcs[nfcIndex]);
+    print(nfcs[nfcKey[nfcIndex]]);
+    bool success = await NFCRead().nfcRead(imageCount, nfcs[nfcKey[nfcIndex]]);
     debugPrint('$success');
     // データベースに登録しているIDと読み取ったIDが異なるので再度読み取り
     if (success == false) {
-      nfcReadFunc(nfcs, nfcIndex: nfcIndex);
+      nfcReadFunc(nfcIndex: nfcIndex);
       return;
     } else {
       setState(() {
@@ -188,7 +192,7 @@ class _RtaPageState extends State<RtaPage> {
         endDialog();
       } else {
         // 再度読み取り
-        nfcReadFunc(nfcs, nfcIndex: nfcIndex);
+        nfcReadFunc(nfcIndex: nfcIndex);
       }
     }
   }

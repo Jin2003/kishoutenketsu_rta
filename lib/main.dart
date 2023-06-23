@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
+import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/log_in.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,6 +46,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initializeNFC(); // initState内で非同期の初期化処理を実行
+    getGroupID();
   }
 
   Future<void> initializeNFC() async {
@@ -53,6 +55,13 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       isExistsNFC = nfcResult ?? false; // 取得した結果を変数に代入
     });
+  }
+
+  // groupIDを取得する
+  Future<void> getGroupID() async {
+    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
+    String? groupID = await sharedPreferencesLogic.getGroupID();
+    Constant.updateGroupID(groupID ?? '');
   }
 
   @override

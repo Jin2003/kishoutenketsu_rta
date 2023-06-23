@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kishoutenketsu_rta/view/constant.dart';
 
 class FirebaseHelper {
   // グループを作成するメソッド
@@ -27,6 +28,20 @@ class FirebaseHelper {
         .update({
       'nfcIdMap': nfcIdMap,
     });
+  }
+
+  // グループにnfcIdListを取得するメソッド
+  // Future<Map<String, String>> getNfcIdMap() async {
+  Future<Map<String, String>> getNfcIdMap() async {
+    print(Constant.groupID);
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('groups')
+        .doc(Constant.groupID)
+        .get();
+    dynamic data = documentSnapshot.data() as Map<String, dynamic>;
+    Map<String, String> nfcIdMap =
+        Map<String, String>.from(data['nfcIdMap'] as Map<String, dynamic>);
+    return nfcIdMap;
   }
 
   // ユーザにgroupIDを追加するメソッド

@@ -64,9 +64,9 @@ dependencies:
 
 flutter_native_splash:
   # 画面全体
-  image: assets/splash.png
+  image: assets/start_page.png
   # 画面全体の背景色
-  color: "#65E4E4"
+  color: "#FFE475"
   fullScreen: true
 
 dev_dependencies:

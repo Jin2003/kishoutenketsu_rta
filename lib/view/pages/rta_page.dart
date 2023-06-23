@@ -54,6 +54,8 @@ class _RtaPageState extends State<RtaPage> {
 
   // 画像番号
   int imageCount = 0;
+  // ランダムにしてMap側のキーにする
+  List nfcKey = ["起", "床", "点", "結", "RTA"];
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +68,13 @@ class _RtaPageState extends State<RtaPage> {
             SizedBox(
               width: 230,
               height: 230,
-              child: Image.asset(iconImage[imageCount]),
+              child: imageCount < 5
+                  ? Image.asset(
+                      "assets/rta/${Constant.themeName}/${nfcKey[imageCount]}.png",
+                    )
+                  : Container(),
             ),
+
             const SizedBox(width: 100, height: 20),
             CustomText(text: '  をタッチしてね！', fontSize: 25, Color: Constant.main),
             const SizedBox(width: 100, height: 30),
@@ -163,12 +170,19 @@ class _RtaPageState extends State<RtaPage> {
     super.initState();
     // _getNfcTable()呼び出し
     _getNfcID();
+    nfcKey.shuffle();
+    print("シャッフルしました");
   }
 
   void nfcReadFunc({int nfcIndex = 0}) async {
-    List nfcKey = ["起", "床", "点", "結", "RTA"];
     dynamic nfcs = Constant.nfcs;
+
+    // print(nfcKey);
+    // print(imageCount);
+    // print(nfcs);
+    // print(nfcIndex);
     // NFC読み取り
+    print(nfcKey[nfcIndex]);
     print(nfcs[nfcKey[nfcIndex]]);
     bool success = await NFCRead().nfcRead(imageCount, nfcs[nfcKey[nfcIndex]]);
     debugPrint('$success');

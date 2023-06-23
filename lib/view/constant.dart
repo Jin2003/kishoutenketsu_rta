@@ -74,4 +74,12 @@ class Constant {
     alarmTime = newAlarmTime;
     sharedPreferencesLogic.setAlarmTime(newAlarmTime);
   }
+
+  // 設定した壁紙
+  static String wallpaper = "dots";
+
+  static void updateWallpaper(String newWallpaper) {
+    wallpaper = newWallpaper;
+    sharedPreferencesLogic.setSelectedWallpaper(newWallpaper);
+  }
 }

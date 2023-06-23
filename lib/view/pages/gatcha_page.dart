@@ -44,7 +44,7 @@ class _GatchaPageState extends State<GatchaPage> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/pages/${Constant.themeName}/dots/gatcha_page.png",
+            "assets/pages/${Constant.themeName}/${Constant.wallpaper}/gatcha_page.png",
             fit: BoxFit.cover,
           ),
           //画像を表示する

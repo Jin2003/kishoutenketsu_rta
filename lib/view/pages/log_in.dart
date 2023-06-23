@@ -162,6 +162,9 @@ class _LogInState extends State<LogIn> {
                           if (groupID != null) {
                             // sharedPreferencesにgroupIDを保存
                             Constant.updateGroupID(groupID);
+                            Constant.updateUserName(
+                                documentSnapshot.data()?['name']);
+                            // Constant.updateUserName(
                             if (!mounted) return;
                             Navigator.push(
                               context,
@@ -248,8 +251,8 @@ class _LogInState extends State<LogIn> {
                       // メール/パスワードでログイン
                       final User? user = (await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
-                                  email: "adjadj@gmail.com",
-                                  password: "adjadj"))
+                                  email: "2220137@ecc.ac.jp",
+                                  password: "123qwecc"))
                           .user;
                       if (user != null) {
                         SharedPreferencesLogic sharedPreferencesLogic =
@@ -277,6 +280,8 @@ class _LogInState extends State<LogIn> {
                         if (groupID != null) {
                           // sharedPreferencesにgroupIDを保存
                           await sharedPreferencesLogic.setGroupID(groupID);
+                          Constant.updateUserName(
+                              documentSnapshot.data()?['name']);
                           if (!mounted) return;
                           Navigator.push(
                             context,

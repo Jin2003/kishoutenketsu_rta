@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 
 class FirebaseHelper {
@@ -33,7 +32,6 @@ class FirebaseHelper {
   // グループにnfcIdListを取得するメソッド
   // Future<Map<String, String>> getNfcIdMap() async {
   Future<Map<String, String>> getNfcIdMap() async {
-    print(Constant.groupID);
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('groups')
         .doc(Constant.groupID)
@@ -56,6 +54,16 @@ class FirebaseHelper {
     await FirebaseFirestore.instance.collection('users').doc(userID).update({
       'name': name,
     });
+  }
+
+  // rtaの結果を保存するメソッド
+  Future<void> saveRtaResult(int rtaResult) async {
+    await FirebaseFirestore.instance
+        .collection('groups')
+        .doc(Constant.groupID)
+        .collection('rtaResults')
+        .doc()
+        .set({'rtaResult': rtaResult, 'name': Constant.userName});
   }
 
   // ユーザのメールアドレスを変更するメソッド

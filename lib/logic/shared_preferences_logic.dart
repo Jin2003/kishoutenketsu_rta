@@ -21,6 +21,8 @@ class SharedPreferencesLogic {
   static const keyExistsNFC = 'ExistsNFC';
   // アラームを鳴らしたい時刻
   static const keyAlarmTime = 'alarmTime';
+  // ユーザ名
+  static const keyUserName = 'userName';
 
   late SharedPreferences sharedPreferences;
 
@@ -82,6 +84,12 @@ class SharedPreferencesLogic {
   Future<void> setAlarmTime(int alarmTime) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setInt(keyAlarmTime, alarmTime);
+  }
+
+  // ユーザ名をローカルに保存
+  Future<void> setUserName(String userName) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString(keyUserName, userName);
   }
 
   // userIDをローカルから取得
@@ -155,5 +163,11 @@ class SharedPreferencesLogic {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getKeys().fold<Map<String, dynamic>>(
         {}, (map, key) => map..[key] = sharedPreferences.get(key));
+  }
+
+  // ユーザ名をローカルから取得
+  Future<String?> getUserName() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString(keyUserName);
   }
 }

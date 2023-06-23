@@ -179,6 +179,7 @@ class _RtaPageState extends State<RtaPage> {
 
   void nfcReadFunc({int nfcIndex = 0}) async {
     dynamic nfcs = Constant.nfcs;
+    print(nfcs);
     bool success = await NFCRead()
         .nfcRead(imageCount, nfcs[nfcIndex == 4 ? rta : nfcKey[nfcIndex]]);
     debugPrint('$success');
@@ -199,7 +200,12 @@ class _RtaPageState extends State<RtaPage> {
       });
       // 5回正しく読み取ったら終了
       if (imageCount == 5) {
-        endDialog();
+        // RTA終了時の時間を取得
+        DateTime finish = DateTime.now();
+        // firebaseにRTAのデータを送信
+        FirebaseHelper().saveRtaResult(finish.difference(startTime).inSeconds);
+
+        endDialog(finish);
       } else {
         // 再度読み取り
         nfcReadFunc(nfcIndex: nfcIndex);
@@ -207,9 +213,7 @@ class _RtaPageState extends State<RtaPage> {
     }
   }
 
-  void endDialog() {
-    // RTA終了時の時間を取得
-    DateTime finish = DateTime.now();
+  void endDialog(DateTime finish) {
     Future.delayed(const Duration(milliseconds: 500), () {
       showDialog(
           context: context,

@@ -82,4 +82,12 @@ class Constant {
     wallpaper = newWallpaper;
     sharedPreferencesLogic.setSelectedWallpaper(newWallpaper);
   }
+
+  // ユーザ名
+  static String userName = "user";
+
+  static void updateUserName(String newUserName) {
+    userName = newUserName;
+    sharedPreferencesLogic.setUserName(newUserName);
+  }
 }

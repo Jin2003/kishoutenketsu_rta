@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
@@ -179,7 +180,6 @@ class _RtaPageState extends State<RtaPage> {
 
   void nfcReadFunc({int nfcIndex = 0}) async {
     dynamic nfcs = Constant.nfcs;
-    print(nfcs);
     bool success = await NFCRead()
         .nfcRead(imageCount, nfcs[nfcIndex == 4 ? rta : nfcKey[nfcIndex]]);
     debugPrint('$success');
@@ -202,8 +202,10 @@ class _RtaPageState extends State<RtaPage> {
       if (imageCount == 5) {
         // RTA終了時の時間を取得
         DateTime finish = DateTime.now();
+        String date = DateFormat('yy.MM/dd').format(finish);
         // firebaseにRTAのデータを送信
-        FirebaseHelper().saveRtaResult(finish.difference(startTime).inSeconds);
+        FirebaseHelper()
+            .saveRtaResult(finish.difference(startTime).inSeconds, date);
 
         endDialog(finish);
       } else {

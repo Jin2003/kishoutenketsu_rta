@@ -62,7 +62,7 @@ class _HelpPageState extends State<HelpPage> {
                     TextSpan(
                       text:
                           // TODO:NFCのリンク貼る
-                          'https://qiita.com/megumu-u/items/73b728ad1d381717d731',
+                          'https://onl.bz/JLhwQR9',
                       style: TextStyle(color: Colors.blue, fontSize: 20),
                     )
                   ]),

@@ -159,6 +159,9 @@ class _LogInState extends State<LogIn> {
                           await sharedPreferencesLogic.setExistsNFC(false);
                           await sharedPreferencesLogic.setSettedAlarm(false);
                           await sharedPreferencesLogic.setAlarmTime(0);
+                          // ユーザ名を保存
+                          await sharedPreferencesLogic
+                              .setUserName(documentSnapshot.data()?['name']);
                           if (groupID != null) {
                             // sharedPreferencesにgroupIDを保存
                             Constant.updateGroupID(groupID);
@@ -259,7 +262,7 @@ class _LogInState extends State<LogIn> {
                             SharedPreferencesLogic();
                         // SharedPreferencesにuserIDを保存
                         await sharedPreferencesLogic.setUserID(user.uid);
-
+                        Constant.updateUserName("AluFu");
                         // firebaseからgroupIDを取得
                         var documentSnapshot = await FirebaseFirestore.instance
                             .collection('users')

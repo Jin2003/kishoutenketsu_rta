@@ -81,7 +81,7 @@ class _AccountSetPageState extends State<AccountSetPage> {
           _ListTileWidget(
             context,
             'ニックネーム',
-            userData != null ? userData['name'] : '',
+            userData != null ? Constant.userName : '',
             NicknameSetPage(userID: userData != null ? userData['userID'] : ''),
           ),
           _ListTileWidget(

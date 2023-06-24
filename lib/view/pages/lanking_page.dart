@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
-import '../../logic/database_helper.dart';
 import 'components/custom_text.dart';
 import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -15,7 +15,8 @@ class LankingPage extends StatefulWidget {
 
 class _LankingPageState extends State<LankingPage> {
   //Lankingを表示するためのリスト
-  List<Map<String, dynamic>> _times = [];
+  List<Map<String, dynamic>> _result = [];
+
   //Lankingを何個表示するか
   int _lankingCount = 0;
 
@@ -29,6 +30,9 @@ class _LankingPageState extends State<LankingPage> {
   String? _response;
   // ChatGPTの応答を表示するかどうかのフラグ
   bool _showResponse = false;
+
+  // データベースのデータを保持する変数
+  List<Map<String, dynamic>>? db;
 
   @override
   void initState() {
@@ -51,19 +55,21 @@ class _LankingPageState extends State<LankingPage> {
     }
   }
 
-  //_timeを取得する関数
+  // ランキングを取得する関数
   Future<void> _loadLank() async {
-    final db = await DatabaseHelper().db;
-    //timesテーブルからtime_recordとtime_datetimeを取得し、time_recordの昇順で並び替える
-    final times = await db.rawQuery(
-        'SELECT time_record, time_datetime FROM times ORDER BY time_record ASC');
-    //timesの中身の数を_lankingCountに代入
-    final lankingCount = times.length;
+    List<Map<String, dynamic>> rtaResults =
+        await FirebaseHelper().getRtaResults();
+
+    // ソート
+    rtaResults.sort((a, b) => a['rtaResult'].compareTo(b['rtaResult']));
+
+    // ランキングの数を設定
+    int lankingCount = rtaResults.length;
 
     setState(() {
-      _times = times;
       _lankingCount = lankingCount;
     });
+    _result = rtaResults;
   }
 
   @override
@@ -94,8 +100,8 @@ class _LankingPageState extends State<LankingPage> {
                           const SizedBox(height: 9),
                       //ここでリストの数を決めている
                       itemCount: _lankingCount,
-                      itemBuilder: (context, index) =>
-                          _buildCard(index + 1, _times[index]),
+                      itemBuilder: (context, index) => _buildCard(
+                          index + 1, _result[index], _result), // 第3引数を追加
                     ),
                   ),
                 ),
@@ -120,15 +126,15 @@ class _LankingPageState extends State<LankingPage> {
             child: SizedBox(
               width: 200,
               height: 190,
-              child:AnimatedTextKit(
-                key: ValueKey<String>(_response ?? ""),  // ValueKeyを追加
+              child: AnimatedTextKit(
+                key: ValueKey<String>(_response ?? ""), // ValueKeyを追加
                 animatedTexts: [
                   TyperAnimatedText(
                     _response ?? "",
                     textStyle: GoogleFonts.zenMaruGothic(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Color(0xFF707070),
+                      color: const Color(0xFF707070),
                     ),
                     speed: const Duration(milliseconds: 100),
                   ),
@@ -157,7 +163,8 @@ class _LankingPageState extends State<LankingPage> {
   }
 }
 
-Widget _buildCard(int index, Map<String, dynamic> time) {
+Widget _buildCard(
+    int index, Map<String, dynamic> time, List<Map<String, dynamic>> result) {
   debugPrint(time.toString());
   return Card(
     elevation: 6,
@@ -200,25 +207,17 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
           // RTAのタイム
           Column(
             children: [
-              const CustomText(text: 'りんご', fontSize: 14, Color: Constant.gray),
-              Text(
-                //timesが秒数で入っているので分と秒に変換し、00:00の形にする
-                '${time['time_record'] ~/ 60}'.padLeft(2, '0') +
-                    ':' +
-                    '${time['time_record'] % 60}'.padLeft(2, '0'),
-                style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Constant.main //accentYellow
-                    ),
-              ),
+              CustomText(
+                  text: "${result[index - 1]['name']}",
+                  fontSize: 14,
+                  Color: Constant.gray),
+              Text("${result[index - 1]['rtaResult']}")
             ],
           ),
           const SizedBox(
             width: 20,
             height: 0,
           ),
-          // 年月日のやつ
           Container(
             alignment: Alignment.center,
             margin: const EdgeInsets.only(top: 10, left: 20),
@@ -229,7 +228,7 @@ Widget _buildCard(int index, Map<String, dynamic> time) {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
-              "${time['time_datetime']}",
+              "${result[index - 1]['date']}",
               style:
                   TextStyle(color: Constant.main, fontWeight: FontWeight.bold),
             ),

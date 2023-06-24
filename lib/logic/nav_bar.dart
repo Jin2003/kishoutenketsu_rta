@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
+import 'package:kishoutenketsu_rta/view/pages/join_group.dart';
 import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/setting/chara_set_page.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
@@ -109,7 +110,7 @@ class _NavBarState extends State<NavBar> {
                   _DrawerWidget(context, 'adduser_icon', 'グループ招待',
                       const InvitationPage()),
                   _DrawerWidget(
-                      context, 'invitaion_icon', 'グループ参加', const JoinPage()),
+                      context, 'invitaion_icon', 'グループ参加', const JoinGroup()),
                   _DrawerWidget(context, 'help_icon', 'ヘルプ', const HelpPage()),
                 ],
               ),

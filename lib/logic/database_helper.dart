@@ -97,11 +97,11 @@ class DatabaseHelper {
         Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM items'));
     if (count2 == 0) {
       await db.execute(
-          'INSERT INTO items (item_name, item_file_name, has_Item) VALUES (?, ?, ?),(?, ?, ?), (?, ?, ?), (?, ?, ?), (?, ?, ?), (?, ?, ?)',
+          'INSERT INTO items (item_name, item_file_name, has_Item) VALUES (?, ?, ?),(?, ?, ?), (?, ?, ?), (?, ?, ?), (?, ?, ?), (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)',
           [
             'デフォルト',
             'file1.mp3',
-            0,
+            1,
             'きらきら星',
             'file2.mp3',
             0,

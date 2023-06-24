@@ -57,13 +57,29 @@ class FirebaseHelper {
   }
 
   // rtaの結果を保存するメソッド
-  Future<void> saveRtaResult(int rtaResult) async {
+  Future<void> saveRtaResult(int rtaResult, String date) async {
     await FirebaseFirestore.instance
         .collection('groups')
         .doc(Constant.groupID)
         .collection('rtaResults')
         .doc()
-        .set({'rtaResult': rtaResult, 'name': Constant.userName});
+        .set({'rtaResult': rtaResult, 'name': Constant.userName, 'date': date});
+  }
+
+  // rtaの結果を取得するメソッド
+  Future<List<Map<String, dynamic>>> getRtaResults() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('groups')
+        .doc(Constant.groupID)
+        .collection('rtaResults')
+        .get();
+    // print(querySnapshot);
+    List<Map<String, dynamic>> rtaResults = [];
+    for (var doc in querySnapshot.docs) {
+      rtaResults.add(doc.data() as Map<String, dynamic>);
+    }
+    // print(rtaResults);
+    return rtaResults;
   }
 
   // ユーザのメールアドレスを変更するメソッド

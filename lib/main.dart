@@ -15,9 +15,10 @@ void main() async {
   //スプラッシュ画面の設定
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  // .evnから環境変数を読み込む
-  await dotenv.load(fileName: '.env');
-  OpenAI.apiKey = dotenv.get('OPEN_AI_API_KEY');
+  // TODO.evnから環境変数を読み込む
+  // await dotenv.load(fileName: '.env');
+  // OpenAI.apiKey = dotenv.get('OPEN_AI_API_KEY');
+
   // 画面の向きを固定
   // SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp,

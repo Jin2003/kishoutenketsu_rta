@@ -55,7 +55,8 @@ String replaceLuckyItem(String message) {
   return message.replaceFirst('{_luckyItem}', luckyItem);
 }
 
-void showRandomResponse() {
+// ラッキーアイテムをランダムに表示する関数
+void RandomLuckyItemResponse() {
   final randomMessage = _message[Random().nextInt(_message.length)];
   final replacedMessage = replaceLuckyItem(randomMessage);
   
@@ -88,11 +89,28 @@ void showRandomResponse() {
     });
 
   //TODOウィジェットが描画された後に実行する
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     _firstMessage();
-  //   });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _firstMessage();
+    });
   }
 
+_firstMessage() async {
+  try {
+    final weather = await getWeather();
+    if (weather != null) {
+      String messageWithWeather = weather.toString();
+      setState(() {
+        _response = messageWithWeather;
+      });
+    } else {
+      setState(() {
+        _response = "申し訳ありません。\n天気情報が取得できませんでした。";
+      });
+    }
+  } catch (e) {
+    print("エラーが発生しました: $e");
+  }
+}
 
   //TODO:初回メッセージを作成する関数
   // Future<void> _firstMessage() async {
@@ -128,16 +146,16 @@ void showRandomResponse() {
   //   }
   // }
 
-  // TODO:天気情報を取得する関数
-  // Future<Weather?> getWeather() async {
-  //   String key = "dcb167452a27389332613cf37eca0217";
-  //   double lat = 35.69; //latitude(緯度)
-  //   double lon = 139.69; //longitude(経度)
-  //   WeatherFactory wf = new WeatherFactory(key);
+  //天気情報を取得する関数
+  getWeather() async {
+    String key = "dcb167452a27389332613cf37eca0217";
+    double lat = 35.69; //latitude(緯度)
+    double lon = 139.69; //longitude(経度)
+    WeatherFactory wf = WeatherFactory(key);
 
-  //   Weather weather = await wf.currentWeatherByLocation(lat, lon);
-  //   return weather;
-  // }
+    Weather weather = await wf.currentWeatherByLocation(lat, lon);
+    return weather;
+  }
 
   // アラーム音の初期化
   Future<void> initializeMusic() async {
@@ -292,7 +310,7 @@ void showRandomResponse() {
           // GestureDetectorの中でメッセージのランダム表示を呼び出す
           GestureDetector(
             onTap: () {
-              showRandomResponse();
+              RandomLuckyItemResponse();
             },
             child: Align(
               alignment: const Alignment(0.8, 0.95),

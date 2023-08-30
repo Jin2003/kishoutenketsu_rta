@@ -20,16 +20,27 @@ class _LankingPageState extends State<LankingPage> {
   //Lankingを何個表示するか
   int _lankingCount = 0;
 
-  //chatGPTへの入力を保持する配列
+  //TODOchatGPTへの入力を保持する配列
+  // List<String> _message = [
+  //   "「更新おめでとう！\n今日も一日頑張ろう!」のみ言ってくださいそれ以外は言わないでください",
+  //   "「惜しい！\nあと秒で更新だったね!」のみ言ってくださいそれ以外は言わないでください",
+  // ];
+
+  //ランキングの定型文
   List<String> _message = [
-    "「更新おめでとう！\n今日も一日頑張ろう!」のみ言ってくださいそれ以外は言わないでください",
-    "「惜しい！\nあと秒で更新だったね!」のみ言ってくださいそれ以外は言わないでください",
+    "更新おめでとう！\n今日も一日頑張ろう!",
+    // "惜しい！\nあと秒で更新だったね!",
   ];
 
-  // ChatGPTからの応答を保持する変数
+  //定型文を表示する変数
   String? _response;
-  // ChatGPTの応答を表示するかどうかのフラグ
+  //定型文を表示するかどうかのフラグ
   bool _showResponse = false;
+
+  //TODO ChatGPTからの応答を保持する変数
+  // String? _response;
+  //TODO ChatGPTの応答を表示するかどうかのフラグ
+  // bool _showResponse = false;
 
   // データベースのデータを保持する変数
   List<Map<String, dynamic>>? db;
@@ -40,20 +51,20 @@ class _LankingPageState extends State<LankingPage> {
     _loadLank();
   }
 
-  // ChatGPTからの応答を取得する関数
-  Future<void> _getChatGPTResponse() async {
-    final chatGPT = ChatGPT();
-    final response = await chatGPT.message(_message[0]);
-    if (mounted) {
-      setState(
-        () {
-          // ChatGPTからの応答を保持する変数に代入
-          _response = response;
-          _showResponse = !_showResponse;
-        },
-      );
-    }
-  }
+  // TODOChatGPTからの応答を取得する関数
+  // Future<void> _getChatGPTResponse() async {
+  //   final chatGPT = ChatGPT();
+  //   final response = await chatGPT.message(_message[0]);
+  //   if (mounted) {
+  //     setState(
+  //       () {
+  //         // ChatGPTからの応答を保持する変数に代入
+  //         _response = response;
+  //         _showResponse = !_showResponse;
+  //       },
+  //     );
+  //   }
+  // }
 
   // ランキングを取得する関数
   Future<void> _loadLank() async {
@@ -145,7 +156,13 @@ class _LankingPageState extends State<LankingPage> {
           ),
           GestureDetector(
               onTap: () async {
-                await _getChatGPTResponse();
+                //定型文を表示
+                setState(() {
+                  _response = _message[0];
+                  _showResponse = !_showResponse;
+                });
+                //TODO ChatGPTからの応答を取得
+                // await _getChatGPTResponse();
               },
               child: Align(
                 alignment: const Alignment(0.8, 0.95),

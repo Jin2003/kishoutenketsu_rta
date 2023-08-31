@@ -35,7 +35,7 @@ class _MainPageState extends State<MainPage> {
 // ラッキーアイテムを保持する配列
 final List<String> _luckyItem = [
   "青いハンカチ",
-  "赤いハンカチ",
+  "花柄のハンカチ",
   "黄色いハンカチ",
   "赤のジャケット",
   "青の靴下",
@@ -55,8 +55,8 @@ String replaceLuckyItem(String message) {
   return message.replaceFirst('{_luckyItem}', luckyItem);
 }
 
-// ラッキーアイテムをランダムに表示する関数
-void RandomLuckyItemResponse() {
+// 定型文をランダムに表示する関数
+void RandomResponse() {
   final randomMessage = _message[Random().nextInt(_message.length)];
   final replacedMessage = replaceLuckyItem(randomMessage);
   
@@ -89,9 +89,10 @@ void RandomLuckyItemResponse() {
     });
 
   //TODOウィジェットが描画された後に実行する
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _firstMessage();
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _response = "今日の梅田の天気は\n曇りのち晴れ\n最高気温は34度だよ！";
+      // _firstMessage();
+    });
   }
 
 // _firstMessage() async {
@@ -300,6 +301,7 @@ void RandomLuckyItemResponse() {
                       fontSize: 16,
                       color: Color(0xFF707070),
                     ),
+                    textAlign: TextAlign.center,
                     speed: const Duration(milliseconds: 100),
                   ),
                 ],
@@ -310,7 +312,7 @@ void RandomLuckyItemResponse() {
           // GestureDetectorの中でメッセージのランダム表示を呼び出す
           GestureDetector(
             onTap: () {
-              RandomLuckyItemResponse();
+              RandomResponse();
             },
             child: Align(
               alignment: const Alignment(0.8, 0.95),

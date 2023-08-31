@@ -66,7 +66,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '198879506519',
     projectId: 'kishoutenketsu-rta',
     storageBucket: 'kishoutenketsu-rta.appspot.com',
-    iosClientId: '198879506519-kabkora1jf0m1uhadcn94121o9id8hcd.apps.googleusercontent.com',
+    iosClientId:
+        '198879506519-kabkora1jf0m1uhadcn94121o9id8hcd.apps.googleusercontent.com',
     iosBundleId: 'com.example.kishoutenketsuRta',
   );
 
@@ -76,7 +77,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '198879506519',
     projectId: 'kishoutenketsu-rta',
     storageBucket: 'kishoutenketsu-rta.appspot.com',
-    iosClientId: '198879506519-kabkora1jf0m1uhadcn94121o9id8hcd.apps.googleusercontent.com',
+    iosClientId:
+        '198879506519-kabkora1jf0m1uhadcn94121o9id8hcd.apps.googleusercontent.com',
     iosBundleId: 'com.example.kishoutenketsuRta',
   );
 }

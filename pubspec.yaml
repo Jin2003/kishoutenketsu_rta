@@ -98,9 +98,9 @@ flutter:
     - assets/characters/blue/
     - assets/characters/red/
     - assets/characters/yellow/
-    
+
     - assets/gacha/yellow/
-    - assets/gacha/red/    
+    - assets/gacha/red/
     - assets/gacha/blue/
 
     - assets/pages/yellow/dots/
@@ -122,11 +122,16 @@ flutter:
     - assets/wallpaper/blue/
     - assets/wallpaper/red/
     - assets/wallpaper/yellow/
-    
+
     - assets/theme/blue/
     - assets/theme/red/
     - assets/theme/yellow/
     - assets/alarm/
+    - assets/alarm/circus.mp3
+    - assets/alarm/domino.mp3
+    - assets/alarm/garandou.mp3
+    - assets/alarm/hinokuruma.mp3
+    - assets/alarm/osyogatsu.mp3
 
     - .env
 

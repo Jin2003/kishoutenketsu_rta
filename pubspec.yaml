@@ -63,6 +63,7 @@ dependencies:
   weather: ^2.0.1
   intl: ^0.18.1
   soundpool: ^2.1.0
+  alarm: ^1.2.2
 
 flutter_native_splash:
   # 画面全体

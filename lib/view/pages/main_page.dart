@@ -287,7 +287,7 @@ void RandomResponse() {
           ),
           // 吹き出しの中身(ChatGPTの応答)
           Align(
-            alignment: const Alignment(-0.3, 1.05),
+            alignment: const Alignment(-0.3, 1.02),
             child: SizedBox(
               width: 200,
               height: 190,

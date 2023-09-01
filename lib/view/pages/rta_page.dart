@@ -180,9 +180,9 @@ class _RtaPageState extends State<RtaPage> {
     }
   }
 
-  void endDialog(DateTime finish, int rtaResult) {
+  void endDialog(DateTime finish, int rtaResult) async {
     // 順位を取得する
-    int ranking = _getRankingPosition(rtaResult) as int;
+    int ranking = await _getRankingPosition(rtaResult);
 
     Future.delayed(const Duration(milliseconds: 500), () {
       showDialog(

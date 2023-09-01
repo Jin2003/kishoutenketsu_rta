@@ -82,6 +82,20 @@ class FirebaseHelper {
     return rtaResults;
   }
 
+  // 順位をFirestoreから取得するメソッド
+  Future<int> getRanking(int thisTime) async {
+    // Firestoreの"rankings"コレクションからthisTimeの順位を取得
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('groups')
+        .doc(Constant.groupID)
+        .collection('rtaResults')
+        .where('rtaResult', isLessThanOrEqualTo: thisTime)
+        .get();
+    print(querySnapshot.size);
+    return querySnapshot.size;
+    // return underThisTimeLength;
+  }
+
   // ユーザのメールアドレスを変更するメソッド
   Future<void> changeEmail(String newEmail) async {
     //　なんかログインもう一回しないとエラー出るっぽい

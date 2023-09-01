@@ -134,6 +134,12 @@ class _RtaPageState extends State<RtaPage> {
     });
   }
 
+  Future<int> _getRankingPosition(int thisTime) async {
+    // 順位を取得する
+    int ranking = await FirebaseHelper().getRanking(thisTime);
+    return ranking;
+  }
+
   void nfcReadFunc({int nfcIndex = 0}) async {
     dynamic nfcs = Constant.nfcs;
     bool success = await NFCRead()
@@ -162,11 +168,11 @@ class _RtaPageState extends State<RtaPage> {
         // RTA終了時の時間を取得
         DateTime finish = DateTime.now();
         String date = DateFormat('yy.MM/dd').format(finish);
+        int rtaResult = finish.difference(startTime).inSeconds;
         // firebaseにRTAのデータを送信
-        FirebaseHelper()
-            .saveRtaResult(finish.difference(startTime).inSeconds, date);
+        FirebaseHelper().saveRtaResult(rtaResult, date);
 
-        endDialog(finish);
+        endDialog(finish, rtaResult);
       } else {
         // 再度読み取り
         nfcReadFunc(nfcIndex: nfcIndex);
@@ -174,7 +180,10 @@ class _RtaPageState extends State<RtaPage> {
     }
   }
 
-  void endDialog(DateTime finish) {
+  void endDialog(DateTime finish, int rtaResult) {
+    // 順位を取得する
+    int ranking = _getRankingPosition(rtaResult) as int;
+
     Future.delayed(const Duration(milliseconds: 500), () {
       showDialog(
           context: context,
@@ -192,7 +201,7 @@ class _RtaPageState extends State<RtaPage> {
                         alignment: Alignment.center,
                         child: CustomText(
                             text:
-                                '今日のタイムは\n${finish.difference(startTime).inSeconds}秒!!!',
+                                '今日のタイムは\n${finish.difference(startTime).inSeconds}秒!!!\n\n順位は$ranking位だよ！',
                             fontSize: 25,
                             Color: Constant.gray),
                       ),

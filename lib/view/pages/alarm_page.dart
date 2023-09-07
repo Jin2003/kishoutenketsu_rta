@@ -1,3 +1,5 @@
+import 'package:alarm/alarm.dart';
+import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +12,10 @@ import 'components/elevate_button.dart';
 
 class AlarmPage extends StatefulWidget {
   final int? argumentAlarmTime;
-  const AlarmPage({required this.argumentAlarmTime, Key? key})
+  final AlarmSettings? alarmSettings;
+
+  const AlarmPage(
+      {required this.argumentAlarmTime, Key? key, this.alarmSettings})
       : super(key: key);
 
   @override
@@ -43,6 +48,31 @@ class _AlarmPageState extends State<AlarmPage> {
     "osyogatsu": "お正月",
   };
 
+  bool loading = false;
+
+  late bool creating;
+  late TimeOfDay selectedTime;
+  late bool loopAudio;
+  late bool vibrate;
+  late bool volumeMax;
+  late bool showNotification;
+  late String assetAudio;
+
+  bool isToday() {
+    final now = DateTime.now();
+    final dateTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      selectedTime.hour,
+      selectedTime.minute,
+      0,
+      0,
+    );
+
+    return now.isBefore(dateTime);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -51,6 +81,103 @@ class _AlarmPageState extends State<AlarmPage> {
     });
     splitAlarmTime().then((_) {
       setState(() {});
+    });
+    creating = widget.alarmSettings == null;
+
+    if (creating) {
+      final dt = DateTime.now().add(const Duration(minutes: 1));
+      selectedTime = TimeOfDay(hour: dt.hour, minute: dt.minute);
+      loopAudio = true;
+      vibrate = true;
+      volumeMax = true;
+      showNotification = true;
+      assetAudio = 'assets/alarm/marimba.mp3';
+    } else {
+      selectedTime = TimeOfDay(
+        hour: widget.alarmSettings!.dateTime.hour,
+        minute: widget.alarmSettings!.dateTime.minute,
+      );
+      loopAudio = widget.alarmSettings!.loopAudio;
+      vibrate = widget.alarmSettings!.vibrate;
+      volumeMax = widget.alarmSettings!.volumeMax;
+      showNotification = widget.alarmSettings!.notificationTitle != null &&
+          widget.alarmSettings!.notificationTitle!.isNotEmpty &&
+          widget.alarmSettings!.notificationBody != null &&
+          widget.alarmSettings!.notificationBody!.isNotEmpty;
+      assetAudio = widget.alarmSettings!.assetAudioPath;
+    }
+  }
+
+  Future<void> pickTime() async {
+    // final res = await showTimePicker(
+    //   initialTime: selectedTime,
+    //   context: context,
+    // );
+    final res = await DatePicker.showTimePicker(context,
+        //DatetimePickerのモーダル内の「キャンセル」「完了」を表示
+        showTitleActions: true,
+        //「秒」の表記が不要->showSecondsColumnをfalse
+        showSecondsColumn: false, onChanged: (date) {
+      // print(date);
+    }, onConfirm: (date) {
+      setState(() {
+        _alarmTime = date.hour * 60 + date.minute;
+        _alarmHour = date.hour;
+        _alarmMinute = date.minute;
+      });
+    },
+        // DatetimePickerの初期値を設定
+        currentTime: DateTime.now(),
+        // 日本語設定
+        locale: LocaleType.jp);
+
+    // if (res != null) setState(() => selectedTime = res);
+  }
+
+  AlarmSettings buildAlarmSettings() {
+    final now = DateTime.now();
+    final id = creating
+        ? DateTime.now().millisecondsSinceEpoch % 100000
+        : widget.alarmSettings!.id;
+
+    DateTime dateTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      selectedTime.hour,
+      selectedTime.minute,
+      0,
+      0,
+    );
+    if (dateTime.isBefore(DateTime.now())) {
+      dateTime = dateTime.add(const Duration(days: 1));
+    }
+
+    final alarmSettings = AlarmSettings(
+      id: id,
+      dateTime: dateTime,
+      loopAudio: loopAudio,
+      vibrate: vibrate,
+      volumeMax: volumeMax,
+      notificationTitle: showNotification ? 'Alarm example' : null,
+      notificationBody: showNotification ? 'Your alarm ($id) is ringing' : null,
+      assetAudioPath: assetAudio,
+      stopOnNotificationOpen: false,
+    );
+    return alarmSettings;
+  }
+
+  void saveAlarm() {
+    setState(() => loading = true);
+    Alarm.set(alarmSettings: buildAlarmSettings()).then((res) {
+      if (res) Navigator.pop(context, true);
+    });
+    setState(() => loading = false);
+  }
+
+  void deleteAlarm() {
+    Alarm.stop(widget.alarmSettings!.id).then((res) {
+      if (res) Navigator.pop(context, true);
     });
   }
 
@@ -123,25 +250,6 @@ class _AlarmPageState extends State<AlarmPage> {
                   //   },
                   onPressed: () {
                     // TODO：時刻設定ダイアログ
-                    DatePicker.showTimePicker(context,
-                        //DatetimePickerのモーダル内の「キャンセル」「完了」を表示
-                        showTitleActions: true,
-                        //「秒」の表記が不要->showSecondsColumnをfalse
-                        showSecondsColumn: false, onChanged: (date) {
-                      // print(date);
-                    }, onConfirm: (date) {
-                      // print(date);
-                      // print("コンフィルム起こったよ");
-                      setState(() {
-                        _alarmTime = date.hour * 60 + date.minute;
-                        _alarmHour = date.hour;
-                        _alarmMinute = date.minute;
-                      });
-                    },
-                        // DatetimePickerの初期値を設定
-                        currentTime: DateTime.now(),
-                        // 日本語設定
-                        locale: LocaleType.jp);
                   },
                   child: SizedBox(
                     width: 270,
@@ -254,6 +362,7 @@ class _AlarmPageState extends State<AlarmPage> {
                   fontSize: 20,
                   shape: 16,
                   onPressed: () async {
+                    saveAlarm();
                     // sharedPreferencesにアラームを鳴らす時刻を保存
                     SharedPreferencesLogic sharedPreferencesLogic =
                         SharedPreferencesLogic();

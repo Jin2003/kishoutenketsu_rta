@@ -1,16 +1,22 @@
+import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/log_in.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
 import 'firebase_options.dart';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await Alarm.init(showDebugLogs: true);
 
   //スプラッシュ画面の設定
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -76,6 +82,7 @@ class _MyAppState extends State<MyApp> {
 
       // isExistsNFCの値に応じて遷移先を決定
       home: isExistsNFC ? const NavBar() : const LogIn(),
+      // home: RtaPage(),
     );
   }
 }

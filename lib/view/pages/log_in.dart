@@ -255,8 +255,7 @@ class _LogInState extends State<LogIn> {
                       // 展示回用
                       final User? user = (await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
-                                  email: "testtest2@gmail.com",
-                                  password: "testtest2"))
+                                  email: "ecc@ecc.ac.jp", password: "eccecc"))
                           .user;
                       // final User? user = (await FirebaseAuth.instance
                       //     .signInWithEmailAndPassword(

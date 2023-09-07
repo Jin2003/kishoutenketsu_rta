@@ -91,7 +91,6 @@ class FirebaseHelper {
         .collection('rtaResults')
         .where('rtaResult', isLessThanOrEqualTo: thisTime)
         .get();
-    print(querySnapshot.size);
     return querySnapshot.size;
     // return underThisTimeLength;
   }

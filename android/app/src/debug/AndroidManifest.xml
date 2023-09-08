@@ -4,7 +4,11 @@
         the Flutter tool needs it to communicate with the running application
         to allow setting breakpoints, to provide hot reload, etc.-->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 追加（nfc） -->
     <uses-permission android:name="android.permission.NFC" />
     <uses-feature android:name="android.hardware.nfc" android:required="true" />
-
+    <!-- 追加 （alarm）-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 </manifest>

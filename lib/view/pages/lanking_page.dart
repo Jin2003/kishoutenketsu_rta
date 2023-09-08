@@ -20,6 +20,9 @@ class _LankingPageState extends State<LankingPage> {
   //Lankingを何個表示するか
   int _lankingCount = 0;
 
+  //最新のRTAタイムを保持する変数
+  Map<String, dynamic>? _rtaTime ;
+
   //TODOchatGPTへの入力を保持する配列
   // List<String> _message = [
   //   "「更新おめでとう！\n今日も一日頑張ろう!」のみ言ってくださいそれ以外は言わないでください",
@@ -29,6 +32,8 @@ class _LankingPageState extends State<LankingPage> {
   //ランキングの定型文
   List<String> _message = [
     "更新おめでとう！\n今日も一日頑張ろう!",
+    "惜しい！\nもう少しで更新だったね!",
+    "RTAをやってみよう！",
     // "惜しい！\nあと秒で更新だったね!",
   ];
 
@@ -46,7 +51,7 @@ class _LankingPageState extends State<LankingPage> {
   List<Map<String, dynamic>>? db;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     _loadLank();
   }
@@ -71,6 +76,15 @@ class _LankingPageState extends State<LankingPage> {
     List<Map<String, dynamic>> rtaResults =
         await FirebaseHelper().getRtaResults();
 
+    // 最新のRTAタイムを取得
+    if (rtaResults.isNotEmpty) {
+      Map<String, dynamic> rtaTime = rtaResults.last;
+
+      setState(() {
+        _rtaTime = rtaTime;
+      });
+    }
+
     // ソート
     rtaResults.sort((a, b) => a['rtaResult'].compareTo(b['rtaResult']));
 
@@ -81,7 +95,29 @@ class _LankingPageState extends State<LankingPage> {
       _lankingCount = lankingCount;
     });
     _result = rtaResults;
+
+    _getMessage();
   }
+
+  //定型文を表示する関数
+  _getMessage() async { 
+    for(int ranking = 0; ranking <= _result.length-1; ranking++){
+      if(_rtaTime != null){ 
+        if(_rtaTime == _result[ranking]){
+          setState(() {
+            _response = (ranking == 0) ? _message[0] : _message[1];
+            _showResponse = !_showResponse;
+          });
+        }
+      }else{
+        setState(() {
+          _response = _message[2];
+          _showResponse = !_showResponse;
+        });
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +167,6 @@ class _LankingPageState extends State<LankingPage> {
             ),
           ),
           // 吹き出しの中身(ChatGPTの応答)
-          // 吹き出しの中身(ChatGPTの応答)
           Align(
             alignment: const Alignment(-0.3, 1.05),
             child: SizedBox(
@@ -154,26 +189,16 @@ class _LankingPageState extends State<LankingPage> {
               ),
             ),
           ),
-          GestureDetector(
-              onTap: () async {
-                //定型文を表示
-                setState(() {
-                  _response = _message[0];
-                  _showResponse = !_showResponse;
-                });
-                //TODO ChatGPTからの応答を取得
-                // await _getChatGPTResponse();
-              },
-              child: Align(
-                alignment: const Alignment(0.8, 0.95),
-                child: SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: Image.asset(
-                    "assets/${Constant.characterName}.png",
-                  ),
-                ),
-              )),
+          Align(
+            alignment: const Alignment(0.8, 0.95),
+            child: SizedBox(
+              width: 120,
+              height: 120,
+              child: Image.asset(
+                "assets/${Constant.characterName}.png",
+              ),
+            ),
+          )
         ],
       ),
     );

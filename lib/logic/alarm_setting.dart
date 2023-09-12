@@ -5,7 +5,7 @@ import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
 class AlarmSetting {
   Future<void> setting(
     int timeInMinutes,
-    String music,
+    String? music,
     int id,
     BuildContext context,
   ) async {
@@ -27,11 +27,11 @@ class AlarmSetting {
       vibrate: true,
       volumeMax: false,
       fadeDuration: 3.0,
-      // notificationTitle: 'さあRTA開始だ！',
-      // notificationBody: 'さあRTA開始だ！',
+      notificationTitle: 'さあRTA開始だ!',
+      notificationBody: 'ランキング一位を目指せ！',
       enableNotificationOnKill: true,
     );
-
+    print("$music.mp3を設定したよ!");
     print("$alarmTimeのアラームを設定したよ!");
 
     // アラームを登録

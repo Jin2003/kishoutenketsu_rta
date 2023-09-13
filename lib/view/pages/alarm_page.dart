@@ -54,7 +54,7 @@ class _AlarmPageState extends State<AlarmPage> {
     splitAlarmTime().then((_) {
       setState(() {});
     });  
-        initialize().then((_) {
+        initializeAlarm().then((_) {
       setState(() {});
     });
   }
@@ -88,9 +88,8 @@ class _AlarmPageState extends State<AlarmPage> {
   }
 
   //アラームサービスの初期化
-  Future<void> initialize() async{
+  Future<void> initializeAlarm() async{
     await Alarm.init();
-    // await Alarm.init(showDebugLogs: true);
   }
 
   @override
@@ -273,7 +272,7 @@ class _AlarmPageState extends State<AlarmPage> {
                     // TODO:alarmSettingにアラームを設定
                     AlarmSetting alarmSetting = AlarmSetting();
                     alarmSetting.setting(
-                      _alarmTime!,
+                      _alarmTime,
                       _music!,
                       1,
                       context,

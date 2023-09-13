@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
+// import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
+import 'package:kishoutenketsu_rta/logic/position.dart';
 import '../constant.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'alarm_page.dart';
 import 'package:weather/weather.dart';
+import 'package:geocoding/geocoding.dart' as geoCoding;
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -32,130 +34,109 @@ class _MainPageState extends State<MainPage> {
   // shared_preferencesから持ってきたアラーム時刻を保持する変数
   int? _alarmTime;
 
-// ラッキーアイテムを保持する配列
-final List<String> _luckyItem = [
-  "青いハンカチ",
-  "花柄のハンカチ",
-  "黄色いハンカチ",
-  "赤のジャケット",
-  "青の靴下",
-  "黄色のTシャツ",   
-];
+  // ラッキーアイテムを保持する配列
+  final List<String> _luckyItem = [
+    "青色のハンカチ",
+    "花柄のハンカチ",
+    "黄色のハンカチ",
+    "赤色のペンダント",
+    "青色の靴下",
+    "黒色のペン",   
+  ];
 
-// 定型文を保持する配列
-final List<String> _message = [
-  "りんごって美味しいよね！",
-  "りんご食べたいなぁ〜",
-  "明日のラッキーアイテムは{_luckyItem}だよ！",
-  "ラ〜ラララ〜ラ〜ラララ〜♩"
-];
+  // 定型文を保持する配列
+  final List<String> _message = [
+    "りんごって美味しいよね！",
+    "りんご食べたいなぁ〜",
+    "明日のラッキーアイテムは{_luckyItem}だよ！",
+    "ラ〜ラララ〜ラ〜ラララ〜♩"
+  ];
 
-String replaceLuckyItem(String message) {
-  final luckyItem = _luckyItem[Random().nextInt(_luckyItem.length)];
-  return message.replaceFirst('{_luckyItem}', luckyItem);
-}
-
-// 定型文をランダムに表示する関数
-void RandomResponse() {
-  final randomMessage = _message[Random().nextInt(_message.length)];
-  final replacedMessage = replaceLuckyItem(randomMessage);
-  
-  setState(() {
-    _response = replacedMessage;
-    _showResponse = !_showResponse;
-  });
-}
-
-  //TODOchatGPTへの入力を保持する配列
-  // List<String> _message = [
-  //   "りんごって美味しいよね！だけ言ってください",
-  //   "りんご食べたいなぁ〜だけ言ってください",
-  //   "今日のラッキーアイテムを「明日のラッキーアイテムは...だよ！」で一文で答えて",
-  //   "ラ〜で歌を短く歌って"
-  // ];
-
-  //TODO ChatGPTからの応答を保持する変数
+  //定型文を保持する変数
   String? _response;
-  //TODO ChatGPTの応答を表示するかどうかのフラグ
+
+  //定型文表示するかどうかのフラグ
   bool _showResponse = false;
+
+  //OpenWeatherMapのAPIキー
+  String key = "acd5de627cfa49076715e8bfd8e76a8d";
+
+  //天気情報を取得するためのインスタンス
+  late WeatherFactory wf;
+
+  // 緯度を保持する変数
+  double? lat; 
+
+  // 経度を保持する変数
+  double? lon; 
+
+  //天気のアイコンを保持する変数
+  String? weatherIcon;
+
+  //position.dartのUserPositionクラスのインスタンスを作成
+  UserPosition userPosition = UserPosition();
 
   @override
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
+    wf = WeatherFactory(key , language: Language.JAPANESE);
     super.initState();
 
     initializeTime().then((_) {
       setState(() {});
     });
 
-  //TODOウィジェットが描画された後に実行する
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _response = "今日の梅田の天気は\n曇りのち晴れ\n最高気温は34度だよ！";
-      // _firstMessage();
+    // 位置情報を取得
+    userPosition.determinePosition().then((position) async{ 
+      setState(() {
+        lat = position.latitude;
+        lon = position.longitude;
+      });
+
+      // print("緯度: $lat, 経度: $lon");
+
+      //初回メッセージを作成
+      // await _weatherMessage();
     });
   }
 
-// _firstMessage() async {
-//   try {
-//     final weather = await getWeather();
-//     if (weather != null) {
-//       String messageWithWeather = weather.toString();
-//       setState(() {
-//         _response = messageWithWeather;
-//       });
-//     } else {
-//       setState(() {
-//         _response = "申し訳ありません。\n天気情報が取得できませんでした。";
-//       });
-//     }
-//   } catch (e) {
-//     print("エラーが発生しました: $e");
-//   }
-// }
+  // レンダリング時に表示される天気情報のメッセージを作成する関数
+  // Future<void>_weatherMessage() async {
+  //   try {
+  //     //緯度と経度が取得できない場合のエラーハンドリング
+  //     if (lat == null || lon == null) {
+  //       print("緯度と経度が取得できませんでした");
+  //       return;
+  //     }
 
-  //TODO:初回メッセージを作成する関数
-  // Future<void> _firstMessage() async {
-  //   final chatGPT = ChatGPT();
+  //     //天気情報を取得
+  //     final position = await geoCoding.placemarkFromCoordinates(lat!, lon!);
+  //     Weather weather = await wf.currentWeatherByCityName(position.first.locality!);
+      
+  //     print("天気情報を取得しました: $weather");      
 
-    //TODO天気情報を含めたメッセージを作成
-    // String messageWithWeather =
-    //     await getWeather().then((value) => value!.toString());
-    // final response = await chatGPT.message(
-    //     "$messageWithWeatherの情報から「今日の...の天気は...だよ！」だけ一文で言ってくださいそれ以外は言わないでください");
-    // if (mounted) {
-    //   setState(() {
-    //     // ChatGPTからの応答を保持する変数に代入
-    //     _response = response;
-    //     _showResponse = !_showResponse;
-    //   });
-    // }
-  // }
+  //     //都市の名前を取得
+  //     String? cityName = position.first.locality;
 
-  // TODOChatGPTからの応答を取得する関数
-  // Future<void> _getChatGPTResponse() async {
-  //   final chatGPT = ChatGPT();
-  //   _response = null;
-  //   final response =
-  //       await chatGPT.message(_message[Random().nextInt(_message.length)]);
+  //     //天候情報を取得
+  //     // String? weatherDescription = weather.weatherMain;
+  //     String? weatherDescription = weather.weatherDescription;
 
-  //   if (mounted) {
+  //     //最高気温の取得
+  //     Temperature? temperature = weather.tempMax;
+
+  //     //天気情報メッセージ
+  //     String weatherMessage
+  //       = "今日の$cityNameの天気は\n$weatherDescriptionだよ!\n最高気温は${temperature!.celsius!.toStringAsFixed(0)}度だよ！";
+
   //     setState(() {
-  //       // ChatGPTからの応答を保持する変数に代入
-  //       _response = response;
+  //       _response = weatherMessage;
   //       _showResponse = !_showResponse;
+  //       weatherIcon = weather.weatherIcon;
   //     });
+  //   } catch (e) {
+  //     print("エラーが発生しました: $e");
   //   }
-  // }
-
-  // //天気情報を取得する関数
-  // getWeather() async {
-  //   String key = "dcb167452a27389332613cf37eca0217";
-  //   double lat = 35.69; //latitude(緯度)
-  //   double lon = 139.69; //longitude(経度)
-  //   WeatherFactory wf = WeatherFactory(key);
-
-  //   Weather weather = await wf.currentWeatherByLocation(lat, lon);
-  //   return weather;
   // }
 
   // アラーム音の初期化
@@ -176,6 +157,26 @@ void RandomResponse() {
       }
     });
   }
+
+  // 定型文をランダムに表示する関数
+  void randomResponse() {
+    final randomMessage = _message[Random().nextInt(_message.length)];
+    final replacedMessage = replaceLuckyItem(randomMessage);
+    
+    setState(() {
+      _response = replacedMessage;
+      _showResponse = !_showResponse;
+    });
+  }
+
+  // ラッキーアイテムをランダムに選択してメッセージに埋め込む関数
+  String replaceLuckyItem(String message) {
+    // ラッキーアイテムをランダムに選択
+    final luckyItem = _luckyItem[Random().nextInt(_luckyItem.length)];
+    // ラッキーアイテムをメッセージに埋め込む
+    return message.replaceFirst('{_luckyItem}', luckyItem);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -241,7 +242,7 @@ void RandomResponse() {
                                     )
                                   : Container(),
                             ),
-                            //　アラーム音の表示
+                            //アラーム音の表示
                             Container(
                               alignment: const Alignment(-0.68, -0.8),
                               width: 300,
@@ -312,7 +313,7 @@ void RandomResponse() {
           // GestureDetectorの中でメッセージのランダム表示を呼び出す
           GestureDetector(
             onTap: () {
-              RandomResponse();
+              randomResponse();
             },
             child: Align(
               alignment: const Alignment(0.8, 0.95),
@@ -370,3 +371,121 @@ class _alarmSelectorDialog extends StatelessWidget {
     );
   }
 }
+
+
+//TODOchatGPTへの入力を保持する配列
+// List<String> _message = [
+//   "りんごって美味しいよね！だけ言ってください",
+//   "りんご食べたいなぁ〜だけ言ってください",
+//   "今日のラッキーアイテムを「明日のラッキーアイテムは...だよ！」で一文で答えて",
+//   "ラ〜で歌を短く歌って"
+// ];
+
+
+
+//TODO ChatGPTからの応答を保持する変数
+// String? _response;
+//TODO ChatGPTの応答を表示するかどうかのフラグ
+// bool _showResponse = false;
+
+
+
+//TODO:初回メッセージを作成する関数
+// Future<void> _firstMessage() async {
+//   final chatGPT = ChatGPT();
+
+  //TODO天気情報を含めたメッセージを作成
+  // String messageWithWeather =
+  //     await getWeather().then((value) => value!.toString());
+  // final response = await chatGPT.message(
+  //     "$messageWithWeatherの情報から「今日の...の天気は...だよ！」だけ一文で言ってくださいそれ以外は言わないでください");
+  // if (mounted) {
+  //   setState(() {
+  //     // ChatGPTからの応答を保持する変数に代入
+  //     _response = response;
+  //     _showResponse = !_showResponse;
+  //   });
+  // }
+// }
+
+
+// TODOChatGPTからの応答を取得する関数
+// Future<void> _getChatGPTResponse() async {
+//   final chatGPT = ChatGPT();
+//   _response = null;
+//   final response =
+//       await chatGPT.message(_message[Random().nextInt(_message.length)]);
+
+//   if (mounted) {
+//     setState(() {
+//       // ChatGPTからの応答を保持する変数に代入
+//       _response = response;
+//       _showResponse = !_showResponse;
+//     });
+//   }
+// }
+
+
+//天候情報を日本語に変換
+// switch (weatherDescription) {
+//   case "Thunderstorm":
+//     weatherDescription = "雷雨";
+//     break;
+//   case "Drizzle":
+//     weatherDescription = "霧雨";
+//     break;
+//   case "Rain":
+//     weatherDescription = "雨";
+//     break;
+//   case "Snow":
+//     weatherDescription = "雪";
+//     break;
+//   case "Clear":
+//     weatherDescription = "晴れ";
+//     break;
+//   case "Clouds":
+//     weatherDescription = "曇り";
+//     break;
+//   default:
+//     weatherDescription = "不明";
+// }
+
+
+
+//天気のアイコン表示
+// weatherIcon != null
+//   ?Container(
+//     alignment: const Alignment(0.8, -0.8),
+//     width: 100,
+//     height: 100,
+//     decoration: BoxDecoration(
+//       color: Constant.main,
+//       shape: BoxShape.circle,
+//       border: Border.all(
+//         color: Colors.white,
+//         width: 2,
+//       ),
+//     ),
+//     child: Center(
+//       child: Image(
+//         image:NetworkImage("http://openweathermap.org/img/wn/$weatherIcon.png"),
+//       ),
+//     ),
+//   )
+//   //ローディングを表示
+//   :Container(
+//     alignment: const Alignment(0.8, -0.8),
+//     width: 100,
+//     height: 100,
+//     decoration: BoxDecoration(
+//       color: Constant.main,
+//       shape: BoxShape.circle,
+//       border: Border.all(
+//         color: Colors.white,
+//         width: 2,
+//       ),
+//     ),
+//     child: const Center(
+//       child: CircularProgressIndicator(),
+//     ),
+//   ),

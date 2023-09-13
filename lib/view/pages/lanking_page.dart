@@ -219,7 +219,6 @@ class _LankingPageState extends State<LankingPage> {
 
 Widget _buildCard(
     int index, Map<String, dynamic> time, List<Map<String, dynamic>> result) {
-  debugPrint(time.toString());
   return Card(
     elevation: 6,
     shape: RoundedRectangleBorder(

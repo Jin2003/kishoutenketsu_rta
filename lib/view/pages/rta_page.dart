@@ -1,11 +1,14 @@
 import 'package:alarm/alarm.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
+import 'package:soundpool/soundpool.dart';
 
 import '../../logic/nav_bar.dart';
 
@@ -62,6 +65,222 @@ class _RtaPageState extends State<RtaPage> {
 
   // この画面が表示された時の時間を取得
   DateTime startTime = DateTime.now();
+
+  SoundpoolOptions _soundpoolOptions = const SoundpoolOptions();
+
+  Soundpool? _pool;
+  late Future<int> _soundId;
+  int? _alarmSoundStreamId;
+
+  Soundpool get _soundpool => _pool!;
+
+  void _loadSounds() {
+    _soundId = _loadSound();
+  }
+
+  Future<int> _loadSound() async {
+    var asset = await rootBundle.load("assets/alarm/Alarm.mp3");
+    return await _soundpool.load(asset);
+  }
+
+  Future<void> _playSound() async {
+    var alarmSound = await _soundId;
+    // TODO: 音が5秒くらいで止まる。無限リピートにしたら一応止まらない
+    _alarmSoundStreamId = await _soundpool.play(alarmSound, repeat: -1);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initPool(_soundpoolOptions);
+    _loadSounds();
+    // _getNfcTable()呼び出し
+    Future(() async {
+      await _getNfcID();
+    });
+    // Future(() async {
+    nfcKey.shuffle();
+    // });
+    // 画面描画時に音を再生
+    _playSound();
+  }
+
+  @override
+  void dispose() {
+    // _seSound.dispose(); // Dispose the SeSound instance
+    super.dispose();
+  }
+
+  // サウンドの停止
+  void _stopSounds() {
+    if (_alarmSoundStreamId != null) {
+      _soundpool.stop(_alarmSoundStreamId!);
+      _alarmSoundStreamId = null;
+    }
+  }
+
+  // Soundpoolの破棄
+  void _disposePool() {
+    _soundpool.release();
+  }
+
+  void _initPool(SoundpoolOptions soundpoolOptions) {
+    _pool?.dispose();
+    setState(() {
+      _soundpoolOptions = soundpoolOptions;
+      _pool = Soundpool.fromOptions(options: _soundpoolOptions);
+      if (kDebugMode) {
+        print('pool updated: $_pool');
+      }
+    });
+  }
+
+  Future<int> _getRankingPosition(int thisTime) async {
+    // 順位を取得する
+    int ranking = await FirebaseHelper().getRanking(thisTime);
+    return ranking;
+  }
+
+  void nfcReadFunc({int nfcIndex = 0}) async {
+    dynamic nfcs = Constant.nfcs;
+    bool success = await NFCRead()
+        .nfcRead(imageCount, nfcs[nfcIndex == 4 ? rta : nfcKey[nfcIndex]]);
+    debugPrint('$success');
+    // データベースに登録しているIDと読み取ったIDが異なるので再度読み取り
+    if (success == false) {
+      nfcReadFunc(nfcIndex: nfcIndex);
+      falseDialog();
+      return;
+    } else {
+      setState(() {
+        // タッチしたかしてないか判定
+        onOff[imageCount] = true;
+        // imageCountをインクリメント
+        imageCount++;
+        //nfcIndexをインクリメント
+        if (nfcIndex <= nfcs.length - 1) {
+          nfcIndex++;
+        }
+      });
+      // 5回正しく読み取ったら終了
+      if (imageCount == 5) {
+        //アラーム停止
+        Alarm.stop(1);
+
+        _stopSounds();
+        _disposePool();
+
+        // RTA終了時の時間を取得
+        DateTime finish = DateTime.now();
+        String date = DateFormat('yy.MM/dd').format(finish);
+        int rtaResult = finish.difference(startTime).inSeconds;
+        // firebaseにRTAのデータを送信
+        FirebaseHelper().saveRtaResult(rtaResult, date);
+
+        endDialog(finish, rtaResult);
+      } else {
+        // 再度読み取り
+        nfcReadFunc(nfcIndex: nfcIndex);
+      }
+    }
+  }
+
+  void endDialog(DateTime finish, int rtaResult) async {
+    // 順位を取得する
+    int ranking = await _getRankingPosition(rtaResult);
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Scaffold(
+              backgroundColor: Constant.sub,
+              body: Stack(
+                children: [
+                  SimpleDialog(
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: CustomText(
+                            text:
+                                '今日のタイムは\n${finish.difference(startTime).inSeconds}秒!!!\n\n順位は$ranking位だよ！',
+                            fontSize: 25,
+                            Color: Constant.gray),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20, left: 50, right: 50, bottom: 40),
+                        child: OutlineButton(
+                          title: 'とじる',
+                          width: 50,
+                          height: 50,
+                          shape: 10,
+                          fontsize: 17,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => const NavBar())),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          });
+    });
+  }
+
+  //タグが違う時のダイアログ
+  void falseDialog() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Scaffold(
+              backgroundColor: Constant.sub,
+              body: Stack(
+                children: [
+                  SimpleDialog(
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      const Align(
+                        alignment: Alignment.center,
+                        child: CustomText(
+                            text: "そのタグじゃないよ！\n他のタグをタッチしてみよう！",
+                            fontSize: 25,
+                            Color: Constant.gray),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20, left: 50, right: 50, bottom: 40),
+                        child: OutlineButton(
+                          title: 'とじる',
+                          width: 50,
+                          height: 50,
+                          shape: 10,
+                          fontsize: 17,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -169,148 +388,5 @@ class _RtaPageState extends State<RtaPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // _getNfcTable()呼び出し
-    _getNfcID();
-    nfcKey.shuffle();
-  }
-
-  void nfcReadFunc({int nfcIndex = 0}) async {
-    dynamic nfcs = Constant.nfcs;
-    bool success = await NFCRead()
-        .nfcRead(imageCount, nfcs[nfcIndex == 4 ? rta : nfcKey[nfcIndex]]);
-    debugPrint('$success');
-    // データベースに登録しているIDと読み取ったIDが異なるので再度読み取り
-    if (success == false) {
-      nfcReadFunc(nfcIndex: nfcIndex);
-      falseDialog();
-      return;
-    } else {
-      setState(() {
-        // タッチしたかしてないか判定
-        onOff[imageCount] = true;
-        // imageCountをインクリメント
-        imageCount++;
-        //nfcIndexをインクリメント
-        if (nfcIndex <= nfcs.length - 1) {
-          nfcIndex++;
-        }
-      });
-      // 5回正しく読み取ったら終了
-      if (imageCount == 5) {
-        //アラーム停止
-        Alarm.stop(1);
-        // RTA終了時の時間を取得
-        DateTime finish = DateTime.now();
-        String date = DateFormat('yy.MM/dd').format(finish);
-        // firebaseにRTAのデータを送信
-        FirebaseHelper()
-            .saveRtaResult(finish.difference(startTime).inSeconds, date);
-
-        endDialog(finish);
-      } else {
-        // 再度読み取り
-        nfcReadFunc(nfcIndex: nfcIndex);
-      }
-    }
-  }
-
-  void endDialog(DateTime finish) {
-    Future.delayed(const Duration(milliseconds: 500), () {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return Scaffold(
-              backgroundColor: Constant.sub,
-              body: Stack(
-                children: [
-                  SimpleDialog(
-                    children: [
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: CustomText(
-                            text:
-                                '今日のタイムは\n${finish.difference(startTime).inSeconds}秒!!!',
-                            fontSize: 25,
-                            Color: Constant.gray),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20, left: 50, right: 50, bottom: 40),
-                        child: OutlineButton(
-                          title: 'とじる',
-                          width: 50,
-                          height: 50,
-                          shape: 10,
-                          fontsize: 17,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => const NavBar())),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          });
-    });
-  }
-
-  //タグが違う時のダイアログ
-  void falseDialog(){
-    Future.delayed(const Duration(milliseconds: 500), () {
-    showDialog(
-          context: context,
-          builder: (context) {
-            return Scaffold(
-              backgroundColor: Constant.sub,
-              body: Stack(
-                children: [
-                  SimpleDialog(
-                    children: [
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: CustomText(
-                            text:
-                                "そのタグじゃないよ！\n他のタグをタッチしてみよう！",
-                            fontSize: 25,
-                            Color: Constant.gray),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20, left: 50, right: 50, bottom: 40),
-                        child: OutlineButton(
-                          title: 'とじる',
-                          width: 50,
-                          height: 50,
-                          shape: 10,
-                          fontsize: 17,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          });
-    });
   }
 }

@@ -252,17 +252,22 @@ class _LogInState extends State<LogIn> {
                   onPressed: () async {
                     try {
                       // メール/パスワードでログイン
+                      // 展示回用
                       final User? user = (await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
-                                  email: "2220137@ecc.ac.jp",
-                                  password: "123qwecc"))
+                                  email: "ecc@ecc.ac.jp", password: "eccecc"))
                           .user;
+                      // final User? user = (await FirebaseAuth.instance
+                      //     .signInWithEmailAndPassword(
+                      //         email: "2220137@ecc.ac.jp",
+                      //         password: "123qwecc"))
+                      // .user;
                       if (user != null) {
                         SharedPreferencesLogic sharedPreferencesLogic =
                             SharedPreferencesLogic();
                         // SharedPreferencesにuserIDを保存
                         await sharedPreferencesLogic.setUserID(user.uid);
-                        Constant.updateUserName("AluFu");
+                        Constant.updateUserName("testuser");
                         // firebaseからgroupIDを取得
                         var documentSnapshot = await FirebaseFirestore.instance
                             .collection('users')

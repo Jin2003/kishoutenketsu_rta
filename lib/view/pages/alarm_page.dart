@@ -1,9 +1,11 @@
+import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
+import 'package:kishoutenketsu_rta/logic/alarm_setting.dart';
 
 import '../constant.dart';
 import 'components/elevate_button.dart';
@@ -51,6 +53,9 @@ class _AlarmPageState extends State<AlarmPage> {
     });
     splitAlarmTime().then((_) {
       setState(() {});
+    });  
+        initializeAlarm().then((_) {
+      setState(() {});
     });
   }
 
@@ -80,6 +85,11 @@ class _AlarmPageState extends State<AlarmPage> {
         _alarmMinute = widget.argumentAlarmTime! % 60;
       });
     }
+  }
+
+  //アラームサービスの初期化
+  Future<void> initializeAlarm() async{
+    await Alarm.init();
   }
 
   @override
@@ -258,6 +268,16 @@ class _AlarmPageState extends State<AlarmPage> {
                     SharedPreferencesLogic sharedPreferencesLogic =
                         SharedPreferencesLogic();
                     sharedPreferencesLogic.setAlarmTime(_alarmTime!);
+
+                    // TODO:alarmSettingにアラームを設定
+                    AlarmSetting alarmSetting = AlarmSetting();
+                    alarmSetting.setting(
+                      _alarmTime,
+                      _music!,
+                      1,
+                      context,
+                    );
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: ((context) => const NavBar())),

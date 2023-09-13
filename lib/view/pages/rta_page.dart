@@ -1,3 +1,4 @@
+import 'package:alarm/alarm.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -163,8 +164,12 @@ class _RtaPageState extends State<RtaPage> {
       });
       // 5回正しく読み取ったら終了
       if (imageCount == 5) {
+        //アラーム停止
+        Alarm.stop(1);
+
         _stopSounds();
         _disposePool();
+
         // RTA終了時の時間を取得
         DateTime finish = DateTime.now();
         String date = DateFormat('yy.MM/dd').format(finish);

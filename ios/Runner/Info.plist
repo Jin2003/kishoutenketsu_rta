@@ -49,5 +49,13 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<!-- geolocator Section -->
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>天気情報を取得する際に、位置情報が必要です。</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>天気情報を取得する際に、位置情報が必要です。</string>
+		<!-- End of the geolocator Section -->
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>アプリがアセットにアクセスするために許可が必要です。</string>
 	</dict>
 </plist>

@@ -29,26 +29,24 @@ class _LankingPageState extends State<LankingPage> {
   //   "「惜しい！\nあと秒で更新だったね!」のみ言ってくださいそれ以外は言わないでください",
   // ];
 
-  //ランキングの定型文
-  List<String> _message = [
-    "更新おめでとう！\n今日も一日頑張ろう!",
-    "惜しい！\nもう少しで更新だったね!",
-    "RTAをやってみよう！",
-    // "惜しい！\nあと秒で更新だったね!",
-  ];
-
-  //定型文を表示する変数
-  String? _response;
-  //定型文を表示するかどうかのフラグ
-  bool _showResponse = false;
-
   //TODO ChatGPTからの応答を保持する変数
   // String? _response;
   //TODO ChatGPTの応答を表示するかどうかのフラグ
   // bool _showResponse = false;
 
-  // データベースのデータを保持する変数
-  List<Map<String, dynamic>>? db;
+  //ランキングの定型文
+  final List<String> _message = [
+    "更新おめでとう！\n今日も一日頑張ろう!",
+    "惜しい！\n",
+    "RTAをやってみよう!",
+    // "惜しい！\nあと秒で更新だったね!",
+  ];
+
+  //定型文を表示する変数
+  String? _response;
+
+  //定型文を表示するかどうかのフラグ
+  bool _showResponse = false;
 
   @override
   void initState(){
@@ -100,24 +98,38 @@ class _LankingPageState extends State<LankingPage> {
   }
 
   //定型文を表示する関数
-  _getMessage() async { 
-    for(int ranking = 0; ranking <= _result.length-1; ranking++){
-      if(_rtaTime != null){ 
-        if(_rtaTime == _result[ranking]){
-          setState(() {
-            _response = (ranking == 0) ? _message[0] : _message[1];
-            _showResponse = !_showResponse;
-          });
-        }
-      }else{
+  _getMessage() async {
+    if (_rtaTime != null && _result.isNotEmpty) {
+      // ランキング最高記録のRTAタイムを取得
+      final topTime = _result.first;
+      // 最高記録のタイムと自分の最新のタイムの差を計算
+      final difference = _rtaTime!['rtaResult'] - topTime['rtaResult'];
+
+      if (difference >= 0) {
+        final minutes = difference ~/ 60;
+        final seconds = difference % 60 + 1;
+
         setState(() {
-          _response = _message[2];
+          if(minutes == 0){
+            _response = "${_message[1]}あと $seconds 秒更新だったね!";
+          }else{
+            _response = "${_message[1]}あと $minutes 分 $seconds 秒で更新だったね!";
+          }
+          _showResponse = !_showResponse;
+        });
+      } else {
+        setState(() {
+          _response = _message[0];
           _showResponse = !_showResponse;
         });
       }
+    } else {
+      setState(() {
+        _response = _message[2];
+        _showResponse = !_showResponse;
+      });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +178,7 @@ class _LankingPageState extends State<LankingPage> {
               ),
             ),
           ),
-          // 吹き出しの中身(ChatGPTの応答)
+          // 吹き出しに表示するメッセージ
           Align(
             alignment: const Alignment(-0.3, 1.05),
             child: SizedBox(

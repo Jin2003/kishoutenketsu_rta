@@ -48,7 +48,7 @@ class _MainPageState extends State<MainPage> {
   final List<String> _message = [
     "りんごって美味しいよね！",
     "りんご食べたいなぁ〜",
-    "明日のラッキーアイテムは{_luckyItem}だよ！",
+    "明日のラッキーアイテムは\n{_luckyItem}だよ！",
     "ラ〜ラララ〜ラ〜ラララ〜♩"
   ];
 
@@ -286,9 +286,13 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
           ),
-          // 吹き出しの中身(ChatGPTの応答)
+          // 吹き出しに表示するメッセージ
           Align(
-            alignment: const Alignment(-0.3, 1.02),
+            alignment: (_response != null && _response!.length >= 14 && _response!.length <= 28)
+              ? const Alignment(-0.3, 1.05)
+              : (_response != null && _response!.length > 28)
+                ? const Alignment(-0.3, 1.02)
+                : const Alignment(-0.3, 1.07),
             child: SizedBox(
               width: 200,
               height: 190,

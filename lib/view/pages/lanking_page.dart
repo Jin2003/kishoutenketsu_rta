@@ -20,8 +20,14 @@ class _LankingPageState extends State<LankingPage> {
   //Lankingを何個表示するか
   int _lankingCount = 0;
 
+  //ランキングで自分の名前を保持する変数
+  String? _userName;
+
   //最新のRTAタイムを保持する変数
   Map<String, dynamic>? _rtaTime ;
+
+  //最高記録のRTAタイムを保持する変数
+  Map<String, dynamic>? _topTime;
 
   //TODOchatGPTへの入力を保持する配列
   // List<String> _message = [
@@ -74,12 +80,24 @@ class _LankingPageState extends State<LankingPage> {
     List<Map<String, dynamic>> rtaResults =
         await FirebaseHelper().getRtaResults();
 
-    // 最新のRTAタイムを取得
+        print('rtaResults: $rtaResults');
+
     if (rtaResults.isNotEmpty) {
-      Map<String, dynamic> rtaTime = rtaResults.last;
+      // rtaResultsの最新で登録されたタイムの名前を取得
+      final userName = rtaResults.last['name'];
+
+      print('userName: $userName');
+      
+      // 自分の最新のタイムを取得
+      final rtaTime = rtaResults.lastWhere(
+          (element) => element['name'] == userName,
+          orElse: () => <String, dynamic>{});
+
+          print('rtaTime: $rtaTime');
 
       setState(() {
         _rtaTime = rtaTime;
+        _userName = userName;
       });
     }
 
@@ -94,42 +112,87 @@ class _LankingPageState extends State<LankingPage> {
     });
     _result = rtaResults;
 
-    _getMessage();
+    _getMessage(_userName!);
   }
 
-  //定型文を表示する関数
-  _getMessage() async {
-    if (_rtaTime != null && _result.isNotEmpty) {
-      // ランキング最高記録のRTAタイムを取得
-      final topTime = _result.first;
-      // 最高記録のタイムと自分の最新のタイムの差を計算
-      final difference = _rtaTime!['rtaResult'] - topTime['rtaResult'];
+//定型文を表示する関数
+_getMessage(String userName) async{
+  // ランキング最高記録のRTAタイムを取得
+  _topTime = _result.firstWhere(
+      (element) => element['name'] == userName,
+      orElse: () => <String, dynamic>{}); 
 
-      if (difference >= 0) {
-        final minutes = difference ~/ 60;
-        final seconds = difference % 60 + 1;
+  print('topTime: $_topTime');
 
-        setState(() {
-          if(minutes == 0){
-            _response = "${_message[1]}あと $seconds 秒更新だったね!";
-          }else{
-            _response = "${_message[1]}あと $minutes 分 $seconds 秒で更新だったね!";
-          }
-          _showResponse = !_showResponse;
-        });
-      } else {
-        setState(() {
-          _response = _message[0];
-          _showResponse = !_showResponse;
-        });
-      }
+  //自分の最新のタイムと最高記録のタイムの差を計算
+  final difference = (_rtaTime != null && _topTime != null)
+      ? _rtaTime!['rtaResult'] - _topTime!['rtaResult']
+      : 'タイムが取得できなかったよ'; 
+
+  print('${_rtaTime!['rtaResult']}だよ！');
+  print('${_topTime!['rtaResult']}だよ！');
+
+  if (_rtaTime != null && _result.isNotEmpty) {
+    if (difference != null && difference >= 0) {
+      final minutes = difference ~/ 60;
+      final seconds = difference % 60 + 1;
+
+      setState(() {
+        if (minutes == 0) {
+          _response = "${_message[1]}あと $seconds 秒で更新だったね!";
+        } else {
+          _response = "${_message[1]}あと $minutes 分 $seconds 秒で更新だったね!";
+        }
+        _showResponse = !_showResponse;
+      });
     } else {
       setState(() {
-        _response = _message[2];
+        _response = _message[0];
         _showResponse = !_showResponse;
       });
     }
+  } else {
+    setState(() {
+      _response = _message[2];
+      _showResponse = !_showResponse;
+    });
   }
+}
+
+
+  //定型文を表示する関数
+  // _getMessage() async {
+  //   if (_rtaTime != null && _result.isNotEmpty) {
+  //     // ランキング最高記録のRTAタイムを取得
+  //     final topTime = _result.first;
+  //     // 最高記録のタイムと自分の最新のタイムの差を計算
+  //     final difference = _rtaTime!['rtaResult'] - topTime['rtaResult'];
+
+  //     if (difference >= 0) {
+  //       final minutes = difference ~/ 60;
+  //       final seconds = difference % 60 + 1;
+
+  //       setState(() {
+  //         if(minutes == 0){
+  //           _response = "${_message[1]}あと $seconds 秒更新だったね!";
+  //         }else{
+  //           _response = "${_message[1]}あと $minutes 分 $seconds 秒で更新だったね!";
+  //         }
+  //         _showResponse = !_showResponse;
+  //       });
+  //     } else {
+  //       setState(() {
+  //         _response = _message[0];
+  //         _showResponse = !_showResponse;
+  //       });
+  //     }
+  //   } else {
+  //     setState(() {
+  //       _response = _message[2];
+  //       _showResponse = !_showResponse;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

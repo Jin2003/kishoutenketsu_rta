@@ -88,10 +88,12 @@ class _MainPageState extends State<MainPage> {
 
     // 位置情報を取得
     userPosition.determinePosition().then((position) async{ 
-      setState(() {
-        lat = position.latitude;
-        lon = position.longitude;
-      });
+      if(mounted) {
+        setState(() {
+          lat = position.latitude;
+          lon = position.longitude;
+        });
+      }
 
       // print("緯度: $lat, 経度: $lon");
 
@@ -129,11 +131,13 @@ class _MainPageState extends State<MainPage> {
   //     String weatherMessage
   //       = "今日の$cityNameの天気は\n$weatherDescriptionだよ!\n最高気温は${temperature!.celsius!.toStringAsFixed(0)}度だよ！";
 
-  //     setState(() {
-  //       _response = weatherMessage;
-  //       _showResponse = !_showResponse;
-  //       weatherIcon = weather.weatherIcon;
-  //     });
+  //     if (mounted) {
+  //       setState(() {
+  //         _response = weatherMessage;
+  //         _showResponse = !_showResponse;
+  //         weatherIcon = weather.weatherIcon;
+  //       });
+  //     }
   //   } catch (e) {
   //     print("エラーが発生しました: $e");
   //   }

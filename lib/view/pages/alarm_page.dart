@@ -26,6 +26,9 @@ class _AlarmPageState extends State<AlarmPage> {
   // 保存中のアラーム音の表示名
   String? _musicName;
 
+  // 保存中のアラーム音のパス
+  String? _musicPath;
+
   // アラームを鳴らす時刻
   int _alarmTime = Constant.alarmTime;
 
@@ -91,6 +94,17 @@ class _AlarmPageState extends State<AlarmPage> {
   Future<void> initializeAlarm() async{
     await Alarm.init();
   }
+
+  String? findKeyByValue(Map<String, String> map, String targetValue) {
+  // マップをループして対応するキーを探す
+  for (var entry in map.entries) {
+    if (entry.value == targetValue) {
+      return entry.key;
+    }
+  }
+  // 見つからなかった場合はnullを返す
+  return null;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -273,11 +287,11 @@ class _AlarmPageState extends State<AlarmPage> {
                     AlarmSetting alarmSetting = AlarmSetting();
                     alarmSetting.setting(
                       _alarmTime,
-                      _music!,
+                      _musicPath = findKeyByValue(_musicNameMap, _music!),
                       1,
                       context,
                     );
-
+                    // print(_musicPath);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: ((context) => const NavBar())),

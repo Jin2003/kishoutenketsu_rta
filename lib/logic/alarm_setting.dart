@@ -22,9 +22,9 @@ class AlarmSetting {
     final alarmSettings = AlarmSettings(
       id: id,
       dateTime: alarmTime,
-      assetAudioPath: 'assets/alarm/$music.mp3',
+      assetAudioPath: "assets/alarm/$music.mp3",
       loopAudio: true,
-      vibrate: true,
+      vibrate: false,
       volumeMax: false,
       fadeDuration: 3.0,
       notificationTitle: 'さあRTA開始だ!',

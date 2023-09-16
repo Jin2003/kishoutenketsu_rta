@@ -44,7 +44,7 @@ class _LankingPageState extends State<LankingPage> {
   final List<String> _message = [
     "更新おめでとう！\n今日も一日頑張ろう!",
     "惜しい！\n",
-    "RTAをやってみよう!",
+    "タイムを競い合おう!",
     // "惜しい！\nあと秒で更新だったね!",
   ];
 
@@ -90,15 +90,17 @@ class _LankingPageState extends State<LankingPage> {
       
       // 自分の最新のタイムを取得
       final rtaTime = rtaResults.lastWhere(
-          (element) => element['name'] == userName,
-          orElse: () => <String, dynamic>{});
+        (element) => element['name'] == userName,
+        orElse: () => <String, dynamic>{});
 
           print('rtaTime: $rtaTime');
 
-      setState(() {
-        _rtaTime = rtaTime;
-        _userName = userName;
-      });
+      if (mounted) {
+        setState(() {
+          _rtaTime = rtaTime;
+          _userName = userName;
+        });
+      }
     }
 
     // ソート
@@ -107,9 +109,11 @@ class _LankingPageState extends State<LankingPage> {
     // ランキングの数を設定
     int lankingCount = rtaResults.length;
 
-    setState(() {
-      _lankingCount = lankingCount;
-    });
+    if(mounted){
+      setState(() {
+        _lankingCount = lankingCount;
+      });
+    }
     _result = rtaResults;
 
     _getMessage(_userName!);
@@ -137,63 +141,35 @@ _getMessage(String userName) async{
       final minutes = difference ~/ 60;
       final seconds = difference % 60 + 1;
 
-      setState(() {
-        if (minutes == 0) {
-          _response = "${_message[1]}あと $seconds 秒で更新だったね!";
-        } else {
-          _response = "${_message[1]}あと $minutes 分 $seconds 秒で更新だったね!";
-        }
-        _showResponse = !_showResponse;
-      });
+      if(mounted){
+        setState(() {
+          if (minutes == 0) {
+            _response = "${_message[1]}あと $seconds 秒で更新だったね!";
+          } else {
+            _response = "${_message[1]}あと $minutes 分 $seconds 秒で更新だったね!";
+          }
+          _showResponse = !_showResponse;
+        });
+      }
     } else {
+      if(mounted){
+        setState(() {
+          _response = _message[0];
+          _showResponse = !_showResponse;
+        });
+      }
+    }
+  } else {
+    if(mounted){
       setState(() {
-        _response = _message[0];
+        _response = _message[2];
         _showResponse = !_showResponse;
       });
     }
-  } else {
-    setState(() {
-      _response = _message[2];
-      _showResponse = !_showResponse;
-    });
   }
 }
 
-
   //定型文を表示する関数
-  // _getMessage() async {
-  //   if (_rtaTime != null && _result.isNotEmpty) {
-  //     // ランキング最高記録のRTAタイムを取得
-  //     final topTime = _result.first;
-  //     // 最高記録のタイムと自分の最新のタイムの差を計算
-  //     final difference = _rtaTime!['rtaResult'] - topTime['rtaResult'];
-
-  //     if (difference >= 0) {
-  //       final minutes = difference ~/ 60;
-  //       final seconds = difference % 60 + 1;
-
-  //       setState(() {
-  //         if(minutes == 0){
-  //           _response = "${_message[1]}あと $seconds 秒更新だったね!";
-  //         }else{
-  //           _response = "${_message[1]}あと $minutes 分 $seconds 秒で更新だったね!";
-  //         }
-  //         _showResponse = !_showResponse;
-  //       });
-  //     } else {
-  //       setState(() {
-  //         _response = _message[0];
-  //         _showResponse = !_showResponse;
-  //       });
-  //     }
-  //   } else {
-  //     setState(() {
-  //       _response = _message[2];
-  //       _showResponse = !_showResponse;
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

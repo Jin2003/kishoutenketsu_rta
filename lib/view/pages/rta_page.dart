@@ -8,7 +8,6 @@ import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
-import 'package:soundpool/soundpool.dart';
 
 import '../../logic/nav_bar.dart';
 
@@ -66,34 +65,9 @@ class _RtaPageState extends State<RtaPage> {
   // この画面が表示された時の時間を取得
   DateTime startTime = DateTime.now();
 
-  SoundpoolOptions _soundpoolOptions = const SoundpoolOptions();
-
-  Soundpool? _pool;
-  late Future<int> _soundId;
-  int? _alarmSoundStreamId;
-
-  Soundpool get _soundpool => _pool!;
-
-  void _loadSounds() {
-    _soundId = _loadSound();
-  }
-
-  Future<int> _loadSound() async {
-    var asset = await rootBundle.load("assets/alarm/Alarm.mp3");
-    return await _soundpool.load(asset);
-  }
-
-  Future<void> _playSound() async {
-    var alarmSound = await _soundId;
-    // TODO: 音が5秒くらいで止まる。無限リピートにしたら一応止まらない
-    _alarmSoundStreamId = await _soundpool.play(alarmSound, repeat: -1);
-  }
-
   @override
   void initState() {
     super.initState();
-    _initPool(_soundpoolOptions);
-    _loadSounds();
     // _getNfcTable()呼び出し
     Future(() async {
       await _getNfcID();
@@ -101,38 +75,12 @@ class _RtaPageState extends State<RtaPage> {
     // Future(() async {
     nfcKey.shuffle();
     // });
-    // 画面描画時に音を再生
-    _playSound();
   }
 
   @override
   void dispose() {
     // _seSound.dispose(); // Dispose the SeSound instance
     super.dispose();
-  }
-
-  // サウンドの停止
-  void _stopSounds() {
-    if (_alarmSoundStreamId != null) {
-      _soundpool.stop(_alarmSoundStreamId!);
-      _alarmSoundStreamId = null;
-    }
-  }
-
-  // Soundpoolの破棄
-  void _disposePool() {
-    _soundpool.release();
-  }
-
-  void _initPool(SoundpoolOptions soundpoolOptions) {
-    _pool?.dispose();
-    setState(() {
-      _soundpoolOptions = soundpoolOptions;
-      _pool = Soundpool.fromOptions(options: _soundpoolOptions);
-      if (kDebugMode) {
-        print('pool updated: $_pool');
-      }
-    });
   }
 
   Future<int> _getRankingPosition(int thisTime) async {
@@ -166,9 +114,6 @@ class _RtaPageState extends State<RtaPage> {
       if (imageCount == 5) {
         //アラーム停止
         Alarm.stop(1);
-
-        _stopSounds();
-        _disposePool();
 
         // RTA終了時の時間を取得
         DateTime finish = DateTime.now();

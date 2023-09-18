@@ -48,12 +48,16 @@ class _RtaPageState extends State<RtaPage> {
 
   Future<void> _getNfcID() async {
     // データベースからnfc_idをランダムに取得
-    Map<String, String> nfcs = await FirebaseHelper().getNfcIdMap();
-    Constant.updateNfcs(nfcs);
+    Map<String, String> gettedNfcs = await FirebaseHelper().getNfcIdMap();
 
+    setState(() {
+      nfcs = gettedNfcs;
+    });
     //nfcReadFunc（）呼び出し読み取り開始
     nfcReadFunc();
   }
+
+  late Map<String, String> nfcs;
 
   // 画像番号
   int imageCount = 0;
@@ -90,7 +94,6 @@ class _RtaPageState extends State<RtaPage> {
   }
 
   void nfcReadFunc({int nfcIndex = 0}) async {
-    dynamic nfcs = Constant.nfcs;
     bool success = await NFCRead()
         .nfcRead(imageCount, nfcs[nfcIndex == 4 ? rta : nfcKey[nfcIndex]]);
     debugPrint('$success');

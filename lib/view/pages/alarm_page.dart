@@ -104,10 +104,8 @@ class _AlarmPageState extends State<AlarmPage> {
       }
     }
     // 見つからなかった場合はnullを返す
-    return null;
+    return 'circus';
   }
-  // 見つからなかった場合はnullを返す
-  return 'circus';
 }
 
   @override

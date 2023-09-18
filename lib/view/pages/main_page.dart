@@ -30,7 +30,7 @@ class _MainPageState extends State<MainPage> {
   final String _character = SingletonUser.characterName;
 
   // アラームオンオフの切り替え
-  bool _value = SingletonUser.alarmONOFF;
+  bool _value = SingletonUser.settedAlarm;
 
   // shared_preferencesから持ってきたアラーム時刻を保持する変数
   int? _alarmTime;

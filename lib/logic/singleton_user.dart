@@ -16,6 +16,13 @@ class SingletonUser {
   }
 
   // ユーザID
+  static String userID = "userID";
+
+  static void updateUserID(String newUserID) {
+    userID = newUserID;
+    sharedPreferencesLogic.setUserID(newUserID);
+  }
+
   // 壁紙
   static String wallpaper = "dots";
 
@@ -37,20 +44,31 @@ class SingletonUser {
   static Color sub = Constant.subYellow;
   static String themeName = "yellow";
 
-  static void updateColors(
-      Color newMain, Color newSub, String argumentThemeName) {
-    main = newMain;
-    sub = newSub;
+  static final Map<String, Color> mainThemes = {
+    "yellow": Constant.yellow,
+    "blue": Constant.blue,
+    "red": Constant.red,
+  };
+
+  static final Map<String, Color> subThemes = {
+    "yellow": Constant.subYellow,
+    "blue": Constant.subBlue,
+    "red": Constant.subRed,
+  };
+
+  static void updateColors(String argumentThemeName) {
+    main = mainThemes[argumentThemeName]!;
+    sub = subThemes[argumentThemeName]!;
     themeName = argumentThemeName;
     sharedPreferencesLogic.setSelectedColor(argumentThemeName);
   }
 
   // アラームON/OFF
-  static bool alarmONOFF = false;
+  static bool settedAlarm = false;
 
-  static void updateAlarmONOFF(bool newAlarmONOFF) {
-    alarmONOFF = newAlarmONOFF;
-    sharedPreferencesLogic.setSettedAlarm(newAlarmONOFF);
+  static void updateAlarmONOFF(bool newSettedAlarm) {
+    settedAlarm = newSettedAlarm;
+    sharedPreferencesLogic.setSettedAlarm(newSettedAlarm);
   }
 
   // 前回何時に設定したアラーム時刻

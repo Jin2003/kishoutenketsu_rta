@@ -1,3 +1,4 @@
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesLogic {
@@ -7,8 +8,6 @@ class SharedPreferencesLogic {
   static const keyUserID = 'userID';
   // 選択の音楽
   static const keySelectedMusic = 'music';
-  // 選択テーマ
-  static const keySelectedTheme = 'theme';
   // 選択の色
   static const keySelectedColor = 'color';
   // 選択キャラクター
@@ -54,12 +53,6 @@ class SharedPreferencesLogic {
   Future<void> setSelectedMusic(String selectedMusic) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString(keySelectedMusic, selectedMusic);
-  }
-
-  // 選択テーマをローカルに保存
-  Future<void> setSelectedTheme(String selectedTheme) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString(keySelectedTheme, selectedTheme);
   }
 
   // 選択の色をローカルに保存
@@ -122,12 +115,6 @@ class SharedPreferencesLogic {
     return sharedPreferences.getString(keySelectedMusic);
   }
 
-  // 選択テーマをローカルから取得
-  Future<String?> getSelectedTheme() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getString(keySelectedTheme);
-  }
-
   // 選択キャラクターをローカルから取得
   Future<String?> getSelectedCharacter() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -169,5 +156,33 @@ class SharedPreferencesLogic {
   Future<String?> getUserName() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString(keyUserName);
+  }
+
+  // Shared_preferencesからSingletonUserの値を更新する関数
+  Future<void> updateSingletonUser() async {
+    // ユーザID
+    getUserID().then((value) => SingletonUser.userID = value!);
+    // グループID
+    getGroupID().then((value) => SingletonUser.groupID = value!);
+    // アラームを設定しているかどうか
+    getSettedAlarm().then((value) => SingletonUser.settedAlarm = value!);
+    // 壁紙
+    getSelectedWallpaper().then((value) => SingletonUser.wallpaper = value!);
+    // キャラクター
+    getSelectedCharacter()
+        .then((value) => SingletonUser.characterName = value!);
+    // 音楽
+    getSelectedMusic().then((value) => SingletonUser.music = value!);
+    // テーマカラー
+    // TODO: ここでエラーが起こる
+    // getSelectedTheme().then((value) => SingletonUser.themeName = value!);
+    getSelectedColor().then((value) {
+      print(value);
+      SingletonUser.themeName = value!;
+    });
+    //アラーム時刻
+    getAlarmTime().then((value) => SingletonUser.alarmTime = value!);
+    // ユーザ名
+    getUserName().then((value) => SingletonUser.userName = value!);
   }
 }

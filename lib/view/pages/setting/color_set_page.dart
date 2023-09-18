@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import '../../constant.dart';
 import '../components/custom_text.dart';
@@ -65,7 +66,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                   height: 125,
                   width: 125,
                   child: Image.asset(
-                      'assets/theme/${selectedThemeName}/chicken_on.png'),
+                      'assets/theme/$selectedThemeName/chicken_on.png'),
                 ),
               ),
               Padding(
@@ -73,8 +74,6 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 child: InkWell(
                   onTap: () {
                     selectedThemeName = "yellow";
-                    selectedMainColor = Constant.yellow;
-                    selectedSubColor = Constant.subYellow;
                     setState(() {});
                   },
                   child: SizedBox(
@@ -89,8 +88,6 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 child: InkWell(
                   onTap: () {
                     selectedThemeName = "red";
-                    selectedMainColor = Constant.red;
-                    selectedSubColor = Constant.subRed;
                     setState(() {});
                   },
                   child: SizedBox(
@@ -105,8 +102,6 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 child: InkWell(
                   onTap: () {
                     selectedThemeName = "blue";
-                    selectedMainColor = Constant.blue;
-                    selectedSubColor = Constant.subBlue;
                     setState(() {});
                   },
                   child: SizedBox(
@@ -128,8 +123,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 nextPage: const NavBar(),
                 onPressed: () {
                   // TODO:shared_preferencesに保存する処理
-                  SingletonUser.updateColors(
-                      selectedMainColor, selectedSubColor, selectedThemeName);
+                  SingletonUser.updateColors(selectedThemeName);
                 },
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
+import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/view/pages/have_nfc.dart';
 import 'package:kishoutenketsu_rta/view/pages/log_in.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -46,6 +47,10 @@ class _MyAppState extends State<MyApp> {
     return groupID;
   }
 
+  Future<void> updateSingletonUser() async {
+    SharedPreferencesLogic().updateSingletonUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -75,7 +80,8 @@ class _MyAppState extends State<MyApp> {
               }
             });
             // サインイン済みなら
-            // TODO:ここでShared_preferencesからSingletonUserの値を更新する関数を作る
+            // Shared_preferencesからSingletonUserの値を更新する関数
+            updateSingletonUser();
             return const NavBar();
           }
           // サインインしていないなら

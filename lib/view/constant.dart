@@ -25,14 +25,6 @@ class Constant {
   static SharedPreferencesLogic sharedPreferencesLogic =
       SharedPreferencesLogic();
 
-  // ユーザ名
-  static String userName = "user";
-
-  static void updateUserName(String newUserName) {
-    userName = newUserName;
-    sharedPreferencesLogic.setUserName(newUserName);
-  }
-
   // 選択した音楽
   static String music = "circus";
 

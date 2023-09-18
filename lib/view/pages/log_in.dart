@@ -166,7 +166,7 @@ class _LogInState extends State<LogIn> {
                           if (groupID != null) {
                             // sharedPreferencesにgroupIDを保存
                             SingletonUser.updateGroupID(groupID);
-                            Constant.updateUserName(
+                            SingletonUser.updateUserName(
                                 documentSnapshot.data()?['name']);
                             // Constant.updateUserName(
                             if (!mounted) return;
@@ -268,7 +268,7 @@ class _LogInState extends State<LogIn> {
                             SharedPreferencesLogic();
                         // SharedPreferencesにuserIDを保存
                         await sharedPreferencesLogic.setUserID(user.uid);
-                        Constant.updateUserName("testuser");
+                        SingletonUser.updateUserName("testuser");
                         // firebaseからgroupIDを取得
                         var documentSnapshot = await FirebaseFirestore.instance
                             .collection('users')
@@ -289,7 +289,7 @@ class _LogInState extends State<LogIn> {
                         if (groupID != null) {
                           // sharedPreferencesにgroupIDを保存
                           await sharedPreferencesLogic.setGroupID(groupID);
-                          Constant.updateUserName(
+                          SingletonUser.updateUserName(
                               documentSnapshot.data()?['name']);
                           if (!mounted) return;
                           Navigator.push(

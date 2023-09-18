@@ -188,7 +188,7 @@ class _SignUpState extends State<SignUp> {
                             'point': 0,
                           });
                           await prefs.setString('userID', user.uid);
-                          Constant.updateUserName(userNameController.text);
+                          SingletonUser.updateUserName(userNameController.text);
                           if (!mounted) return;
                           // Navbar経由でloginページへ
                           Navigator.push(

@@ -177,7 +177,8 @@ class SharedPreferencesLogic {
     // TODO: ここでエラーが起こる
     // getSelectedTheme().then((value) => SingletonUser.themeName = value!);
     getSelectedColor().then((value) {
-      print(value);
+      SingletonUser.main = SingletonUser.mainThemes[value]!;
+      SingletonUser.sub = SingletonUser.subThemes[value]!;
       SingletonUser.themeName = value!;
     });
     //アラーム時刻

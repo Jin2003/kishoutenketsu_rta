@@ -75,6 +75,7 @@ class _MyAppState extends State<MyApp> {
               }
             });
             // サインイン済みなら
+            // TODO:ここでShared_preferencesからSingletonUserの値を更新する関数を作る
             return const NavBar();
           }
           // サインインしていないなら

@@ -106,7 +106,6 @@ class _AlarmPageState extends State<AlarmPage> {
     // 見つからなかった場合はnullを返す
     return 'circus';
   }
-}
 
   @override
   Widget build(BuildContext context) {

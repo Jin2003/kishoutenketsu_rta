@@ -116,7 +116,7 @@ class _AlarmPageState extends State<AlarmPage> {
         children: [
           // 背景画像
           Image.asset(
-            "assets/pages/${Constant.themeName}/dots/alarm_page.png",
+            "assets/pages/${SingletonUser.themeName}/dots/alarm_page.png",
             fit: BoxFit.cover,
           ),
 
@@ -355,7 +355,7 @@ class _alarmSelectorDialog extends StatelessWidget {
                 visible: p == music,
                 child: Icon(
                   Icons.circle,
-                  color: Constant.main, //accentYellow
+                  color: SingletonUser.main, //accentYellow
                 ),
               ),
               title: Text(

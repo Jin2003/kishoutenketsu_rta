@@ -22,18 +22,6 @@ class Constant {
   static const Color red = Color(0xFFFFB6A6);
   static const Color subRed = Color(0xFFFFEAE5);
 
-  static Color main = yellow;
-  static Color sub = subYellow;
-  static String themeName = "yellow";
-
-  static void updateColors(
-      Color newMain, Color newSub, String argumentThemeName) {
-    main = newMain;
-    sub = newSub;
-    themeName = argumentThemeName;
-    sharedPreferencesLogic.setSelectedColor(argumentThemeName);
-  }
-
   static SharedPreferencesLogic sharedPreferencesLogic =
       SharedPreferencesLogic();
 

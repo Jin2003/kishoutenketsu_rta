@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import '../../constant.dart';
 import '../components/custom_text.dart';
 import '../components/outline_button.dart';
@@ -12,9 +13,9 @@ class ColorSetPage extends StatefulWidget {
 }
 
 class _ColorSetPageState extends State<ColorSetPage> {
-  Color selectedMainColor = Constant.main;
-  Color selectedSubColor = Constant.sub;
-  String selectedThemeName = Constant.themeName;
+  Color selectedMainColor = SingletonUser.main;
+  Color selectedSubColor = SingletonUser.sub;
+  String selectedThemeName = SingletonUser.themeName;
 
   @override
   Widget build(BuildContext context) {
@@ -124,9 +125,10 @@ class _ColorSetPageState extends State<ColorSetPage> {
                 height: 50,
                 fontsize: 20,
                 shape: 15,
-                nextPage: NavBar(),
+                nextPage: const NavBar(),
                 onPressed: () {
-                  Constant.updateColors(
+                  // TODO:shared_preferencesに保存する処理
+                  SingletonUser.updateColors(
                       selectedMainColor, selectedSubColor, selectedThemeName);
                 },
               ),

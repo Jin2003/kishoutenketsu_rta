@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 
 import '../../../logic/nav_bar.dart';
 import '../../constant.dart';
@@ -67,7 +68,7 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                     height: 150,
                     width: 350,
                     child: Image.asset(
-                        'assets/wallpaper/${Constant.themeName}/dots.png'),
+                        'assets/wallpaper/${SingletonUser.themeName}/dots.png'),
                   ),
                 ),
               ),
@@ -83,7 +84,7 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                     height: 150,
                     width: 350,
                     child: Image.asset(
-                        'assets/wallpaper/${Constant.themeName}/plaid.png'),
+                        'assets/wallpaper/${SingletonUser.themeName}/plaid.png'),
                   ),
                 ),
               ),
@@ -99,7 +100,7 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                     height: 150,
                     width: 350,
                     child: Image.asset(
-                        'assets/wallpaper/${Constant.themeName}/stripe.png'),
+                        'assets/wallpaper/${SingletonUser.themeName}/stripe.png'),
                   ),
                 ),
               ),

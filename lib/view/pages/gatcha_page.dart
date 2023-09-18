@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
 import '../../logic/database_helper.dart';
@@ -39,12 +40,12 @@ class _GatchaPageState extends State<GatchaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.sub,
+      backgroundColor: SingletonUser.sub,
       body: Stack(
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/pages/${Constant.themeName}/${Constant.wallpaper}/gatcha_page.png",
+            "assets/pages/${SingletonUser.themeName}/${Constant.wallpaper}/gatcha_page.png",
             fit: BoxFit.cover,
           ),
           //画像を表示する
@@ -65,7 +66,7 @@ class _GatchaPageState extends State<GatchaPage> {
                 width: 260,
                 height: 90,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Constant.main, width: 5),
+                  border: Border.all(color: SingletonUser.main, width: 5),
                   borderRadius: BorderRadius.circular(60),
                   // color と boxdecorationの共存はNG
                   color: Constant.white,
@@ -79,7 +80,7 @@ class _GatchaPageState extends State<GatchaPage> {
                       style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
-                        color: Constant.main, //accentYellow
+                        color: SingletonUser.main, //accentYellow
                       ),
                     ),
                     const SizedBox(
@@ -91,7 +92,7 @@ class _GatchaPageState extends State<GatchaPage> {
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        color: Constant.main, //accentYellow
+                        color: SingletonUser.main, //accentYellow
                       ),
                     ),
                   ],
@@ -266,7 +267,7 @@ class _GatchaPageState extends State<GatchaPage> {
           if (_isPressed)
             Positioned(
               child: Lottie.asset(
-                "assets/gacha/${Constant.themeName}/capsule.json",
+                "assets/gacha/${SingletonUser.themeName}/capsule.json",
                 fit: BoxFit.cover,
                 repeat: false,
               ),

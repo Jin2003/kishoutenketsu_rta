@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
+import 'package:kishoutenketsu_rta/view/constant.dart';
 
 class SingletonUser {
   static SharedPreferencesLogic sharedPreferencesLogic =
@@ -21,7 +24,19 @@ class SingletonUser {
     characterName = newCharacterName;
     sharedPreferencesLogic.setSelectedCharacter(newCharacterName);
   }
+
   // テーマカラー
+  static Color main = Constant.yellow;
+  static Color sub = Constant.subYellow;
+  static String themeName = "yellow";
+
+  static void updateColors(
+      Color newMain, Color newSub, String argumentThemeName) {
+    main = newMain;
+    sub = newSub;
+    themeName = argumentThemeName;
+    sharedPreferencesLogic.setSelectedColor(argumentThemeName);
+  }
 
   // アラームON/OFF
   static bool alarmONOFF = false;

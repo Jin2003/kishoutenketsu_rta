@@ -38,7 +38,7 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
     String tagName = tagname[tagCount];
 
     return Scaffold(
-      backgroundColor: Constant.sub,
+      backgroundColor: SingletonUser.sub,
       body: Stack(
         children: [
           Center(
@@ -123,7 +123,7 @@ class Dialog extends StatelessWidget {
           side: const BorderSide(color: Constant.white, width: 5),
           borderRadius: BorderRadius.circular(10.0),
         ),
-        backgroundColor: Constant.sub,
+        backgroundColor: SingletonUser.sub,
         children: [
           SizedBox(
             width: 200,

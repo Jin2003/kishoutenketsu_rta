@@ -177,7 +177,7 @@ class _JoinGroupState extends State<JoinGroup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.sub,
+      backgroundColor: SingletonUser.sub,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

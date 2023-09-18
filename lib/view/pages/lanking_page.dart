@@ -173,12 +173,12 @@ class _LankingPageState extends State<LankingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.sub,
+      backgroundColor: SingletonUser.sub,
       body: Stack(
         children: [
           Positioned.fill(
             child: Image.asset(
-              "assets/pages/${Constant.themeName}/${Constant.wallpaper}/ranking_page.png",
+              "assets/pages/${SingletonUser.themeName}/${Constant.wallpaper}/ranking_page.png",
               fit: BoxFit.cover,
             ),
           ),
@@ -282,7 +282,7 @@ Widget _buildCard(
             width: 35,
             height: 35,
             decoration: BoxDecoration(
-              border: Border.all(color: Constant.main //accentYellow
+              border: Border.all(color: SingletonUser.main //accentYellow
                   ),
               color: Constant.white,
               shape: BoxShape.circle,
@@ -293,7 +293,7 @@ Widget _buildCard(
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Constant.main //accentYellow
+                    color: SingletonUser.main //accentYellow
                     ),
               ),
             ),
@@ -322,13 +322,13 @@ Widget _buildCard(
             width: 75,
             height: 20,
             decoration: BoxDecoration(
-              color: Constant.sub,
+              color: SingletonUser.sub,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               "${result[index - 1]['date']}",
-              style:
-                  TextStyle(color: Constant.main, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: SingletonUser.main, fontWeight: FontWeight.bold),
             ),
           ),
         ],

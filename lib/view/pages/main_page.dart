@@ -185,13 +185,13 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.sub,
+      backgroundColor: SingletonUser.sub,
       body: Stack(
         fit: StackFit.expand,
         children: [
           // 背景画像
           Image.asset(
-            "assets/pages/${Constant.themeName}/${Constant.wallpaper}/main_page.png",
+            "assets/pages/${SingletonUser.themeName}/${Constant.wallpaper}/main_page.png",
             fit: BoxFit.cover,
           ),
           Column(
@@ -208,7 +208,7 @@ class _MainPageState extends State<MainPage> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     side: BorderSide(
-                      color: Constant.main, //枠線の色
+                      color: SingletonUser.main, //枠線の色
                       width: 4, //太さ
                     ),
                     backgroundColor: Constant.white,
@@ -241,7 +241,7 @@ class _MainPageState extends State<MainPage> {
                                       style: GoogleFonts.zenMaruGothic(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 65,
-                                        color: Constant.main,
+                                        color: SingletonUser.main,
                                       ),
                                     )
                                   : Container(),

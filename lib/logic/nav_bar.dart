@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/join_group.dart';
 import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
@@ -53,7 +54,7 @@ class _NavBarState extends State<NavBar> {
           width: 130,
         ),
 
-        backgroundColor: Constant.main,
+        backgroundColor: SingletonUser.main,
 
         actions: <Widget>[
           // ハンバーガーボタンをカスタム
@@ -173,9 +174,9 @@ class _NavBarState extends State<NavBar> {
       bottomNavigationBar: CurvedNavigationBar(
         index: _selectedIndex,
         height: 75,
-        color: Constant.main,
+        color: SingletonUser.main,
         //背景色と同色
-        backgroundColor: Constant.sub,
+        backgroundColor: SingletonUser.sub,
         items: const <Widget>[
           ImageIcon(
             AssetImage(

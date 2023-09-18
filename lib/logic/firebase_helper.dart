@@ -24,8 +24,13 @@ class FirebaseHelper {
     DocumentSnapshot documentSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(userID).get();
     dynamic data = documentSnapshot.data() as Map<String, dynamic>;
-    String groupID = data['groupID'] as String;
-    return groupID;
+    String groupId;
+    if (data['groupID'] == null) {
+      groupId = '';
+    } else {
+      groupId = data['groupID'] as String;
+    }
+    return groupId;
   }
 
   // グループにnfcIdListを保存するメソッド
@@ -40,16 +45,22 @@ class FirebaseHelper {
   }
 
   // グループにnfcIdListを取得するメソッド
-  // Future<Map<String, String>> getNfcIdMap() async {
   Future<Map<String, String>> getNfcIdMap() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('groups')
         .doc(SingletonUser.groupID)
         .get();
-    dynamic data = documentSnapshot.data() as Map<String, dynamic>;
-    Map<String, String> nfcIdMap =
-        Map<String, String>.from(data['nfcIdMap'] as Map<String, dynamic>);
-    return nfcIdMap;
+    if (documentSnapshot.exists) {
+      // ドキュメントが存在する場合のみデータを取得し、キャストします
+      dynamic data = documentSnapshot.data();
+      if (data is Map<String, dynamic>) {
+        Map<String, String> nfcIdMap =
+            Map<String, String>.from(data['nfcIdMap'] as Map<String, dynamic>);
+        return nfcIdMap;
+      }
+    }
+    // ドキュメントが存在しないか、データが不正な場合は空のマップを返すか、エラー処理を行います
+    return {}; // または例外をスローするなどの適切なエラーハンドリングを行う
   }
 
   // ユーザにgroupIDを追加するメソッド

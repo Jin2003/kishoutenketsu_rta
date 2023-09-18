@@ -37,12 +37,6 @@ class Constant {
   static SharedPreferencesLogic sharedPreferencesLogic =
       SharedPreferencesLogic();
 
-  // NFCのID
-  static Map<String, String> nfcs = {};
-  static void updateNfcs(Map<String, String> newNfcs) {
-    nfcs = newNfcs;
-  }
-
   // アラームON/OFF
   static bool alarmONOFF = false;
 

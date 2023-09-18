@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 
 // 定数を管理するクラス
 class Constant {
@@ -21,9 +20,4 @@ class Constant {
   // red
   static const Color red = Color(0xFFFFB6A6);
   static const Color subRed = Color(0xFFFFEAE5);
-
-  static SharedPreferencesLogic sharedPreferencesLogic =
-      SharedPreferencesLogic();
-
-  
 }

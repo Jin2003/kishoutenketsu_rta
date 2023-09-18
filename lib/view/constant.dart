@@ -25,11 +25,5 @@ class Constant {
   static SharedPreferencesLogic sharedPreferencesLogic =
       SharedPreferencesLogic();
 
-  // 選択した音楽
-  static String music = "circus";
-
-  static void updateMusic(String newMusic) {
-    music = newMusic;
-    sharedPreferencesLogic.setSelectedMusic(newMusic);
-  }
+  
 }

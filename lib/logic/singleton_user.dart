@@ -69,4 +69,12 @@ class SingletonUser {
     userName = newUserName;
     sharedPreferencesLogic.setUserName(newUserName);
   }
+
+  // 選択した音楽
+  static String music = "circus";
+
+  static void updateMusic(String newMusic) {
+    music = newMusic;
+    sharedPreferencesLogic.setSelectedMusic(newMusic);
+  }
 }

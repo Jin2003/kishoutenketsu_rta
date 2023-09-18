@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'components/custom_text.dart';
 import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
@@ -24,7 +25,7 @@ class _LankingPageState extends State<LankingPage> {
   String? _userName;
 
   //最新のRTAタイムを保持する変数
-  Map<String, dynamic>? _rtaTime ;
+  Map<String, dynamic>? _rtaTime;
 
   //最高記録のRTAタイムを保持する変数
   Map<String, dynamic>? _topTime;
@@ -55,7 +56,7 @@ class _LankingPageState extends State<LankingPage> {
   bool _showResponse = false;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _loadLank();
   }
@@ -80,20 +81,20 @@ class _LankingPageState extends State<LankingPage> {
     List<Map<String, dynamic>> rtaResults =
         await FirebaseHelper().getRtaResults();
 
-        print('rtaResults: $rtaResults');
+    print('rtaResults: $rtaResults');
 
     if (rtaResults.isNotEmpty) {
       // rtaResultsの最新で登録されたタイムの名前を取得
       final userName = rtaResults.last['name'];
 
       print('userName: $userName');
-      
+
       // 自分の最新のタイムを取得
       final rtaTime = rtaResults.lastWhere(
-        (element) => element['name'] == userName,
-        orElse: () => <String, dynamic>{});
+          (element) => element['name'] == userName,
+          orElse: () => <String, dynamic>{});
 
-          print('rtaTime: $rtaTime');
+      print('rtaTime: $rtaTime');
 
       if (mounted) {
         setState(() {
@@ -109,7 +110,7 @@ class _LankingPageState extends State<LankingPage> {
     // ランキングの数を設定
     int lankingCount = rtaResults.length;
 
-    if(mounted){
+    if (mounted) {
       setState(() {
         _lankingCount = lankingCount;
       });
@@ -120,65 +121,64 @@ class _LankingPageState extends State<LankingPage> {
   }
 
 //定型文を表示する関数
-_getMessage(String userName) async{
-  // ランキング最高記録のRTAタイムを取得
-  _topTime = _result.firstWhere(
-      (element) => element['name'] == userName,
-      orElse: () => <String, dynamic>{}); 
+  _getMessage(String userName) async {
+    // ランキング最高記録のRTAタイムを取得
+    _topTime = _result.firstWhere((element) => element['name'] == userName,
+        orElse: () => <String, dynamic>{});
 
-  print('topTime: $_topTime');
+    print('topTime: $_topTime');
 
-  //自分の最新のタイムと最高記録のタイムの差を計算
-  final difference = (_rtaTime != null && _topTime != null)
-      ? _rtaTime!['rtaResult'] - _topTime!['rtaResult']
-      : 'タイムが取得できなかったよ'; 
+    //自分の最新のタイムと最高記録のタイムの差を計算
+    final difference = (_rtaTime != null && _topTime != null)
+        ? _rtaTime!['rtaResult'] - _topTime!['rtaResult']
+        : 'タイムが取得できなかったよ';
 
-  print('${_rtaTime!['rtaResult']}だよ！');
-  print('${_topTime!['rtaResult']}だよ！');
+    print('${_rtaTime!['rtaResult']}だよ！');
+    print('${_topTime!['rtaResult']}だよ！');
 
-  if (_rtaTime != null && _result.isNotEmpty) {
-    if (difference != null && difference >= 0) {
-      final minutes = difference ~/ 60;
-      final seconds = difference % 60 + 1;
+    if (_rtaTime != null && _result.isNotEmpty) {
+      if (difference != null && difference >= 0) {
+        final minutes = difference ~/ 60;
+        final seconds = difference % 60 + 1;
 
-      if(mounted){
-        setState(() {
-          if (minutes == 0) {
-            _response = "${_message[1]}あと $seconds 秒で更新だったね!";
-          } else {
-            _response = "${_message[1]}あと $minutes 分 $seconds 秒で更新だったね!";
-          }
-          _showResponse = !_showResponse;
-        });
+        if (mounted) {
+          setState(() {
+            if (minutes == 0) {
+              _response = "${_message[1]}あと $seconds 秒で更新だったね!";
+            } else {
+              _response = "${_message[1]}あと $minutes 分 $seconds 秒で更新だったね!";
+            }
+            _showResponse = !_showResponse;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            _response = _message[0];
+            _showResponse = !_showResponse;
+          });
+        }
       }
     } else {
-      if(mounted){
+      if (mounted) {
         setState(() {
-          _response = _message[0];
+          _response = _message[2];
           _showResponse = !_showResponse;
         });
       }
     }
-  } else {
-    if(mounted){
-      setState(() {
-        _response = _message[2];
-        _showResponse = !_showResponse;
-      });
-    }
   }
-}
 
   //定型文を表示する関数
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.sub,
+      backgroundColor: SingletonUser.sub,
       body: Stack(
         children: [
           Positioned.fill(
             child: Image.asset(
-              "assets/pages/${Constant.themeName}/${Constant.wallpaper}/ranking_page.png",
+              "assets/pages/${SingletonUser.themeName}/${SingletonUser.wallpaper}/ranking_page.png",
               fit: BoxFit.cover,
             ),
           ),
@@ -219,11 +219,13 @@ _getMessage(String userName) async{
           ),
           // 吹き出しに表示するメッセージ
           Align(
-            alignment: (_response != null && _response!.length >= 14 && _response!.length <= 28)
-              ? const Alignment(-0.3, 1.05)
-              : (_response != null && _response!.length > 28)
-                ? const Alignment(-0.3, 1.02)
-                : const Alignment(-0.3, 1.07),
+            alignment: (_response != null &&
+                    _response!.length >= 14 &&
+                    _response!.length <= 28)
+                ? const Alignment(-0.3, 1.05)
+                : (_response != null && _response!.length > 28)
+                    ? const Alignment(-0.3, 1.02)
+                    : const Alignment(-0.3, 1.07),
             child: SizedBox(
               width: 200,
               height: 190,
@@ -250,7 +252,7 @@ _getMessage(String userName) async{
               width: 120,
               height: 120,
               child: Image.asset(
-                "assets/${Constant.characterName}.png",
+                "assets/${SingletonUser.characterName}.png",
               ),
             ),
           )
@@ -280,7 +282,7 @@ Widget _buildCard(
             width: 35,
             height: 35,
             decoration: BoxDecoration(
-              border: Border.all(color: Constant.main //accentYellow
+              border: Border.all(color: SingletonUser.main //accentYellow
                   ),
               color: Constant.white,
               shape: BoxShape.circle,
@@ -291,7 +293,7 @@ Widget _buildCard(
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Constant.main //accentYellow
+                    color: SingletonUser.main //accentYellow
                     ),
               ),
             ),
@@ -320,13 +322,13 @@ Widget _buildCard(
             width: 75,
             height: 20,
             decoration: BoxDecoration(
-              color: Constant.sub,
+              color: SingletonUser.sub,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               "${result[index - 1]['date']}",
-              style:
-                  TextStyle(color: Constant.main, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: SingletonUser.main, fontWeight: FontWeight.bold),
             ),
           ),
         ],

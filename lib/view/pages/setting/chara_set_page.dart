@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import '../../constant.dart';
 import '../components/custom_text.dart';
 import '../components/outline_button.dart';
@@ -13,7 +14,7 @@ class CharaSetPage extends StatefulWidget {
 
 class _CharaSetPageState extends State<CharaSetPage> {
   // 選択して変更後に保存するキャラクター
-  String? _selectedCharacter = Constant.characterName;
+  String? _selectedCharacter = SingletonUser.characterName;
 
   @override
   void initState() {
@@ -77,8 +78,8 @@ class _CharaSetPageState extends State<CharaSetPage> {
                           margin: const EdgeInsets.all(8),
                           child: Image.asset(
                             _selectedCharacter == 'chicken'
-                                ? 'assets/characters/${Constant.themeName}/chicken_on.png'
-                                : 'assets/characters/${Constant.themeName}/chicken_off.png',
+                                ? 'assets/characters/${SingletonUser.themeName}/chicken_on.png'
+                                : 'assets/characters/${SingletonUser.themeName}/chicken_off.png',
                           ),
                         ),
                       ),
@@ -99,8 +100,8 @@ class _CharaSetPageState extends State<CharaSetPage> {
                           margin: const EdgeInsets.all(8),
                           child: Image.asset(
                             _selectedCharacter == 'medamayaki'
-                                ? 'assets/characters/${Constant.themeName}/medamayaki_on.png'
-                                : 'assets/characters/${Constant.themeName}/medamayaki_off.png',
+                                ? 'assets/characters/${SingletonUser.themeName}/medamayaki_on.png'
+                                : 'assets/characters/${SingletonUser.themeName}/medamayaki_off.png',
                           ),
                         ),
                       ),
@@ -126,8 +127,8 @@ class _CharaSetPageState extends State<CharaSetPage> {
                             margin: const EdgeInsets.all(8),
                             child: Image.asset(
                               _selectedCharacter == 'mezamashi'
-                                  ? 'assets/characters/${Constant.themeName}/mezamashi_on.png'
-                                  : 'assets/characters/${Constant.themeName}/mezamashi_off.png',
+                                  ? 'assets/characters/${SingletonUser.themeName}/mezamashi_on.png'
+                                  : 'assets/characters/${SingletonUser.themeName}/mezamashi_off.png',
                             ),
                           )),
                     ),
@@ -147,8 +148,8 @@ class _CharaSetPageState extends State<CharaSetPage> {
                             margin: const EdgeInsets.all(8),
                             child: Image.asset(
                               _selectedCharacter == 'toast'
-                                  ? 'assets/characters/${Constant.themeName}/toast_on.png'
-                                  : 'assets/characters/${Constant.themeName}/toast_off.png',
+                                  ? 'assets/characters/${SingletonUser.themeName}/toast_on.png'
+                                  : 'assets/characters/${SingletonUser.themeName}/toast_off.png',
                             ),
                           )),
                     ),
@@ -164,9 +165,10 @@ class _CharaSetPageState extends State<CharaSetPage> {
                 height: 50,
                 fontsize: 20,
                 shape: 15,
-                nextPage: NavBar(),
+                nextPage: const NavBar(),
                 onPressed: () {
-                  Constant.updateCharacterName(_selectedCharacter!);
+                  // TODO:shared_preferencesに保存する処理
+                  SingletonUser.updateCharacterName(_selectedCharacter!);
                 },
               ),
             ],

@@ -84,7 +84,11 @@ class FirebaseHelper {
         .doc(SingletonUser.groupID)
         .collection('rtaResults')
         .doc()
-        .set({'rtaResult': rtaResult, 'name': Constant.userName, 'date': date});
+        .set({
+      'rtaResult': rtaResult,
+      'name': SingletonUser.userName,
+      'date': date
+    });
   }
 
   // rtaの結果を取得するメソッド

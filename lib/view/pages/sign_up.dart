@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constant.dart';
 import 'components/custom_text.dart';
@@ -39,7 +40,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Constant.sub,
+      backgroundColor: SingletonUser.sub,
       body: Stack(
         children: [
           //　背景画像
@@ -187,7 +188,7 @@ class _SignUpState extends State<SignUp> {
                             'point': 0,
                           });
                           await prefs.setString('userID', user.uid);
-                          Constant.updateUserName(userNameController.text);
+                          SingletonUser.updateUserName(userNameController.text);
                           if (!mounted) return;
                           // Navbar経由でloginページへ
                           Navigator.push(
@@ -235,7 +236,7 @@ class _SignUpState extends State<SignUp> {
                     style: GoogleFonts.zenMaruGothic(
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
-                      color: Constant.main, //accentYellow
+                      color: SingletonUser.main, //accentYellow
                     ),
                   ),
                 ),

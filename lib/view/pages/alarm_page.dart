@@ -4,6 +4,7 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/logic/alarm_setting.dart';
 
@@ -30,7 +31,7 @@ class _AlarmPageState extends State<AlarmPage> {
   String? _musicPath;
 
   // アラームを鳴らす時刻
-  int _alarmTime = Constant.alarmTime;
+  int _alarmTime = SingletonUser.alarmTime;
 
   // 設定した時刻のhourのみを取得
   int? _alarmHour;
@@ -56,8 +57,8 @@ class _AlarmPageState extends State<AlarmPage> {
     });
     splitAlarmTime().then((_) {
       setState(() {});
-    });  
-        initializeAlarm().then((_) {
+    });
+    initializeAlarm().then((_) {
       setState(() {});
     });
   }
@@ -91,16 +92,19 @@ class _AlarmPageState extends State<AlarmPage> {
   }
 
   //アラームサービスの初期化
-  Future<void> initializeAlarm() async{
+  Future<void> initializeAlarm() async {
     await Alarm.init();
   }
 
   String? findKeyByValue(Map<String, String> map, String targetValue) {
-  // マップをループして対応するキーを探す
-  for (var entry in map.entries) {
-    if (entry.value == targetValue) {
-      return entry.key;
+    // マップをループして対応するキーを探す
+    for (var entry in map.entries) {
+      if (entry.value == targetValue) {
+        return entry.key;
+      }
     }
+    // 見つからなかった場合はnullを返す
+    return null;
   }
   // 見つからなかった場合はnullを返す
   return 'circus';
@@ -115,7 +119,7 @@ class _AlarmPageState extends State<AlarmPage> {
         children: [
           // 背景画像
           Image.asset(
-            "assets/pages/${Constant.themeName}/dots/alarm_page.png",
+            "assets/pages/${SingletonUser.themeName}/dots/alarm_page.png",
             fit: BoxFit.cover,
           ),
 
@@ -354,7 +358,7 @@ class _alarmSelectorDialog extends StatelessWidget {
                 visible: p == music,
                 child: Icon(
                   Icons.circle,
-                  color: Constant.main, //accentYellow
+                  color: SingletonUser.main, //accentYellow
                 ),
               ),
               title: Text(

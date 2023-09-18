@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 // import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
 import 'package:kishoutenketsu_rta/logic/position.dart';
@@ -26,10 +27,10 @@ class _MainPageState extends State<MainPage> {
   // TODO:音楽を選択できるようにする
   String? _music;
   // 選択中のキャラクター
-  final String _character = Constant.characterName;
+  final String _character = SingletonUser.characterName;
 
   // アラームオンオフの切り替え
-  bool _value = Constant.alarmONOFF;
+  bool _value = SingletonUser.alarmONOFF;
 
   // shared_preferencesから持ってきたアラーム時刻を保持する変数
   int? _alarmTime;
@@ -41,7 +42,7 @@ class _MainPageState extends State<MainPage> {
     "黄色のハンカチ",
     "赤色のペンダント",
     "青色の靴下",
-    "黒色のペン",   
+    "黒色のペン",
   ];
 
   // 定型文を保持する配列
@@ -65,10 +66,10 @@ class _MainPageState extends State<MainPage> {
   late WeatherFactory wf;
 
   // 緯度を保持する変数
-  double? lat; 
+  double? lat;
 
   // 経度を保持する変数
-  double? lon; 
+  double? lon;
 
   //天気のアイコンを保持する変数
   String? weatherIcon;
@@ -79,7 +80,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
-    wf = WeatherFactory(key , language: Language.JAPANESE);
+    wf = WeatherFactory(key, language: Language.JAPANESE);
     super.initState();
 
     initializeTime().then((_) {
@@ -87,8 +88,8 @@ class _MainPageState extends State<MainPage> {
     });
 
     // 位置情報を取得
-    userPosition.determinePosition().then((position) async{ 
-      if(mounted) {
+    userPosition.determinePosition().then((position) async {
+      if (mounted) {
         setState(() {
           lat = position.latitude;
           lon = position.longitude;
@@ -114,8 +115,8 @@ class _MainPageState extends State<MainPage> {
   //     //天気情報を取得
   //     final position = await geoCoding.placemarkFromCoordinates(lat!, lon!);
   //     Weather weather = await wf.currentWeatherByCityName(position.first.locality!);
-      
-  //     print("天気情報を取得しました: $weather");      
+
+  //     print("天気情報を取得しました: $weather");
 
   //     //都市の名前を取得
   //     String? cityName = position.first.locality;
@@ -166,7 +167,7 @@ class _MainPageState extends State<MainPage> {
   void randomResponse() {
     final randomMessage = _message[Random().nextInt(_message.length)];
     final replacedMessage = replaceLuckyItem(randomMessage);
-    
+
     setState(() {
       _response = replacedMessage;
       _showResponse = !_showResponse;
@@ -181,17 +182,16 @@ class _MainPageState extends State<MainPage> {
     return message.replaceFirst('{_luckyItem}', luckyItem);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.sub,
+      backgroundColor: SingletonUser.sub,
       body: Stack(
         fit: StackFit.expand,
         children: [
           // 背景画像
           Image.asset(
-            "assets/pages/${Constant.themeName}/${Constant.wallpaper}/main_page.png",
+            "assets/pages/${SingletonUser.themeName}/${SingletonUser.wallpaper}/main_page.png",
             fit: BoxFit.cover,
           ),
           Column(
@@ -208,7 +208,7 @@ class _MainPageState extends State<MainPage> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     side: BorderSide(
-                      color: Constant.main, //枠線の色
+                      color: SingletonUser.main, //枠線の色
                       width: 4, //太さ
                     ),
                     backgroundColor: Constant.white,
@@ -241,7 +241,7 @@ class _MainPageState extends State<MainPage> {
                                       style: GoogleFonts.zenMaruGothic(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 65,
-                                        color: Constant.main,
+                                        color: SingletonUser.main,
                                       ),
                                     )
                                   : Container(),
@@ -266,7 +266,8 @@ class _MainPageState extends State<MainPage> {
                         trackColor: Colors.grey,
                         value: _value,
                         onChanged: (value) {
-                          Constant.updateAlarmONOFF(value);
+                          // TODO:shared_preferencesにアラームのオンオフを保存
+                          SingletonUser.updateAlarmONOFF(value);
                           setState(() {
                             _value = value;
                           });
@@ -292,16 +293,18 @@ class _MainPageState extends State<MainPage> {
           ),
           // 吹き出しに表示するメッセージ
           Align(
-            alignment: (_response != null && _response!.length >= 14 && _response!.length <= 28)
-              ? const Alignment(-0.3, 1.05)
-              : (_response != null && _response!.length > 28)
-                ? const Alignment(-0.3, 1.02)
-                : const Alignment(-0.3, 1.07),
+            alignment: (_response != null &&
+                    _response!.length >= 14 &&
+                    _response!.length <= 28)
+                ? const Alignment(-0.3, 1.05)
+                : (_response != null && _response!.length > 28)
+                    ? const Alignment(-0.3, 1.02)
+                    : const Alignment(-0.3, 1.07),
             child: SizedBox(
               width: 200,
               height: 190,
-              child:AnimatedTextKit(
-                key: ValueKey<String>(_response ?? ""),  // ValueKeyを追加
+              child: AnimatedTextKit(
+                key: ValueKey<String>(_response ?? ""), // ValueKeyを追加
                 animatedTexts: [
                   TyperAnimatedText(
                     _response ?? "",
@@ -380,7 +383,6 @@ class _alarmSelectorDialog extends StatelessWidget {
   }
 }
 
-
 //TODOchatGPTへの入力を保持する配列
 // List<String> _message = [
 //   "りんごって美味しいよね！だけ言ってください",
@@ -389,33 +391,28 @@ class _alarmSelectorDialog extends StatelessWidget {
 //   "ラ〜で歌を短く歌って"
 // ];
 
-
-
 //TODO ChatGPTからの応答を保持する変数
 // String? _response;
 //TODO ChatGPTの応答を表示するかどうかのフラグ
 // bool _showResponse = false;
 
-
-
 //TODO:初回メッセージを作成する関数
 // Future<void> _firstMessage() async {
 //   final chatGPT = ChatGPT();
 
-  //TODO天気情報を含めたメッセージを作成
-  // String messageWithWeather =
-  //     await getWeather().then((value) => value!.toString());
-  // final response = await chatGPT.message(
-  //     "$messageWithWeatherの情報から「今日の...の天気は...だよ！」だけ一文で言ってくださいそれ以外は言わないでください");
-  // if (mounted) {
-  //   setState(() {
-  //     // ChatGPTからの応答を保持する変数に代入
-  //     _response = response;
-  //     _showResponse = !_showResponse;
-  //   });
-  // }
+//TODO天気情報を含めたメッセージを作成
+// String messageWithWeather =
+//     await getWeather().then((value) => value!.toString());
+// final response = await chatGPT.message(
+//     "$messageWithWeatherの情報から「今日の...の天気は...だよ！」だけ一文で言ってくださいそれ以外は言わないでください");
+// if (mounted) {
+//   setState(() {
+//     // ChatGPTからの応答を保持する変数に代入
+//     _response = response;
+//     _showResponse = !_showResponse;
+//   });
 // }
-
+// }
 
 // TODOChatGPTからの応答を取得する関数
 // Future<void> _getChatGPTResponse() async {
@@ -432,7 +429,6 @@ class _alarmSelectorDialog extends StatelessWidget {
 //     });
 //   }
 // }
-
 
 //天候情報を日本語に変換
 // switch (weatherDescription) {
@@ -457,8 +453,6 @@ class _alarmSelectorDialog extends StatelessWidget {
 //   default:
 //     weatherDescription = "不明";
 // }
-
-
 
 //天気のアイコン表示
 // weatherIcon != null

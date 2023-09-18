@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 
 // 定数を管理するクラス
 class Constant {
@@ -21,67 +20,4 @@ class Constant {
   // red
   static const Color red = Color(0xFFFFB6A6);
   static const Color subRed = Color(0xFFFFEAE5);
-
-  static Color main = yellow;
-  static Color sub = subYellow;
-  static String themeName = "yellow";
-
-  static void updateColors(
-      Color newMain, Color newSub, String argumentThemeName) {
-    main = newMain;
-    sub = newSub;
-    themeName = argumentThemeName;
-    sharedPreferencesLogic.setSelectedColor(argumentThemeName);
-  }
-
-  static SharedPreferencesLogic sharedPreferencesLogic =
-      SharedPreferencesLogic();
-
-  // アラームON/OFF
-  static bool alarmONOFF = false;
-
-  static void updateAlarmONOFF(bool newAlarmONOFF) {
-    alarmONOFF = newAlarmONOFF;
-    sharedPreferencesLogic.setSettedAlarm(newAlarmONOFF);
-  }
-
-  // キャラクタ-名
-  static String characterName = "chicken";
-
-  static void updateCharacterName(String newCharacterName) {
-    characterName = newCharacterName;
-    sharedPreferencesLogic.setSelectedCharacter(newCharacterName);
-  }
-
-  // 設定したアラーム時刻
-  static int alarmTime = 0;
-
-  static void updateAlarmTime(int newAlarmTime) {
-    alarmTime = newAlarmTime;
-    sharedPreferencesLogic.setAlarmTime(newAlarmTime);
-  }
-
-  // 設定した壁紙
-  static String wallpaper = "dots";
-
-  static void updateWallpaper(String newWallpaper) {
-    wallpaper = newWallpaper;
-    sharedPreferencesLogic.setSelectedWallpaper(newWallpaper);
-  }
-
-  // ユーザ名
-  static String userName = "user";
-
-  static void updateUserName(String newUserName) {
-    userName = newUserName;
-    sharedPreferencesLogic.setUserName(newUserName);
-  }
-
-  // 選択した音楽
-  static String music = "circus";
-
-  static void updateMusic(String newMusic) {
-    music = newMusic;
-    sharedPreferencesLogic.setSelectedMusic(newMusic);
-  }
 }

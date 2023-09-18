@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 
 import '../../../logic/nav_bar.dart';
 import '../../constant.dart';
@@ -14,7 +15,7 @@ class WallpaperSetPage extends StatefulWidget {
 
 class _WallpaperSetPageState extends State<WallpaperSetPage> {
   // 選択して変更後に保存する壁紙
-  String _selectedWallpaper = Constant.wallpaper;
+  String _selectedWallpaper = SingletonUser.wallpaper;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +68,7 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                     height: 150,
                     width: 350,
                     child: Image.asset(
-                        'assets/wallpaper/${Constant.themeName}/dots.png'),
+                        'assets/wallpaper/${SingletonUser.themeName}/dots.png'),
                   ),
                 ),
               ),
@@ -83,7 +84,7 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                     height: 150,
                     width: 350,
                     child: Image.asset(
-                        'assets/wallpaper/${Constant.themeName}/plaid.png'),
+                        'assets/wallpaper/${SingletonUser.themeName}/plaid.png'),
                   ),
                 ),
               ),
@@ -99,7 +100,7 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                     height: 150,
                     width: 350,
                     child: Image.asset(
-                        'assets/wallpaper/${Constant.themeName}/stripe.png'),
+                        'assets/wallpaper/${SingletonUser.themeName}/stripe.png'),
                   ),
                 ),
               ),
@@ -115,7 +116,7 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                 nextPage: NavBar(),
                 onPressed: () {
                   // changeWallpaper();
-                  Constant.updateWallpaper(_selectedWallpaper);
+                  SingletonUser.updateWallpaper(_selectedWallpaper);
                 },
               ),
             ],

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/setting/email_set_page.dart';
@@ -81,7 +82,7 @@ class _AccountSetPageState extends State<AccountSetPage> {
           _ListTileWidget(
             context,
             'ニックネーム',
-            userData != null ? Constant.userName : '',
+            userData != null ? SingletonUser.userName : '',
             NicknameSetPage(userID: userData != null ? userData['userID'] : ''),
           ),
           _ListTileWidget(

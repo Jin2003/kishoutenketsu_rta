@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_read.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
@@ -21,12 +22,12 @@ class RtaPage extends StatefulWidget {
 class _RtaPageState extends State<RtaPage> {
   // アイコン画像
   final List<String> iconImage = [
-    'assets/rta/${Constant.themeName}/起.png',
-    'assets/rta/${Constant.themeName}/床.png',
-    'assets/rta/${Constant.themeName}/点.png',
-    'assets/rta/${Constant.themeName}/結.png',
-    'assets/rta/${Constant.themeName}/RTA.png',
-    'assets/rta/${Constant.themeName}/RTA.png',
+    'assets/rta/${SingletonUser.themeName}/起.png',
+    'assets/rta/${SingletonUser.themeName}/床.png',
+    'assets/rta/${SingletonUser.themeName}/点.png',
+    'assets/rta/${SingletonUser.themeName}/結.png',
+    'assets/rta/${SingletonUser.themeName}/RTA.png',
+    'assets/rta/${SingletonUser.themeName}/RTA.png',
   ];
 
   // タッチしたかしてないか判定
@@ -41,15 +42,14 @@ class _RtaPageState extends State<RtaPage> {
 
   // running_bar 画像
   final List<String> rtaImage = [
-    'assets/rta/${Constant.themeName}/rta_circle.png',
-    'assets/rta/${Constant.themeName}/rta_circle_on.png',
-    'assets/rta/${Constant.themeName}/rta_bar.png',
+    'assets/rta/${SingletonUser.themeName}/rta_circle.png',
+    'assets/rta/${SingletonUser.themeName}/rta_circle_on.png',
+    'assets/rta/${SingletonUser.themeName}/rta_bar.png',
   ];
 
   Future<void> _getNfcID() async {
     // データベースからnfc_idをランダムに取得
     Map<String, String> gettedNfcs = await FirebaseHelper().getNfcIdMap();
-
     setState(() {
       nfcs = gettedNfcs;
     });
@@ -142,7 +142,7 @@ class _RtaPageState extends State<RtaPage> {
           context: context,
           builder: (context) {
             return Scaffold(
-              backgroundColor: Constant.sub,
+              backgroundColor: SingletonUser.sub,
               body: Stack(
                 children: [
                   SimpleDialog(
@@ -192,7 +192,7 @@ class _RtaPageState extends State<RtaPage> {
           context: context,
           builder: (context) {
             return Scaffold(
-              backgroundColor: Constant.sub,
+              backgroundColor: SingletonUser.sub,
               body: Stack(
                 children: [
                   SimpleDialog(
@@ -233,7 +233,7 @@ class _RtaPageState extends State<RtaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.sub,
+      backgroundColor: SingletonUser.sub,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -243,13 +243,14 @@ class _RtaPageState extends State<RtaPage> {
               height: 230,
               child: imageCount < 5
                   ? Image.asset(
-                      "assets/rta/${Constant.themeName}/${imageCount == 4 ? 'RTA' : nfcKey[imageCount]}.png",
+                      "assets/rta/${SingletonUser.themeName}/${imageCount == 4 ? 'RTA' : nfcKey[imageCount]}.png",
                     )
                   : Container(),
             ),
 
             const SizedBox(width: 100, height: 20),
-            CustomText(text: '  をタッチしてね！', fontSize: 25, Color: Constant.main),
+            CustomText(
+                text: '  をタッチしてね！', fontSize: 25, Color: SingletonUser.main),
             const SizedBox(width: 100, height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

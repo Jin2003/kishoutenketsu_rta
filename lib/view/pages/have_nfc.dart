@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/elevate_button.dart';
 import 'package:kishoutenketsu_rta/view/pages/use_select.dart';
@@ -7,8 +8,7 @@ import 'package:kishoutenketsu_rta/view/pages/use_select.dart';
 import 'components/custom_text.dart';
 
 class HaveNfc extends StatefulWidget {
-  const HaveNfc
-({super.key});
+  const HaveNfc({super.key});
 
   @override
   State<HaveNfc> createState() => _HaveNfcState();
@@ -18,7 +18,7 @@ class _HaveNfcState extends State<HaveNfc> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constant.sub,
+      backgroundColor: SingletonUser.sub,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -28,7 +28,9 @@ class _HaveNfcState extends State<HaveNfc> {
               fontSize: 22,
               Color: Constant.gray,
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             SizedBox(
               width: 140,
               height: 140,
@@ -42,7 +44,6 @@ class _HaveNfcState extends State<HaveNfc> {
               Color: Constant.gray,
             ),
             const SizedBox(height: 30),
-
             Text(
               textAlign: TextAlign.left,
               '※ お持ちの方は「このまま進む」,\n　 お持ちでない方は「購入する」\n　 を押すと、オススメのNFCタグが\n　 表示されます。',
@@ -52,12 +53,17 @@ class _HaveNfcState extends State<HaveNfc> {
                 color: Constant.gray,
               ),
             ),
-
             const SizedBox(height: 30),
-
-            const ElevateButton(title: 'このまま進む', shape: 20, fontSize: 20, width: 180, height: 55, nextPage: UseSelect()),
+            const ElevateButton(
+                title: 'このまま進む',
+                shape: 20,
+                fontSize: 20,
+                width: 180,
+                height: 55,
+                nextPage: UseSelect()),
             const SizedBox(height: 15),
-            const ElevateButton(title: '購入する', shape: 20, fontSize: 20, width: 180, height: 55),
+            const ElevateButton(
+                title: '購入する', shape: 20, fontSize: 20, width: 180, height: 55),
           ],
         ),
       ),

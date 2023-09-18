@@ -86,7 +86,6 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
         await sharedPreferencesLogic.setExistsNFC(true);
         await sharedPreferencesLogic.setSelectedCharacter('chicken');
         await sharedPreferencesLogic.setSelectedWallpaper("dots");
-        await sharedPreferencesLogic.setSelectedTheme("dots");
         // TODO:circusをデフォルトにしてるけど、後で考える
         await sharedPreferencesLogic.setSelectedMusic('circus');
         await sharedPreferencesLogic.setSelectedColor("yellow");

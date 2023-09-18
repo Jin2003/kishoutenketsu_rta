@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -81,7 +82,7 @@ class _JoinGroupState extends State<JoinGroup> {
             .update({
           'groupID': groupID,
         });
-        Constant.updateGroupID(groupID.toString());
+        SingletonUser.updateGroupID(groupID.toString());
         // isNfcSettingをtrueに変更
         await sharedPreferencesLogic.setExistsNFC(true);
         await sharedPreferencesLogic.setSelectedCharacter('chicken');

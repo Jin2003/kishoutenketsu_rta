@@ -37,14 +37,6 @@ class Constant {
   static SharedPreferencesLogic sharedPreferencesLogic =
       SharedPreferencesLogic();
 
-  // グループID
-  static String groupID = "groupID";
-
-  static void updateGroupID(String newGroupID) {
-    groupID = newGroupID;
-    sharedPreferencesLogic.setGroupID(newGroupID);
-  }
-
   // NFCのID
   static Map<String, String> nfcs = {};
   static void updateNfcs(Map<String, String> newNfcs) {

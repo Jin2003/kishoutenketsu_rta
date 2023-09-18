@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 
 class FirebaseHelper {
@@ -43,7 +44,7 @@ class FirebaseHelper {
   Future<Map<String, String>> getNfcIdMap() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('groups')
-        .doc(Constant.groupID)
+        .doc(SingletonUser.groupID)
         .get();
     dynamic data = documentSnapshot.data() as Map<String, dynamic>;
     Map<String, String> nfcIdMap =
@@ -69,7 +70,7 @@ class FirebaseHelper {
   Future<void> saveRtaResult(int rtaResult, String date) async {
     await FirebaseFirestore.instance
         .collection('groups')
-        .doc(Constant.groupID)
+        .doc(SingletonUser.groupID)
         .collection('rtaResults')
         .doc()
         .set({'rtaResult': rtaResult, 'name': Constant.userName, 'date': date});
@@ -79,7 +80,7 @@ class FirebaseHelper {
   Future<List<Map<String, dynamic>>> getRtaResults() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('groups')
-        .doc(Constant.groupID)
+        .doc(SingletonUser.groupID)
         .collection('rtaResults')
         .get();
     // print(querySnapshot);
@@ -96,7 +97,7 @@ class FirebaseHelper {
     // Firestoreの"rankings"コレクションからthisTimeの順位を取得
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('groups')
-        .doc(Constant.groupID)
+        .doc(SingletonUser.groupID)
         .collection('rtaResults')
         .where('rtaResult', isLessThanOrEqualTo: thisTime)
         .get();

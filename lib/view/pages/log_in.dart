@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/constant.dart';
 import 'package:kishoutenketsu_rta/view/pages/have_nfc.dart';
 import 'package:kishoutenketsu_rta/view/pages/sign_up.dart';
@@ -164,7 +165,7 @@ class _LogInState extends State<LogIn> {
                               .setUserName(documentSnapshot.data()?['name']);
                           if (groupID != null) {
                             // sharedPreferencesにgroupIDを保存
-                            Constant.updateGroupID(groupID);
+                            SingletonUser.updateGroupID(groupID);
                             Constant.updateUserName(
                                 documentSnapshot.data()?['name']);
                             // Constant.updateUserName(

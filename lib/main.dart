@@ -1,13 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
-import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
-import 'package:kishoutenketsu_rta/view/constant.dart';
+import 'package:kishoutenketsu_rta/view/pages/have_nfc.dart';
 import 'package:kishoutenketsu_rta/view/pages/log_in.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:dart_openai/dart_openai.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +14,7 @@ void main() async {
   //スプラッシュ画面の設定
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   // TODO.evnから環境変数を読み込む
   // await dotenv.load(fileName: '.env');
   // OpenAI.apiKey = dotenv.get('OPEN_AI_API_KEY');
@@ -27,9 +27,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // TODO:removeしないとずっとスプラッシュ画面が表示される(かまのに後で聞く)
-  FlutterNativeSplash.remove();
-
   runApp(const MyApp());
 }
 
@@ -41,28 +38,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool isExistsNFC = false; // デフォルト値を設定しておく
-
-  @override
-  void initState() {
-    super.initState();
-    initializeNFC(); // initState内で非同期の初期化処理を実行
-    getGroupID();
-  }
-
-  Future<void> initializeNFC() async {
-    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
-    bool? nfcResult = await sharedPreferencesLogic.getExistsNFC();
-    setState(() {
-      isExistsNFC = nfcResult ?? false; // 取得した結果を変数に代入
-    });
-  }
-
   // groupIDを取得する
-  Future<void> getGroupID() async {
-    SharedPreferencesLogic sharedPreferencesLogic = SharedPreferencesLogic();
-    String? groupID = await sharedPreferencesLogic.getGroupID();
-    Constant.updateGroupID(groupID ?? '');
+  Future<String> getGroupID(String userId) async {
+    String groupID = await FirebaseHelper().getGroupID(
+      userId,
+    );
+    return groupID;
   }
 
   @override
@@ -73,9 +54,33 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.lightBlue,
       ),
-
-      // isExistsNFCの値に応じて遷移先を決定
-      home: isExistsNFC ? const NavBar() : const LogIn(),
+      // ログイン状態を監視し、状態によって表示する画面を変更
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // スプラッシュ画面などに書き換えても良い
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          FlutterNativeSplash.remove();
+          // Userがサインインしているかどうかで条件分岐
+          if (snapshot.hasData) {
+            // グループに所属しているかどうか
+            getGroupID(snapshot.data!.uid).then((value) {
+              if (value == '') {
+                // グループに所属していない場合、NFCを持っているかの画面に。
+                return const HaveNfc();
+              }
+            });
+            // サインイン済みなら
+            return const NavBar();
+          }
+          // サインインしていないなら
+          return const LogIn();
+        },
+      ),
     );
   }
 }

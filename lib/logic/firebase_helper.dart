@@ -18,6 +18,15 @@ class FirebaseHelper {
     return documentID;
   }
 
+  // ユーザに紐づいたグループを取得するメソッド
+  Future<String> getGroupID(String userID) async {
+    DocumentSnapshot documentSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userID).get();
+    dynamic data = documentSnapshot.data() as Map<String, dynamic>;
+    String groupID = data['groupID'] as String;
+    return groupID;
+  }
+
   // グループにnfcIdListを保存するメソッド
   Future<void> saveNfcIdMap(
       String documentID, Map<String, String> nfcIdMap) async {

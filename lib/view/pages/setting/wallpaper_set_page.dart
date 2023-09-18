@@ -15,7 +15,7 @@ class WallpaperSetPage extends StatefulWidget {
 
 class _WallpaperSetPageState extends State<WallpaperSetPage> {
   // 選択して変更後に保存する壁紙
-  String _selectedWallpaper = Constant.wallpaper;
+  String _selectedWallpaper = SingletonUser.wallpaper;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +116,7 @@ class _WallpaperSetPageState extends State<WallpaperSetPage> {
                 nextPage: NavBar(),
                 onPressed: () {
                   // changeWallpaper();
-                  Constant.updateWallpaper(_selectedWallpaper);
+                  SingletonUser.updateWallpaper(_selectedWallpaper);
                 },
               ),
             ],

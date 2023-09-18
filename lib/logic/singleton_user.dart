@@ -17,6 +17,13 @@ class SingletonUser {
 
   // ユーザID
   // 壁紙
+  static String wallpaper = "dots";
+
+  static void updateWallpaper(String newWallpaper) {
+    wallpaper = newWallpaper;
+    sharedPreferencesLogic.setSelectedWallpaper(newWallpaper);
+  }
+
   // キャラクター
   static String characterName = "chicken";
 

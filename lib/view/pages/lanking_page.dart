@@ -178,7 +178,7 @@ class _LankingPageState extends State<LankingPage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              "assets/pages/${SingletonUser.themeName}/${Constant.wallpaper}/ranking_page.png",
+              "assets/pages/${SingletonUser.themeName}/${SingletonUser.wallpaper}/ranking_page.png",
               fit: BoxFit.cover,
             ),
           ),

@@ -191,7 +191,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           // 背景画像
           Image.asset(
-            "assets/pages/${SingletonUser.themeName}/${Constant.wallpaper}/main_page.png",
+            "assets/pages/${SingletonUser.themeName}/${SingletonUser.wallpaper}/main_page.png",
             fit: BoxFit.cover,
           ),
           Column(

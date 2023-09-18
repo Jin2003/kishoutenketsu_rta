@@ -25,14 +25,6 @@ class Constant {
   static SharedPreferencesLogic sharedPreferencesLogic =
       SharedPreferencesLogic();
 
-  // 設定した壁紙
-  static String wallpaper = "dots";
-
-  static void updateWallpaper(String newWallpaper) {
-    wallpaper = newWallpaper;
-    sharedPreferencesLogic.setSelectedWallpaper(newWallpaper);
-  }
-
   // ユーザ名
   static String userName = "user";
 

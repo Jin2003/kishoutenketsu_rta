@@ -24,8 +24,14 @@ class FirebaseHelper {
     DocumentSnapshot documentSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(userID).get();
     dynamic data = documentSnapshot.data() as Map<String, dynamic>;
-    String groupID = data['groupID'] as String;
-    return groupID;
+    // _TypeError (type 'Null' is not a subtype of type 'String' in type cast)
+    String groupId;
+    if (data['groupID'] == null) {
+      groupId = '';
+    } else {
+      groupId = data['groupID'] as String;
+    }
+    return groupId;
   }
 
   // グループにnfcIdListを保存するメソッド

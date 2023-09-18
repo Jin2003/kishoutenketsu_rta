@@ -31,13 +31,7 @@ class _AlarmPageState extends State<AlarmPage> {
   String? _musicPath;
 
   // アラームを鳴らす時刻
-  int _alarmTime = SingletonUser.alarmTime;
-
-  // 設定した時刻のhourのみを取得
-  int? _alarmHour;
-
-  // 設定した時刻のminuteのみを取得
-  int? _alarmMinute;
+  DateTime? _alarmTime;
 
   // アラームネームをkeyvalueで管理
   // TODO:名前後で考える
@@ -52,10 +46,10 @@ class _AlarmPageState extends State<AlarmPage> {
   @override
   void initState() {
     super.initState();
+
+    _alarmTime = DateTime.now();
+    
     initializeMusic().then((_) {
-      setState(() {});
-    });
-    splitAlarmTime().then((_) {
       setState(() {});
     });
     initializeAlarm().then((_) {
@@ -79,16 +73,6 @@ class _AlarmPageState extends State<AlarmPage> {
     setState(() {
       _musicName = _musicNameMap[_music!];
     });
-  }
-
-  // init時に渡されたalarmTimeをalarmHourとalarmMinuteに分割
-  Future<void> splitAlarmTime() async {
-    if (widget.argumentAlarmTime != null) {
-      setState(() {
-        _alarmHour = widget.argumentAlarmTime! ~/ 60;
-        _alarmMinute = widget.argumentAlarmTime! % 60;
-      });
-    }
   }
 
   //アラームサービスの初期化
@@ -148,25 +132,19 @@ class _AlarmPageState extends State<AlarmPage> {
                   //   },
                   onPressed: () {
                     // TODO：時刻設定ダイアログ
-                    DatePicker.showTimePicker(context,
-                        //DatetimePickerのモーダル内の「キャンセル」「完了」を表示
-                        showTitleActions: true,
-                        //「秒」の表記が不要->showSecondsColumnをfalse
-                        showSecondsColumn: false, onChanged: (date) {
-                      // print(date);
-                    }, onConfirm: (date) {
-                      // print(date);
-                      // print("コンフィルム起こったよ");
-                      setState(() {
-                        _alarmTime = date.hour * 60 + date.minute;
-                        _alarmHour = date.hour;
-                        _alarmMinute = date.minute;
-                      });
-                    },
-                        // DatetimePickerの初期値を設定
-                        currentTime: DateTime.now(),
-                        // 日本語設定
-                        locale: LocaleType.jp);
+                    DatePicker.showTimePicker(
+                      context,
+                      showTitleActions: true,
+                      showSecondsColumn: false,
+                      onChanged: (date) {},
+                      onConfirm: (date) {
+                        setState(() {
+                          _alarmTime = date;
+                        });
+                      },
+                      currentTime: _alarmTime,
+                      locale: LocaleType.jp,
+                    );
                   },
                   child: SizedBox(
                     width: 270,
@@ -191,8 +169,9 @@ class _AlarmPageState extends State<AlarmPage> {
                         Align(
                             alignment: Alignment(0.9, 0),
                             child: CustomText(
-                              text:
-                                  '${_alarmHour.toString().padLeft(2, '0')}:${_alarmMinute.toString().padLeft(2, '0')}',
+                              text: _alarmTime != null
+                                  ? '${_alarmTime!.hour.toString().padLeft(2, '0')}:${_alarmTime!.minute.toString().padLeft(2, '0')}'
+                                  : '未設定',
                               fontSize: 25,
                               Color: Constant.gray,
                             )),
@@ -279,19 +258,22 @@ class _AlarmPageState extends State<AlarmPage> {
                   fontSize: 20,
                   shape: 16,
                   onPressed: () async {
-                    // sharedPreferencesにアラームを鳴らす時刻を保存
-                    SharedPreferencesLogic sharedPreferencesLogic =
-                        SharedPreferencesLogic();
-                    sharedPreferencesLogic.setAlarmTime(_alarmTime!);
+                    if (_alarmTime != null) {
+                      // sharedPreferencesにアラームを鳴らす時刻を保存
+                      SharedPreferencesLogic sharedPreferencesLogic =
+                          SharedPreferencesLogic();
+                      sharedPreferencesLogic.setAlarmTime(
+                          _alarmTime!.hour * 60 + _alarmTime!.minute);
 
-                    // TODO:alarmSettingにアラームを設定
-                    AlarmSetting alarmSetting = AlarmSetting();
-                    alarmSetting.setting(
-                      _alarmTime,
-                      _musicPath = findKeyByValue(_musicNameMap, _music!),
-                      1,
-                      context,
-                    );
+                      // TODO:alarmSettingにアラームを設定
+                      AlarmSetting alarmSetting = AlarmSetting();
+                      alarmSetting.setting(
+                        _alarmTime!,
+                        _musicPath = findKeyByValue(_musicNameMap, _music!),
+                        1,
+                        context,
+                      );
+                    }
                     // print(_musicPath);
                     Navigator.push(
                       context,

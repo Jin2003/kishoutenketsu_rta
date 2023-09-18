@@ -4,20 +4,11 @@ import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
 
 class AlarmSetting {
   Future<void> setting(
-    int timeInMinutes,
+    DateTime alarmTime,
     String? music,
     int id,
     BuildContext context,
   ) async {
-    
-    // intからDateTimeに変換する
-    int hours = timeInMinutes ~/ 60;
-    int minutes = timeInMinutes % 60;
-
-    // 現在の年月日を取得
-    DateTime now = DateTime.now();
-    DateTime alarmTime = DateTime(now.year, now.month, now.day, hours, minutes);
-
     // アラームの設定を作成
     final alarmSettings = AlarmSettings(
       id: id,

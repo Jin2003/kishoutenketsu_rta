@@ -37,22 +37,6 @@ class Constant {
   static SharedPreferencesLogic sharedPreferencesLogic =
       SharedPreferencesLogic();
 
-  // アラームON/OFF
-  static bool alarmONOFF = false;
-
-  static void updateAlarmONOFF(bool newAlarmONOFF) {
-    alarmONOFF = newAlarmONOFF;
-    sharedPreferencesLogic.setSettedAlarm(newAlarmONOFF);
-  }
-
-  // 設定したアラーム時刻
-  static int alarmTime = 0;
-
-  static void updateAlarmTime(int newAlarmTime) {
-    alarmTime = newAlarmTime;
-    sharedPreferencesLogic.setAlarmTime(newAlarmTime);
-  }
-
   // 設定した壁紙
   static String wallpaper = "dots";
 

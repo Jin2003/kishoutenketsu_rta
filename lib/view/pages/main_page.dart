@@ -30,7 +30,7 @@ class _MainPageState extends State<MainPage> {
   final String _character = SingletonUser.characterName;
 
   // アラームオンオフの切り替え
-  bool _value = Constant.alarmONOFF;
+  bool _value = SingletonUser.alarmONOFF;
 
   // shared_preferencesから持ってきたアラーム時刻を保持する変数
   int? _alarmTime;
@@ -266,7 +266,8 @@ class _MainPageState extends State<MainPage> {
                         trackColor: Colors.grey,
                         value: _value,
                         onChanged: (value) {
-                          Constant.updateAlarmONOFF(value);
+                          // TODO:shared_preferencesにアラームのオンオフを保存
+                          SingletonUser.updateAlarmONOFF(value);
                           setState(() {
                             _value = value;
                           });

@@ -45,14 +45,6 @@ class Constant {
     sharedPreferencesLogic.setSettedAlarm(newAlarmONOFF);
   }
 
-  // キャラクタ-名
-  static String characterName = "chicken";
-
-  static void updateCharacterName(String newCharacterName) {
-    characterName = newCharacterName;
-    sharedPreferencesLogic.setSelectedCharacter(newCharacterName);
-  }
-
   // 設定したアラーム時刻
   static int alarmTime = 0;
 

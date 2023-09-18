@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import '../../constant.dart';
 import '../components/custom_text.dart';
 import '../components/outline_button.dart';
@@ -13,7 +14,7 @@ class CharaSetPage extends StatefulWidget {
 
 class _CharaSetPageState extends State<CharaSetPage> {
   // 選択して変更後に保存するキャラクター
-  String? _selectedCharacter = Constant.characterName;
+  String? _selectedCharacter = SingletonUser.characterName;
 
   @override
   void initState() {
@@ -164,9 +165,10 @@ class _CharaSetPageState extends State<CharaSetPage> {
                 height: 50,
                 fontsize: 20,
                 shape: 15,
-                nextPage: NavBar(),
+                nextPage: const NavBar(),
                 onPressed: () {
-                  Constant.updateCharacterName(_selectedCharacter!);
+                  // TODO:shared_preferencesに保存する処理
+                  SingletonUser.updateCharacterName(_selectedCharacter!);
                 },
               ),
             ],

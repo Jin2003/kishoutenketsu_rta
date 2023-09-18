@@ -11,8 +11,15 @@ class SingletonUser {
     groupID = newGroupID;
     sharedPreferencesLogic.setGroupID(newGroupID);
   }
+
   // ユーザID
   // 壁紙
   // キャラクター
+  static String characterName = "chicken";
+
+  static void updateCharacterName(String newCharacterName) {
+    characterName = newCharacterName;
+    sharedPreferencesLogic.setSelectedCharacter(newCharacterName);
+  }
   // テーマカラー
 }

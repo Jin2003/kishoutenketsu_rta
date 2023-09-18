@@ -3,6 +3,7 @@ import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/nfc_scan.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
+import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:uuid/uuid.dart';
 
@@ -76,7 +77,7 @@ class _NfcSettingPageState extends State<NfcSettingPage> {
         // shared_preferencesにgroupIDを保存
         SharedPreferencesLogic sharedPreferencesLogic =
             SharedPreferencesLogic();
-        Constant.updateGroupID(documentID);
+        SingletonUser.updateGroupID(documentID);
         // groupIDをusersコレクションに登録
         String? userID = await sharedPreferencesLogic.getUserID();
         sharedPreferencesLogic.setGroupID(documentID);

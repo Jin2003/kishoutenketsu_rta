@@ -28,6 +28,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  SharedPreferencesLogic().updateSingletonUser();
+
   runApp(const MyApp());
 }
 
@@ -45,10 +47,6 @@ class _MyAppState extends State<MyApp> {
       userId,
     );
     return groupID;
-  }
-
-  Future<void> updateSingletonUser() async {
-    SharedPreferencesLogic().updateSingletonUser();
   }
 
   @override
@@ -81,7 +79,6 @@ class _MyAppState extends State<MyApp> {
             });
             // サインイン済みなら
             // Shared_preferencesからSingletonUserの値を更新する関数
-            updateSingletonUser();
             return const NavBar();
           }
           // サインインしていないなら

@@ -120,6 +120,17 @@ class FirebaseHelper {
     // return underThisTimeLength;
   }
 
+  // ユーザ情報からポイントを取得するメソッド
+  Future<int> getPoint() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(SingletonUser.userID)
+        .get();
+    dynamic data = documentSnapshot.data() as Map<String, dynamic>;
+    int point = data['point'] as int;
+    return point;
+  }
+
   // ユーザのメールアドレスを変更するメソッド
   Future<void> changeEmail(String newEmail) async {
     //　なんかログインもう一回しないとエラー出るっぽい

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kishoutenketsu_rta/logic/firebase_helper.dart';
 import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/outline_button.dart';
@@ -29,11 +30,9 @@ class _GatchaPageState extends State<GatchaPage> {
 
   //_pointを取得し、画面を更新する関数
   Future<void> _loadPoint() async {
-    final db = await DatabaseHelper().db;
-    //userテーブルからpointカラムを取得
-    final point = await db.rawQuery('SELECT * FROM user');
+    int point = await FirebaseHelper().getPoint();
     setState(() {
-      _point = point[0]['point'] as int;
+      _point = point;
     });
   }
 

@@ -174,7 +174,6 @@ class SharedPreferencesLogic {
     // 音楽
     getSelectedMusic().then((value) => SingletonUser.music = value!);
     // テーマカラー
-    // TODO:1回目の描画時(Navbar)にこれが追いついていない？
     getSelectedColor().then((value) {
       SingletonUser.main = SingletonUser.mainThemes[value]!;
       SingletonUser.sub = SingletonUser.subThemes[value]!;

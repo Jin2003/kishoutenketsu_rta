@@ -117,7 +117,16 @@ class _LankingPageState extends State<LankingPage> {
     }
     _result = rtaResults;
 
-    _getMessage(_userName!);
+    if(_userName != null){
+      _getMessage(_userName!);
+    }else{
+      if(mounted){
+        setState(() {
+          _response = _message[2];
+          _showResponse = !_showResponse;
+        });
+      }
+    }
   }
 
 //定型文を表示する関数
@@ -128,6 +137,7 @@ class _LankingPageState extends State<LankingPage> {
 
     print('topTime: $_topTime');
 
+
     //自分の最新のタイムと最高記録のタイムの差を計算
     final difference = (_rtaTime != null && _topTime != null)
         ? _rtaTime!['rtaResult'] - _topTime!['rtaResult']
@@ -137,7 +147,7 @@ class _LankingPageState extends State<LankingPage> {
     print('${_topTime!['rtaResult']}だよ！');
 
     if (_rtaTime != null && _result.isNotEmpty) {
-      if (difference != null && difference >= 0) {
+      if (difference != null && difference >= 0 && _topTime!['date'] != _rtaTime!['date']) {
         final minutes = difference ~/ 60;
         final seconds = difference % 60 + 1;
 

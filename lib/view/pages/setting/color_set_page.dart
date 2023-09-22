@@ -69,48 +69,280 @@ class _ColorSetPageState extends State<ColorSetPage> {
                       'assets/theme/$selectedThemeName/chicken_on.png'),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(),
-                child: InkWell(
-                  onTap: () {
-                    selectedThemeName = "yellow";
-                    setState(() {});
-                  },
-                  child: SizedBox(
-                    height: 100,
-                    width: 350,
-                    child: Image.asset('assets/theme/yellow/color.png'),
-                  ),
-                ),
-              ),
+
+              //レッド
               Padding(
                 padding: const EdgeInsets.all(3.0),
-                child: InkWell(
-                  onTap: () {
-                    selectedThemeName = "red";
-                    setState(() {});
-                  },
-                  child: SizedBox(
-                    height: 100,
-                    width: 350,
-                    child: Image.asset('assets/theme/red/color.png'),
+                  child: InkWell(
+                    onTap: () {
+                      selectedThemeName = "red";
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: 340,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Constant.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 0,
+                            blurRadius: 3,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          //カラー表示
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25),
+                            child: Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                color: Constant.red,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+
+                          //テキストの表示
+                          const Text('red',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Constant.gray,
+                            )
+                          ),
+                        ],
+                    ),
                   ),
                 ),
               ),
+
+              const SizedBox(height: 10),
+
+              //オレンジ
               Padding(
                 padding: const EdgeInsets.all(3.0),
-                child: InkWell(
-                  onTap: () {
-                    selectedThemeName = "blue";
-                    setState(() {});
-                  },
-                  child: SizedBox(
-                    height: 100,
-                    width: 350,
-                    child: Image.asset('assets/theme/blue/color.png'),
+                  child: InkWell(
+                    onTap: () {
+                      selectedThemeName = "orange";
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: 340,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Constant.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 0,
+                            blurRadius: 3,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          //カラー表示
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25),
+                            child: Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                color: Constant.orange,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+
+                          //テキストの表示
+                          const Text('orange',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Constant.gray,
+                            )
+                          ),
+                        ],
+                    ),
                   ),
                 ),
               ),
+
+              const SizedBox(height: 10),
+
+              //イエロー
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                  child: InkWell(
+                    onTap: () {
+                      selectedThemeName = "yellow";
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: 340,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Constant.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 0,
+                            blurRadius: 3,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          //カラー表示
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25),
+                            child: Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                color: selectedMainColor,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+
+                          //テキストの表示
+                          const Text('yellow',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Constant.gray,
+                            )
+                          ),
+                        ],
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              //グリーン
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                  child: InkWell(
+                    onTap: () {
+                      selectedThemeName = "green";
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: 340,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Constant.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 0,
+                            blurRadius: 3,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          //カラー表示
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25),
+                            child: Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                color: Constant.green,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+
+                          //テキストの表示
+                          const Text('green',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Constant.gray,
+                            )
+                          ),
+                        ],
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              //ブルー
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                  child: InkWell(
+                    onTap: () {
+                      selectedThemeName = "blue";
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: 340,
+                      height: 75,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Constant.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 0,
+                            blurRadius: 3,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          //カラー表示
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25),
+                            child: Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                color: Constant.blue,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+
+                          //テキストの表示
+                          const Text('blue',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Constant.gray,
+                            )
+                          ),
+                        ],
+                    ),
+                  ),
+                ),
+              ),
+
               const SizedBox(
                 height: 20,
               ),

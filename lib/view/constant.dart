@@ -20,4 +20,12 @@ class Constant {
   // red
   static const Color red = Color(0xFFFFB6A6);
   static const Color subRed = Color(0xFFFFEAE5);
+
+  // green
+  static const Color green = Color(0xFFA5E886);
+  static const Color subGreen = Color(0xFFE3FFC8);
+
+  // orange
+  static const Color orange = Color(0xFFFFB672);
+  static const Color subOrange = Color(0xFFFEE3CA);
 }

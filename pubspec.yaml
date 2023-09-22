@@ -129,6 +129,8 @@ flutter:
     - assets/theme/blue/
     - assets/theme/red/
     - assets/theme/yellow/
+    - assets/theme/green/
+    - assets/theme/orange/
     
     - assets/alarm/
     - assets/alarm/circus.mp3

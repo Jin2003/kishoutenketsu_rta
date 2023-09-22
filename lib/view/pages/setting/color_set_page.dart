@@ -212,7 +212,7 @@ class _ColorSetPageState extends State<ColorSetPage> {
                               height: 55,
                               width: 55,
                               decoration: BoxDecoration(
-                                color: selectedMainColor,
+                                color: Constant.yellow,
                                 borderRadius: BorderRadius.circular(50),
                               ),
                             ),

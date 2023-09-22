@@ -55,6 +55,9 @@ class _LankingPageState extends State<LankingPage> {
   //定型文を表示するかどうかのフラグ
   bool _showResponse = false;
 
+  //allとmonthlyの切り替えフラグ
+  bool _modeSwitchFlag = true;
+
   @override
   void initState() {
     super.initState();
@@ -183,6 +186,93 @@ class _LankingPageState extends State<LankingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        // appbarの高さ指定
+        toolbarHeight: 90,
+        // 影の深さ
+        elevation: 5,
+        // titleをcenter固定
+        centerTitle: true,
+        // 戻るボタンオフ
+        automaticallyImplyLeading: false,
+        // ランキングのAllとMonthlyをAppbarの真ん中で分けて左右で表示(_allでアンダーライン切り替え)
+        actions: [
+          Center(
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _modeSwitchFlag = true;
+                    });
+                  },
+                  child:Container(
+                    width: 200,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: _modeSwitchFlag ? Constant.white : SingletonUser.main,
+                          width: 3,
+                        ),
+                      ),
+                    ),
+                    child:const Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          'Monthly',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Constant.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _modeSwitchFlag = false;
+                    });
+                  },
+                  child: Container(
+                    width: 200,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: _modeSwitchFlag ? SingletonUser.main : Constant.white,
+                          width: 3,
+                        ),
+                      ),
+                    ),
+                    child:const Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          'All',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Constant.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+        backgroundColor: SingletonUser.main,
+      ),
+
       backgroundColor: SingletonUser.sub,
       body: Stack(
         children: [
@@ -198,9 +288,9 @@ class _LankingPageState extends State<LankingPage> {
               Align(
                 alignment: Alignment.center,
                 child: Container(
-                  padding: const EdgeInsets.only(top: 55),
+                  padding: const EdgeInsets.only(top: 30),
                   width: 310,
-                  height: 420,
+                  height: 350,
                   child: Scrollbar(
                     child: ListView.separated(
                       padding: const EdgeInsets.all(20),

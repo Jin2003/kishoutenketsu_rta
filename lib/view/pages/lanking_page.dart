@@ -56,7 +56,7 @@ class _LankingPageState extends State<LankingPage> {
   bool _showResponse = false;
 
   //allとmonthlyの切り替えフラグ
-  bool _modeSwitchFlag = true;
+  bool _isMonthly = true;
 
   @override
   void initState() {
@@ -193,7 +193,7 @@ class _LankingPageState extends State<LankingPage> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      _modeSwitchFlag = true;
+                      _isMonthly = true;
                     });
                   },
                   child: Container(
@@ -202,9 +202,8 @@ class _LankingPageState extends State<LankingPage> {
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: _modeSwitchFlag
-                              ? Constant.white
-                              : SingletonUser.main,
+                          color:
+                              _isMonthly ? Constant.white : SingletonUser.main,
                           width: 3,
                         ),
                       ),
@@ -228,7 +227,7 @@ class _LankingPageState extends State<LankingPage> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      _modeSwitchFlag = false;
+                      _isMonthly = false;
                     });
                   },
                   child: Container(
@@ -237,9 +236,8 @@ class _LankingPageState extends State<LankingPage> {
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: _modeSwitchFlag
-                              ? SingletonUser.main
-                              : Constant.white,
+                          color:
+                              _isMonthly ? SingletonUser.main : Constant.white,
                           width: 3,
                         ),
                       ),

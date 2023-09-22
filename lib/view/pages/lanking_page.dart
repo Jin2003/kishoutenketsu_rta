@@ -62,6 +62,8 @@ class _LankingPageState extends State<LankingPage> {
   void initState() {
     super.initState();
     _loadAllLank();
+    _loadMonthlyLank();
+    _getMyLateestRtaResult();
   }
 
   // TODOChatGPTからの応答を取得する関数
@@ -84,38 +86,40 @@ class _LankingPageState extends State<LankingPage> {
     List<Map<String, dynamic>> rtaResults =
         await FirebaseHelper().getRtaResults();
 
-    if (rtaResults.isNotEmpty) {
-      // rtaResultsの最新で登録されたタイムの名前を取得
-      final userName = rtaResults.last['name'];
-
-      // 自分の最新のタイムを取得
-      final newTime = rtaResults.lastWhere(
-          (element) => element['name'] == userName,
-          orElse: () => <String, dynamic>{});
-
-      if (mounted) {
-        setState(() {
-          _newTime = newTime;
-          _userName = userName;
-        });
-      }
+    if (mounted) {
+      setState(() {
+        _lankingCount = rtaResults.length;
+        _result = rtaResults;
+      });
     }
+  }
 
-    // ソート
-    rtaResults.sort((a, b) => a['rtaResult'].compareTo(b['rtaResult']));
-
-    // ランキングの数を設定
-    int lankingCount = rtaResults.length;
+  // 月間ランキングを取得する関数
+  Future<void> _loadMonthlyLank() async {
+    List<Map<String, dynamic>> rtaResults =
+        await FirebaseHelper().getMonthlyRtaResults();
 
     if (mounted) {
       setState(() {
-        _lankingCount = lankingCount;
+        _lankingCount = rtaResults.length;
+        _result = rtaResults;
       });
     }
-    _result = rtaResults;
+  }
 
-    if (_userName != null) {
-      _getMessage(_userName!);
+  // 自分の最新のタイムを取得する関数
+  Future<void> _getMyLateestRtaResult() async {
+    Map<String, dynamic> myLateestRtaResult =
+        await FirebaseHelper().getMyLateestRtaResult();
+    print("myLateestRtaResult");
+    print(myLateestRtaResult);
+    if (mounted) {
+      setState(() {
+        _newTime = myLateestRtaResult;
+      });
+    }
+    if (myLateestRtaResult != {}) {
+      _getMessage();
     } else {
       if (mounted) {
         setState(() {
@@ -127,9 +131,10 @@ class _LankingPageState extends State<LankingPage> {
   }
 
 //定型文を表示する関数
-  _getMessage(String userName) async {
+  _getMessage() async {
     // ランキング最高記録のRTAタイムを取得
-    _topTime = _result.firstWhere((element) => element['name'] == userName,
+    _topTime = _result.firstWhere(
+        (element) => element['name'] == SingletonUser.userName,
         orElse: () => <String, dynamic>{});
 
     //自分の最新のタイムと最高記録のタイムの差を計算

@@ -61,7 +61,7 @@ class _LankingPageState extends State<LankingPage> {
   @override
   void initState() {
     super.initState();
-    _loadLank();
+    _loadAllLank();
   }
 
   // TODOChatGPTからの応答を取得する関数
@@ -80,7 +80,7 @@ class _LankingPageState extends State<LankingPage> {
   // }
 
   // ランキングを取得する関数
-  Future<void> _loadLank() async {
+  Future<void> _loadAllLank() async {
     List<Map<String, dynamic>> rtaResults =
         await FirebaseHelper().getRtaResults();
 

@@ -25,7 +25,7 @@ class _LankingPageState extends State<LankingPage> {
   String? _userName;
 
   //最新のRTAタイムを保持する変数
-  Map<String, dynamic>? _rtaTime;
+  Map<String, dynamic>? _newTime;
 
   //最高記録のRTAタイムを保持する変数
   Map<String, dynamic>? _topTime;
@@ -84,24 +84,18 @@ class _LankingPageState extends State<LankingPage> {
     List<Map<String, dynamic>> rtaResults =
         await FirebaseHelper().getRtaResults();
 
-    print('rtaResults: $rtaResults');
-
     if (rtaResults.isNotEmpty) {
       // rtaResultsの最新で登録されたタイムの名前を取得
       final userName = rtaResults.last['name'];
 
-      print('userName: $userName');
-
       // 自分の最新のタイムを取得
-      final rtaTime = rtaResults.lastWhere(
+      final newTime = rtaResults.lastWhere(
           (element) => element['name'] == userName,
           orElse: () => <String, dynamic>{});
 
-      print('rtaTime: $rtaTime');
-
       if (mounted) {
         setState(() {
-          _rtaTime = rtaTime;
+          _newTime = newTime;
           _userName = userName;
         });
       }
@@ -120,10 +114,10 @@ class _LankingPageState extends State<LankingPage> {
     }
     _result = rtaResults;
 
-    if(_userName != null){
+    if (_userName != null) {
       _getMessage(_userName!);
-    }else{
-      if(mounted){
+    } else {
+      if (mounted) {
         setState(() {
           _response = _message[2];
           _showResponse = !_showResponse;
@@ -138,19 +132,15 @@ class _LankingPageState extends State<LankingPage> {
     _topTime = _result.firstWhere((element) => element['name'] == userName,
         orElse: () => <String, dynamic>{});
 
-    print('topTime: $_topTime');
-
-
     //自分の最新のタイムと最高記録のタイムの差を計算
-    final difference = (_rtaTime != null && _topTime != null)
-        ? _rtaTime!['rtaResult'] - _topTime!['rtaResult']
+    final difference = (_newTime != null && _topTime != null)
+        ? _newTime!['rtaResult'] - _topTime!['rtaResult']
         : 'タイムが取得できなかったよ';
 
-    print('${_rtaTime!['rtaResult']}だよ！');
-    print('${_topTime!['rtaResult']}だよ！');
-
-    if (_rtaTime != null && _result.isNotEmpty) {
-      if (difference != null && difference >= 0 && _topTime!['date'] != _rtaTime!['date']) {
+    if (_newTime != null && _result.isNotEmpty) {
+      if (difference != null &&
+          difference >= 0 &&
+          _topTime!['date'] != _newTime!['date']) {
         final minutes = difference ~/ 60;
         final seconds = difference % 60 + 1;
 
@@ -206,18 +196,20 @@ class _LankingPageState extends State<LankingPage> {
                       _modeSwitchFlag = true;
                     });
                   },
-                  child:Container(
+                  child: Container(
                     width: 200,
                     height: 90,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: _modeSwitchFlag ? Constant.white : SingletonUser.main,
+                          color: _modeSwitchFlag
+                              ? Constant.white
+                              : SingletonUser.main,
                           width: 3,
                         ),
                       ),
                     ),
-                    child:const Align(
+                    child: const Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 5),
@@ -245,12 +237,14 @@ class _LankingPageState extends State<LankingPage> {
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: _modeSwitchFlag ? SingletonUser.main : Constant.white,
+                          color: _modeSwitchFlag
+                              ? SingletonUser.main
+                              : Constant.white,
                           width: 3,
                         ),
                       ),
                     ),
-                    child:const Align(
+                    child: const Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 5),
@@ -272,7 +266,6 @@ class _LankingPageState extends State<LankingPage> {
         ],
         backgroundColor: SingletonUser.main,
       ),
-
       backgroundColor: SingletonUser.sub,
       body: Stack(
         children: [

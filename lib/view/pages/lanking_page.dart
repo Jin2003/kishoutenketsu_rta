@@ -21,9 +21,6 @@ class _LankingPageState extends State<LankingPage> {
   //Lankingを何個表示するか
   int _lankingCount = 0;
 
-  //ランキングで自分の名前を保持する変数
-  String? _userName;
-
   //最新のRTAタイムを保持する変数
   Map<String, dynamic>? _newTime;
 

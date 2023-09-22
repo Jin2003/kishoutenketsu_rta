@@ -129,8 +129,8 @@ flutter:
     - assets/rta/blue/
     - assets/rta/red/
     - assets/rta/yellow/
-    # - assets/rta/green/
-    # - assets/rta/orange/
+    - assets/rta/green/
+    - assets/rta/orange/
 
 
     - assets/wallpaper/blue/

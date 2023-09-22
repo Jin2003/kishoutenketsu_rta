@@ -101,6 +101,8 @@ flutter:
     - assets/characters/blue/
     - assets/characters/red/
     - assets/characters/yellow/
+    - assets/characters/green/
+    - assets/characters/orange/
 
     - assets/gacha/yellow/
     - assets/gacha/red/
@@ -115,16 +117,28 @@ flutter:
     - assets/pages/blue/dots/
     - assets/pages/blue/plaid/
     - assets/pages/blue/stripe/
+    - assets/pages/green/dots/
+    - assets/pages/green/plaid/
+    - assets/pages/green/stripe/
+    - assets/pages/orange/dots/
+    - assets/pages/orange/plaid/
+    - assets/pages/orange/stripe/
 
     - assets/icon/
 
     - assets/rta/blue/
     - assets/rta/red/
     - assets/rta/yellow/
+    # - assets/rta/green/
+    # - assets/rta/orange/
+
 
     - assets/wallpaper/blue/
     - assets/wallpaper/red/
     - assets/wallpaper/yellow/
+    - assets/wallpaper/green/
+    - assets/wallpaper/orange/
+
 
     - assets/theme/blue/
     - assets/theme/red/

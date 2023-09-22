@@ -1,12 +1,23 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kishoutenketsu_rta/logic/nav_bar.dart';
 import 'package:kishoutenketsu_rta/logic/shared_preferences_logic.dart';
 import 'package:kishoutenketsu_rta/logic/singleton_user.dart';
 import 'package:kishoutenketsu_rta/view/pages/components/custom_text.dart';
 // import 'package:kishoutenketsu_rta/logic/chatgpt_service.dart';
 import 'package:kishoutenketsu_rta/logic/position.dart';
+import 'package:kishoutenketsu_rta/view/pages/join_group.dart';
+import 'package:kishoutenketsu_rta/view/pages/log_in.dart';
+import 'package:kishoutenketsu_rta/view/pages/rta_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/account_set_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/chara_set_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/color_set_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/help_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/invitation_page.dart';
+import 'package:kishoutenketsu_rta/view/pages/setting/wallpaper_set_page.dart';
 import '../constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -71,11 +82,27 @@ class _MainPageState extends State<MainPage> {
   // 経度を保持する変数
   double? lon;
 
+  //天気を保持する変数
+  String? weatherDescription;
+
+  //最高気温を保持する変数
+  Temperature? temperature;
+
+  //降水確率を保持する変数
+  double? rain;
+
   //天気のアイコンを保持する変数
   String? weatherIcon;
 
   //position.dartのUserPositionクラスのインスタンスを作成
   UserPosition userPosition = UserPosition();
+
+  // ScaffoldStateのGlobalKeyを変数として定義
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  //nav_bar.dartのインスタンスを作成
+  final NavBar _navBar = NavBar();
+
 
   @override
   void initState() {
@@ -122,15 +149,47 @@ class _MainPageState extends State<MainPage> {
   //     String? cityName = position.first.locality;
 
   //     //天候情報を取得
-  //     // String? weatherDescription = weather.weatherMain;
-  //     String? weatherDescription = weather.weatherDescription;
+  //     weatherDescription = weather.weatherMain;
+  //     // String? weatherDescription = weather.weatherDescription;
+
+  //     //天候情報を日本語に変換
+  //     switch (weatherDescription) {
+  //       case "Clear":
+  //         weatherDescription = "晴れ";
+  //         break;
+  //       case "Clouds":
+  //         weatherDescription = "曇り";
+  //         break;
+  //       case "Rain":
+  //         weatherDescription = "雨";
+  //         break;
+  //       case "Thunderstorm":
+  //         weatherDescription = "雷雨";
+  //         break;
+  //       case "Drizzle":
+  //         weatherDescription = "霧雨";
+  //         break;
+  //       case "Snow":
+  //         weatherDescription = "雪";
+  //         break;
+  //       case "Mist":
+  //         weatherDescription = "霧";
+  //         break;
+  //       default:
+  //         weatherDescription = "不明";
+  //     }
 
   //     //最高気温の取得
-  //     Temperature? temperature = weather.tempMax;
+  //     temperature = weather.tempMax;
+
+  //     //OpenWeatherMapのAPIから降水確率を取得
+  //     rain = weather.rainLastHour;
+
+  //     print(rain);
 
   //     //天気情報メッセージ
   //     String weatherMessage
-  //       = "今日の$cityNameの天気は\n$weatherDescriptionだよ!\n最高気温は${temperature!.celsius!.toStringAsFixed(0)}度だよ！";
+  //       = "今日の$cityNameの天気は$weatherDescriptionだよ!\n最高気温は${temperature!.celsius!.toStringAsFixed(0)}度だよ！";
 
   //     if (mounted) {
   //       setState(() {
@@ -185,6 +244,124 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        // appbarの高さ指定
+        toolbarHeight: 90,
+        // 影の深さ
+        elevation: 5,
+        // titleをcenter固定
+        centerTitle: true,
+        // 戻るボタンオフ
+        automaticallyImplyLeading: false,
+        // ロゴ表示
+        title: Image.asset(
+          'assets/logo.png',
+          height: 50,
+          width: 130,
+        ),
+
+        backgroundColor: SingletonUser.main,
+
+        actions: <Widget>[
+          // ハンバーガーボタンをカスタム
+          InkWell(
+            onTap: () => _scaffoldKey.currentState?.openEndDrawer(),
+            child: const Row(
+              children: [
+                ImageIcon(
+                  AssetImage('assets/icon/humberger_icon.png'),
+                  color: Constant.white,
+                ),
+                SizedBox(width: 10),
+              ],
+            ),
+          ),
+        ],
+      ),
+      // 定義した _scaffoldKey をkeyプロパティに適用
+      key: _scaffoldKey,
+
+      // drawerの表示（ハンバーガーメニュー）
+      endDrawer: Drawer(
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  const SizedBox(
+                    height: 120,
+                    child: DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: Constant.white,
+                        border: Border(
+                            bottom: BorderSide(color: Constant.gray, width: 2)),
+                      ),
+                      child: Column(
+                        children: [
+                          CustomText(
+                              text: '設定', fontSize: 20, Color: Constant.gray),
+                        ],
+                      ),
+                    ),
+                  ),
+                  _DrawerWidget(context, 'person_icon', 'アカウント設定',
+                      const AccountSetPage()),
+                  _DrawerWidget(context, 'character_icon', 'キャラクター変更',
+                      const CharaSetPage()),
+                  // 時間があれば
+                  _DrawerWidget(
+                      context, 'color_icon', 'テーマカラー変更', const ColorSetPage()),
+                  _DrawerWidget(context, 'wallpaper_icon', '壁紙変更',
+                      const WallpaperSetPage()),
+                  _DrawerWidget(context, 'adduser_icon', 'グループ招待',
+                      const InvitationPage()),
+                  _DrawerWidget(
+                      context, 'invitaion_icon', 'グループ参加', const JoinGroup()),
+                  _DrawerWidget(context, 'help_icon', 'ヘルプ', const HelpPage()),
+                ],
+              ),
+            ),
+            // ログアウトボタン
+            TextButton(
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: ((context) => const RtaPage())),
+                );
+              },
+              child: const CustomText(
+                text: 'RTAテスト',
+                Color: Constant.red,
+                fontSize: 20,
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                // firebaseからログアウト
+                // print(Constant.groupID);
+                // FirebaseHelper().getNfcIdMap();
+                await FirebaseAuth.instance.signOut();
+                SharedPreferencesLogic sharedPreferencesLogic =
+                    SharedPreferencesLogic();
+                // sharedPreferenceのデータを全て削除
+                sharedPreferencesLogic.clearAllData();
+                if (!mounted) return;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: ((context) => const LogIn())),
+                );
+              },
+              child: const CustomText(
+                text: 'ログアウト',
+                Color: Constant.red,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
       backgroundColor: SingletonUser.sub,
       body: Stack(
         fit: StackFit.expand,
@@ -195,89 +372,181 @@ class _MainPageState extends State<MainPage> {
             fit: BoxFit.cover,
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            mainAxisAlignment: MainAxisAlignment.start,
+              children:[
+              const SizedBox(height: 100),
               // 時刻とか表示させてる箱
               Container(
                 alignment: Alignment.center,
                 width: 330,
                 height: 150,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    side: BorderSide(
-                      color: SingletonUser.main, //枠線の色
-                      width: 4, //太さ
-                    ),
-                    backgroundColor: Constant.white,
-                    elevation: 8,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) =>
-                              AlarmPage(argumentAlarmTime: _alarmTime))),
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 25),
-                      SizedBox(
-                        width: 200,
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Container(
-                              alignment: const Alignment(-0.65, 0),
-                              // アラームが鳴る時刻
-                              child: _timeOfDay != null
-                                  ? Text(
-                                      '${_timeOfDay?.hour.toString().padLeft(2, '0')}:${_timeOfDay?.minute.toString().padLeft(2, '0')}',
-                                      style: GoogleFonts.zenMaruGothic(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 65,
-                                        color: SingletonUser.main,
-                                      ),
-                                    )
-                                  : Container(),
-                            ),
-                            //アラーム音の表示
-                            Container(
-                              alignment: const Alignment(-0.68, -0.8),
-                              width: 300,
-                              height: 30,
-                              child: const CustomText(
-                                  text: '♪きらきら星',
-                                  fontSize: 19,
-                                  Color: Constant.gray),
-                            ),
-                          ],
+                child: Stack(
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
+                        side: BorderSide(
+                          color: SingletonUser.main, //枠線の色
+                          width: 4, //太さ
+                        ),
+                        backgroundColor: Constant.white,
+                        elevation: 8,
                       ),
-                      const SizedBox(width: 12),
-                      // アラームのオンオフを切り替えるボタン
-                      CupertinoSwitch(
-                        activeColor: const Color(0xFFFFA08A),
-                        trackColor: Colors.grey,
-                        value: _value,
-                        onChanged: (value) {
-                          // TODO:shared_preferencesにアラームのオンオフを保存
-                          SingletonUser.updateAlarmONOFF(value);
-                          setState(() {
-                            _value = value;
-                          });
-                        },
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) =>
+                                  AlarmPage(argumentAlarmTime: _alarmTime))),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 25),
+                          SizedBox(
+                            width: 200,
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Container(
+                                  alignment: const Alignment(-0.65, 0),
+                                  // アラームが鳴る時刻
+                                  child: _timeOfDay != null
+                                      ? Text(
+                                          '${_timeOfDay?.hour.toString().padLeft(2, '0')}:${_timeOfDay?.minute.toString().padLeft(2, '0')}',
+                                          style: GoogleFonts.zenMaruGothic(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 65,
+                                            color: SingletonUser.main,
+                                          ),
+                                        )
+                                      : Container(),
+                                ),
+                                //アラーム音の表示
+                                Container(
+                                  alignment: const Alignment(-0.68, -0.8),
+                                  width: 300,
+                                  height: 30,
+                                  child: const CustomText(
+                                      text: '♪きらきら星',
+                                      fontSize: 19,
+                                      Color: Constant.gray),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          // アラームのオンオフを切り替えるボタン
+                          CupertinoSwitch(
+                            activeColor: const Color(0xFFFFA08A),
+                            trackColor: Colors.grey,
+                            value: _value,
+                            onChanged: (value) {
+                              // TODO:shared_preferencesにアラームのオンオフを保存
+                              SingletonUser.updateAlarmONOFF(value);
+                              setState(() {
+                                _value = value;
+                              });
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 150),
+
+              const SizedBox(height: 60),
+
+            // 天気情報を表示する箱
+            weatherIcon != null
+            ? Container(
+                alignment: Alignment.center,
+                width: 320,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Constant.white,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 0,
+                      blurRadius: 3,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    //天気アイコン表示
+                    Image.network("http://openweathermap.org/img/wn/$weatherIcon.png",
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+
+                    const SizedBox(width: 15),
+
+                    //最高気温表示
+                    Text(
+                      "${temperature!.celsius!.toStringAsFixed(0)}℃",
+                      style: GoogleFonts.zenMaruGothic(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 50,
+                        color: SingletonUser.main,
+                      ),
+                    ),
+
+                    const SizedBox(width: 30),
+
+                    //天気表示
+                    Align(
+                      alignment: const Alignment(0, 0.2),
+                      child: Text(
+                        "$weatherDescription",
+                        style: GoogleFonts.zenMaruGothic(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          color: Colors.grey,
+                      ),
+                    ),
+                    //降水確率表示
+                    // Text(
+                    //   "降水確率\n${rain!.toStringAsFixed(0)}%",
+                    //   style: GoogleFonts.zenMaruGothic(
+                    //     fontWeight: FontWeight.bold,
+                    //     fontSize: 25,
+                    //     color: Colors.grey,
+                    //   ),
+                    ),
+                  ],
+                )
+              )
+              : Container(
+                alignment: Alignment.center,
+                width: 320,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Constant.white,
+                  borderRadius: BorderRadius.circular(30),
+                  //影を表示
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.32),
+                      spreadRadius: 0,
+                      blurRadius: 10,
+                      offset: const Offset(-1, 5),
+                    ),
+                  ],
+                ),
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
             ],
           ),
           // 吹き出し
@@ -296,10 +565,10 @@ class _MainPageState extends State<MainPage> {
             alignment: (_response != null &&
                     _response!.length >= 14 &&
                     _response!.length <= 28)
-                ? const Alignment(-0.3, 1.05)
+                ? const Alignment(-0.3, 1.07) //二行
                 : (_response != null && _response!.length > 28)
-                    ? const Alignment(-0.3, 1.02)
-                    : const Alignment(-0.3, 1.07),
+                    ? const Alignment(-0.3, 1.03)  //三行
+                    : const Alignment(-0.3, 1.08), //一行
             child: SizedBox(
               width: 200,
               height: 190,
@@ -310,10 +579,10 @@ class _MainPageState extends State<MainPage> {
                     _response ?? "",
                     textStyle: GoogleFonts.zenMaruGothic(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 13,
                       color: Color(0xFF707070),
                     ),
-                    textAlign: TextAlign.center,
+                    // textAlign: TextAlign.center,
                     speed: const Duration(milliseconds: 100),
                   ),
                 ],
@@ -342,6 +611,32 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+
+Widget _DrawerWidget(
+    context, String iconName, String listTitle, Widget nextPage) {
+  return ListTile(
+    leading: ImageIcon(
+      AssetImage('assets/icon/$iconName.png'),
+      color: Constant.gray,
+    ),
+    title: Row(
+      children: [
+        CustomText(text: listTitle, fontSize: 18, Color: Constant.gray),
+        const SizedBox(
+          width: 0,
+        ),
+      ],
+    ),
+    // 画面遷移
+    onTap: () async {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: ((context) => nextPage)),
+      );
+    },
+  );
+}
+
 
 // アラーム音を選択するダイアログ
 class _alarmSelectorDialog extends StatelessWidget {
@@ -382,6 +677,8 @@ class _alarmSelectorDialog extends StatelessWidget {
     );
   }
 }
+
+
 
 //TODOchatGPTへの入力を保持する配列
 // List<String> _message = [
@@ -430,29 +727,6 @@ class _alarmSelectorDialog extends StatelessWidget {
 //   }
 // }
 
-//天候情報を日本語に変換
-// switch (weatherDescription) {
-//   case "Thunderstorm":
-//     weatherDescription = "雷雨";
-//     break;
-//   case "Drizzle":
-//     weatherDescription = "霧雨";
-//     break;
-//   case "Rain":
-//     weatherDescription = "雨";
-//     break;
-//   case "Snow":
-//     weatherDescription = "雪";
-//     break;
-//   case "Clear":
-//     weatherDescription = "晴れ";
-//     break;
-//   case "Clouds":
-//     weatherDescription = "曇り";
-//     break;
-//   default:
-//     weatherDescription = "不明";
-// }
 
 //天気のアイコン表示
 // weatherIcon != null

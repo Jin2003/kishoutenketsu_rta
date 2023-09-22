@@ -48,12 +48,16 @@ class SingletonUser {
     "yellow": Constant.yellow,
     "blue": Constant.blue,
     "red": Constant.red,
+    "green": Constant.green,
+    "orange": Constant.orange,
   };
 
   static final Map<String, Color> subThemes = {
     "yellow": Constant.subYellow,
     "blue": Constant.subBlue,
     "red": Constant.subRed,
+    "green": Constant.subGreen,
+    "orange": Constant.subOrange,
   };
 
   static void updateColors(String argumentThemeName) {

@@ -100,10 +100,6 @@ class _MainPageState extends State<MainPage> {
   // ScaffoldStateのGlobalKeyを変数として定義
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  //nav_bar.dartのインスタンスを作成
-  final NavBar _navBar = NavBar();
-
-
   @override
   void initState() {
     _timeOfDay = const TimeOfDay(hour: 0, minute: 0);
@@ -125,83 +121,83 @@ class _MainPageState extends State<MainPage> {
 
       // print("緯度: $lat, 経度: $lon");
 
-      //初回メッセージを作成
-      // await _weatherMessage();
+      // 初回メッセージを作成
+      await _weatherMessage();
     });
   }
 
-  // レンダリング時に表示される天気情報のメッセージを作成する関数
-  // Future<void>_weatherMessage() async {
-  //   try {
-  //     //緯度と経度が取得できない場合のエラーハンドリング
-  //     if (lat == null || lon == null) {
-  //       print("緯度と経度が取得できませんでした");
-  //       return;
-  //     }
+  //レンダリング時に表示される天気情報のメッセージを作成する関数
+  Future<void>_weatherMessage() async {
+    try {
+      //緯度と経度が取得できない場合のエラーハンドリング
+      if (lat == null || lon == null) {
+        print("緯度と経度が取得できませんでした");
+        return;
+      }
 
-  //     //天気情報を取得
-  //     final position = await geoCoding.placemarkFromCoordinates(lat!, lon!);
-  //     Weather weather = await wf.currentWeatherByCityName(position.first.locality!);
+      //天気情報を取得
+      final position = await geoCoding.placemarkFromCoordinates(lat!, lon!);
+      Weather weather = await wf.currentWeatherByCityName(position.first.locality!);
 
-  //     print("天気情報を取得しました: $weather");
+      print("天気情報を取得しました: $weather");
 
-  //     //都市の名前を取得
-  //     String? cityName = position.first.locality;
+      //都市の名前を取得
+      String? cityName = position.first.locality;
 
-  //     //天候情報を取得
-  //     weatherDescription = weather.weatherMain;
-  //     // String? weatherDescription = weather.weatherDescription;
+      //天候情報を取得
+      weatherDescription = weather.weatherMain;
+      // String? weatherDescription = weather.weatherDescription;
 
-  //     //天候情報を日本語に変換
-  //     switch (weatherDescription) {
-  //       case "Clear":
-  //         weatherDescription = "晴れ";
-  //         break;
-  //       case "Clouds":
-  //         weatherDescription = "曇り";
-  //         break;
-  //       case "Rain":
-  //         weatherDescription = "雨";
-  //         break;
-  //       case "Thunderstorm":
-  //         weatherDescription = "雷雨";
-  //         break;
-  //       case "Drizzle":
-  //         weatherDescription = "霧雨";
-  //         break;
-  //       case "Snow":
-  //         weatherDescription = "雪";
-  //         break;
-  //       case "Mist":
-  //         weatherDescription = "霧";
-  //         break;
-  //       default:
-  //         weatherDescription = "不明";
-  //     }
+      //天候情報を日本語に変換
+      switch (weatherDescription) {
+        case "Clear":
+          weatherDescription = "晴れ";
+          break;
+        case "Clouds":
+          weatherDescription = "曇り";
+          break;
+        case "Rain":
+          weatherDescription = "雨";
+          break;
+        case "Thunderstorm":
+          weatherDescription = "雷雨";
+          break;
+        case "Drizzle":
+          weatherDescription = "霧雨";
+          break;
+        case "Snow":
+          weatherDescription = "雪";
+          break;
+        case "Mist":
+          weatherDescription = "霧";
+          break;
+        default:
+          weatherDescription = "不明";
+      }
 
-  //     //最高気温の取得
-  //     temperature = weather.tempMax;
+      //最高気温の取得
+      temperature = weather.tempMax;
 
-  //     //OpenWeatherMapのAPIから降水確率を取得
-  //     rain = weather.rainLastHour;
+      //OpenWeatherMapのAPIから降水確率を取得
+      rain = weather.rainLastHour;
 
-  //     print(rain);
+      print(rain);
 
-  //     //天気情報メッセージ
-  //     String weatherMessage
-  //       = "今日の$cityNameの天気は$weatherDescriptionだよ!\n最高気温は${temperature!.celsius!.toStringAsFixed(0)}度だよ！";
+      //天気情報メッセージ
+      String weatherMessage
+        = "今日の$cityNameの天気は$weatherDescriptionだよ!\n最高気温は${temperature!.celsius!.toStringAsFixed(0)}度だよ！";
 
-  //     if (mounted) {
-  //       setState(() {
-  //         _response = weatherMessage;
-  //         _showResponse = !_showResponse;
-  //         weatherIcon = weather.weatherIcon;
-  //       });
-  //     }
-  //   } catch (e) {
-  //     print("エラーが発生しました: $e");
-  //   }
-  // }
+      if (mounted) {
+        setState(() {
+          _response = weatherMessage;
+          _showResponse = !_showResponse;
+          weatherIcon = weather.weatherIcon;
+        });
+      }
+    } catch (e) {
+      print("エラーが発生しました: $e");
+    }
+  }
 
   // アラーム音の初期化
   Future<void> initializeMusic() async {

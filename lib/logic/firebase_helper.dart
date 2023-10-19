@@ -91,38 +91,98 @@ class FirebaseHelper {
     });
   }
 
-  // 全体のrtaの結果を取得するメソッド
-  Future<List<Map<String, dynamic>>> getRtaResults() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('groups')
-        .doc(SingletonUser.groupID)
-        .collection('rtaResults')
-        .orderBy('date', descending: false)
-        .get();
-    List<Map<String, dynamic>> rtaResults = [];
-    for (var doc in querySnapshot.docs) {
-      rtaResults.add(doc.data() as Map<String, dynamic>);
-    }
-    return rtaResults;
-  }
+  // Future<List<Map<String, dynamic>>> getRtaResults() async {
+  //   DateTime now = DateTime.now();
+  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //       .collection('groups')
+  //       .doc(SingletonUser.groupID)
+  //       .collection('rtaResults')
+  //       .orderBy('rtaResult', descending: false)
+  //       .get();
+  //   List<Map<String, dynamic>> rtaResults = [];
+  //   List<Map<String, dynamic>> monthlyResults = [];
 
-  // 月間のrtaの結果を取得し、ランキング順に
-  Future<List<Map<String, dynamic>>> getMonthlyRtaResults() async {
+  //   for (var doc in querySnapshot.docs) {
+  //     Map<String, dynamic> rtaResult = doc.data() as Map<String, dynamic>;
+  //     // エントリの日付をDateTimeに変換
+  //     DateTime entryDate = rtaResult['date'].toDate();
+
+  //     // 今月の1日から現在までのエントリを抽出
+  //     if (entryDate.isAfter(DateTime(now.year, now.month, 1))) {
+  //       monthlyResults.add(rtaResult);
+  //     }
+
+  //     rtaResults.add(rtaResult);
+  //   }
+  // }
+
+  // rtaResults には全体の結果が含まれ、monthlyResults には今月の結果が含まれます
+  // 全体のrtaの結果と月間のrtaの結果を取得するメソッド
+  Future<Map<String, List<Map<String, dynamic>>>> getRtaResults() async {
+    DateTime now = DateTime.now();
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('groups')
         .doc(SingletonUser.groupID)
         .collection('rtaResults')
-        .where('rtaResult', isGreaterThanOrEqualTo: DateTime.now().month)
         .orderBy('rtaResult', descending: false)
         .get();
     List<Map<String, dynamic>> rtaResults = [];
+    List<Map<String, dynamic>> monthlyResults = [];
+
     for (var doc in querySnapshot.docs) {
-      rtaResults.add(doc.data() as Map<String, dynamic>);
+      Map<String, dynamic> rtaResult = doc.data() as Map<String, dynamic>;
+      // エントリの日付をDateTimeに変換
+      // TODO
+      DateTime entryDate = rtaResult['date'].toDate();
+
+      // 今月の1日から現在までのエントリを抽出
+      if (entryDate.isAfter(DateTime(now.year, now.month, 1))) {
+        monthlyResults.add(rtaResult);
+      }
+
+      rtaResults.add(rtaResult);
     }
-    return rtaResults;
+
+    print(rtaResults);
+    print(monthlyResults);
+
+    // rtaResults には全体の結果が含まれ、monthlyResults には今月の結果が含まれます
+    return {'rtaResults': rtaResults, 'monthlyResults': monthlyResults};
   }
 
-  // 自分の最新のrtaの結果を取得するメソッド
+// 全体のrtaの結果を取得するメソッド
+// Future<List<Map<String, dynamic>>> getRtaResults() async {
+//   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+//       .collection('groups')
+//       .doc(SingletonUser.groupID)
+//       .collection('rtaResults')
+//       .orderBy('rtaResult', descending: false)
+//       .get();
+//   List<Map<String, dynamic>> rtaResults = [];
+//   for (var doc in querySnapshot.docs) {
+//     rtaResults.add(doc.data() as Map<String, dynamic>);
+//   }
+//   return rtaResults;
+// }
+
+// // 月間のrtaの結果を取得し、ランキング順に
+// Future<List<Map<String, dynamic>>> getMonthlyRtaResults() async {
+//   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+//       .collection('groups')
+//       .doc(SingletonUser.groupID)
+//       .collection('rtaResults')
+//       .where('date', isGreaterThanOrEqualTo: DateTime.now().month)
+//       .orderBy('rtaResult', descending: false)
+//       .get();
+//   List<Map<String, dynamic>> rtaResults = [];
+//   for (var doc in querySnapshot.docs) {
+//     rtaResults.add(doc.data() as Map<String, dynamic>);
+//   }
+//   print(rtaResults);
+//   return rtaResults;
+// }
+
+// 自分の最新のrtaの結果を取得するメソッド
   Future<Map<String, dynamic>> getMyLateestRtaResult() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('groups')
@@ -136,11 +196,10 @@ class FirebaseHelper {
     for (var doc in querySnapshot.docs) {
       myRtaResult = doc.data() as Map<String, dynamic>;
     }
-    print(myRtaResult);
     return myRtaResult;
   }
 
-  // 順位をFirestoreから取得するメソッド
+// 順位をFirestoreから取得するメソッド
   Future<int> getRanking(int thisTime) async {
     // Firestoreの"rankings"コレクションからthisTimeの順位を取得
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -153,7 +212,7 @@ class FirebaseHelper {
     // return underThisTimeLength;
   }
 
-  // ユーザ情報からポイントを取得するメソッド
+// ユーザ情報からポイントを取得するメソッド
   Future<int> getPoint() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -164,7 +223,7 @@ class FirebaseHelper {
     return point;
   }
 
-  // ユーザのメールアドレスを変更するメソッド
+// ユーザのメールアドレスを変更するメソッド
   Future<void> changeEmail(String newEmail) async {
     //　なんかログインもう一回しないとエラー出るっぽい
 

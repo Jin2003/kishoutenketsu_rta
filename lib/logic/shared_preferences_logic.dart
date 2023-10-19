@@ -163,6 +163,7 @@ class SharedPreferencesLogic {
     // ユーザID
     getUserID().then((value) => SingletonUser.userID = value!);
     // グループID
+    // _TypeError (Null check operator used on a null value)
     getGroupID().then((value) => SingletonUser.groupID = value!);
     // アラームを設定しているかどうか
     getSettedAlarm().then((value) => SingletonUser.settedAlarm = value!);

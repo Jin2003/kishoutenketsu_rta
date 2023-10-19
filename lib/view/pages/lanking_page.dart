@@ -16,10 +16,15 @@ class LankingPage extends StatefulWidget {
 
 class _LankingPageState extends State<LankingPage> {
   //Lankingを表示するためのリスト
-  List<Map<String, dynamic>> _result = [];
+  List<Map<String, dynamic>> _resultAll = [];
+
+  //Lankingを表示するためのリスト
+  List<Map<String, dynamic>> _resultMonthly = [];
 
   //Lankingを何個表示するか
   int _lankingCount = 0;
+
+  int _lankingCountMonthly = 0;
 
   //最新のRTAタイムを保持する変数
   Map<String, dynamic>? _newTime;
@@ -59,7 +64,6 @@ class _LankingPageState extends State<LankingPage> {
   void initState() {
     super.initState();
     _loadAllLank();
-    _loadMonthlyLank();
     _getMyLateestRtaResult();
   }
 
@@ -80,26 +84,26 @@ class _LankingPageState extends State<LankingPage> {
 
   // ランキングを取得する関数
   Future<void> _loadAllLank() async {
-    List<Map<String, dynamic>> rtaResults =
+    Map<String, List<Map<String, dynamic>>> rtaResults =
         await FirebaseHelper().getRtaResults();
 
+    // 全体のランキングを取得
+    final allRtaResults = rtaResults['rtaResults'] ?? [];
     if (mounted) {
       setState(() {
-        _lankingCount = rtaResults.length;
-        _result = rtaResults;
+        _lankingCount = allRtaResults.length;
+        _resultAll = allRtaResults;
       });
     }
-  }
 
-  // 月間ランキングを取得する関数
-  Future<void> _loadMonthlyLank() async {
-    List<Map<String, dynamic>> rtaResults =
-        await FirebaseHelper().getMonthlyRtaResults();
-
+    // 月間のランキングを取得
+    final monthlyRtaResults = rtaResults['monthlyResults'] ?? [];
+    // print(monthlyRtaResults);
     if (mounted) {
       setState(() {
-        _lankingCount = rtaResults.length;
-        _result = rtaResults;
+        _lankingCountMonthly = monthlyRtaResults.length;
+        _resultMonthly = monthlyRtaResults;
+        // _topTime = monthlyRtaResults[0];
       });
     }
   }
@@ -108,8 +112,6 @@ class _LankingPageState extends State<LankingPage> {
   Future<void> _getMyLateestRtaResult() async {
     Map<String, dynamic> myLateestRtaResult =
         await FirebaseHelper().getMyLateestRtaResult();
-    print("myLateestRtaResult");
-    print(myLateestRtaResult);
     if (mounted) {
       setState(() {
         _newTime = myLateestRtaResult;
@@ -129,17 +131,19 @@ class _LankingPageState extends State<LankingPage> {
 
 //定型文を表示する関数
   _getMessage() async {
-    // ランキング最高記録のRTAタイムを取得
-    _topTime = _result.firstWhere(
-        (element) => element['name'] == SingletonUser.userName,
-        orElse: () => <String, dynamic>{});
-
     //自分の最新のタイムと最高記録のタイムの差を計算
-    final difference = (_newTime != null && _topTime != null)
-        ? _newTime!['rtaResult'] - _topTime!['rtaResult']
-        : 'タイムが取得できなかったよ';
+    if (_newTime != null && _resultAll.isNotEmpty) {
+      double? difference;
 
-    if (_newTime != null && _result.isNotEmpty) {
+      if (_newTime != null && _topTime != null) {
+        final newTime = _newTime!['rtaResult'] as num?;
+        final topTime = _topTime!['rtaResult'] as num?;
+
+        if (newTime != null && topTime != null) {
+          difference = newTime.toDouble() - topTime.toDouble();
+        }
+      }
+
       if (difference != null &&
           difference >= 0 &&
           _topTime!['date'] != _newTime!['date']) {
@@ -289,10 +293,16 @@ class _LankingPageState extends State<LankingPage> {
                       padding: const EdgeInsets.all(20),
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 9),
-                      //ここでリストの数を決めている
-                      itemCount: _lankingCount,
+                      itemCount: _isMonthly
+                          ? _lankingCountMonthly
+                          : _lankingCount, // _isMonthly によって表示するリストを切り替え
                       itemBuilder: (context, index) => _buildCard(
-                          index + 1, _result[index], _result), // 第3引数を追加
+                        index + 1,
+                        _isMonthly
+                            ? _resultMonthly[index]
+                            : _resultAll[index], // _isMonthly によってデータを切り替え
+                        _isMonthly ? _resultMonthly : _resultAll, // リストも切り替え
+                      ),
                     ),
                   ),
                 ),
